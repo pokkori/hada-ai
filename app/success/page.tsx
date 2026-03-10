@@ -1,40 +1,142 @@
-'use client';
+"use client";
 
-import { useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+
+function Confetti() {
+  const [particles, setParticles] = useState<{ id: number; left: number; delay: number; color: string; size: number }[]>([]);
+
+  useEffect(() => {
+    const colors = ["#ec4899", "#f472b6", "#fb7185", "#fbbf24", "#a78bfa", "#34d399"];
+    const ps = Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: 6 + Math.random() * 6,
+    }));
+    setParticles(ps);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-50">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute animate-confetti"
+          style={{
+            left: `${p.left}%`,
+            top: -20,
+            width: p.size,
+            height: p.size,
+            backgroundColor: p.color,
+            borderRadius: Math.random() > 0.5 ? "50%" : "2px",
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes confetti {
+          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+          100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .animate-confetti {
+          animation: confetti 3s ease-in forwards;
+        }
+      `}</style>
+    </div>
+  );
+}
 
 function SuccessContent() {
   const params = useSearchParams();
+  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
-    const sessionId = params.get('session_id');
+    const sessionId = params.get("session_id");
     if (sessionId) {
-      fetch(`/api/stripe/verify?session_id=${sessionId}`);
+      fetch(`/api/stripe/verify?session_id=${sessionId}`).catch(() => {});
     }
+    const timer = setTimeout(() => setShowConfetti(false), 4000);
+    return () => clearTimeout(timer);
   }, [params]);
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border p-10 max-w-md w-full text-center">
-      <div className="text-6xl mb-6">🎉</div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-3">ご購入ありがとうございます！</h1>
-      <p className="text-gray-500 mb-8">
-        決済が完了しました。<br />
-        無制限でSNS投稿文を生成できます！
-      </p>
-      <Link
-        href="/"
-        className="block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-colors"
-      >
-        投稿文を生成する
-      </Link>
-    </div>
+    <>
+      {showConfetti && <Confetti />}
+      <div className="max-w-lg w-full mx-auto px-4">
+        <div className="text-center mb-10">
+          <div className="text-7xl mb-4">&#x2728;</div>
+          <h1 className="text-3xl font-black text-gray-900 mb-2">プレミアム会員へようこそ！</h1>
+          <p className="text-gray-500">AI美肌診断の全機能が使えるようになりました</p>
+        </div>
+
+        <div className="bg-pink-50 border border-pink-200 rounded-2xl p-6 mb-8">
+          <h2 className="font-bold text-pink-800 mb-3 text-sm">あなたの特典</h2>
+          <ul className="space-y-2 text-sm text-pink-900">
+            <li className="flex items-start gap-2">
+              <span className="text-pink-600 mt-0.5">&#10003;</span>
+              AI美肌診断が無制限で使い放題
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-pink-600 mt-0.5">&#10003;</span>
+              詳細なスキンケアアドバイス
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-pink-600 mt-0.5">&#10003;</span>
+              肌タイプ別おすすめケア提案
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-pink-600 mt-0.5">&#10003;</span>
+              季節・年齢に合わせた美肌プラン
+            </li>
+          </ul>
+        </div>
+
+        <div className="space-y-4 mb-8">
+          <h2 className="font-bold text-gray-800 text-center text-sm">美肌への3ステップ</h2>
+
+          <Link href="/#tool" className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-pink-400 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0 group-hover:bg-pink-400">1</div>
+            <div className="flex-1">
+              <p className="font-bold text-gray-800 text-sm">今の肌状態を診断する</p>
+              <p className="text-xs text-gray-400">写真をアップロードしてAIが分析</p>
+            </div>
+            <span className="text-gray-300 group-hover:text-pink-500 transition-colors">&rarr;</span>
+          </Link>
+
+          <Link href="/#tool" className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-pink-400 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0 group-hover:bg-pink-400">2</div>
+            <div className="flex-1">
+              <p className="font-bold text-gray-800 text-sm">ケアプランを確認する</p>
+              <p className="text-xs text-gray-400">AIが提案する最適なスキンケア手順</p>
+            </div>
+            <span className="text-gray-300 group-hover:text-pink-500 transition-colors">&rarr;</span>
+          </Link>
+
+          <Link href="/#tool" className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-pink-400 hover:shadow-md transition-all group">
+            <div className="w-10 h-10 bg-pink-500 text-white rounded-full flex items-center justify-center font-bold text-lg shrink-0 group-hover:bg-pink-400">3</div>
+            <div className="flex-1">
+              <p className="font-bold text-gray-800 text-sm">定期的に診断して変化を実感</p>
+              <p className="text-xs text-gray-400">2週間後にもう一度診断してみましょう</p>
+            </div>
+            <span className="text-gray-300 group-hover:text-pink-500 transition-colors">&rarr;</span>
+          </Link>
+        </div>
+
+        <div className="text-center bg-gray-50 rounded-xl p-4 border border-gray-100">
+          <p className="text-xs text-gray-500 mb-1">美肌ケアを習慣に</p>
+          <p className="text-sm font-bold text-gray-700">このサイトをブックマークしておきましょう</p>
+        </div>
+      </div>
+    </>
   );
 }
 
 export default function SuccessPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <Suspense fallback={<div className="text-gray-400">読み込み中...</div>}>
         <SuccessContent />
       </Suspense>

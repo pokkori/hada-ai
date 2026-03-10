@@ -5,9 +5,9 @@ import "./globals.css";
 
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
-const SITE_URL = "https://sns-post-generator.vercel.app";
-const TITLE = "AI SNS投稿文ジェネレーター | X・Instagram・TikTok対応 30秒で5パターン生成";
-const DESC = "サービス名を入力するだけでX・Instagram・TikTok・note・YouTube Shorts向けの投稿文をAIが自動生成。毎日の投稿ネタ切れを解消。¥980/月。";
+const SITE_URL = "https://hada-ai.vercel.app";
+const TITLE = "AI美肌診断 | あなたの肌タイプを分析してパーソナルスキンケアを提案";
+const DESC = "肌の悩みを入力するだけでAIが肌タイプを詳細分析。朝・夜のスキンケアルーティン・注目成分・コスパ商品レコメンドまで。無料3回試せる。¥980/月。";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESC,
     url: SITE_URL,
-    siteName: "AI SNS投稿文ジェネレーター",
+    siteName: "AI美肌診断",
     locale: "ja_JP",
     type: "website",
   },
