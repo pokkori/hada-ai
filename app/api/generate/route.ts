@@ -1,12 +1,10 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { isActiveSubscription } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 const FREE_LIMIT = 3;
-const APP_ID = "hada";
+const COOKIE_KEY = "hada_use_count";
 
 function getClient() {
   return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -17,33 +15,19 @@ function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const entry = rateLimit.get(ip);
   if (!entry || now > entry.resetAt) { rateLimit.set(ip, { count: 1, resetAt: now + 60000 }); return true; }
-  if (entry.count >= 20) return false;
+  if (entry.count >= 10) return false;
   entry.count++;
   return true;
 }
-
-const usageStore = new Map<string, number>();
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") || "unknown";
   if (!checkRateLimit(ip)) return NextResponse.json({ error: "しばらくお待ちください" }, { status: 429 });
 
-  const cookieStore = await cookies();
-  const email = cookieStore.get("user_email")?.value;
-  let isPremium = false;
-
-  if (email) {
-    isPremium = await isActiveSubscription(email, APP_ID);
-    if (!isPremium) {
-      const legacyCookie = cookieStore.get("stripe_premium")?.value;
-      isPremium = legacyCookie === "1";
-    }
-  }
-
-  if (!isPremium) {
-    const usage = usageStore.get(ip) || 0;
-    if (usage >= FREE_LIMIT) return NextResponse.json({ error: "無料回数を超えました" }, { status: 429 });
-    usageStore.set(ip, usage + 1);
+  const isPremium = req.cookies.get("premium")?.value === "1" || req.cookies.get("stripe_premium")?.value === "1";
+  const cookieCount = parseInt(req.cookies.get(COOKIE_KEY)?.value || "0");
+  if (!isPremium && cookieCount >= FREE_LIMIT) {
+    return NextResponse.json({ error: "LIMIT_REACHED" }, { status: 429 });
   }
 
   const { skinType, concerns, routine, lifestyle } = await req.json();
@@ -122,7 +106,12 @@ K-beautyの商品も積極的に取り入れてください。`;
       messages: [{ role: "user", content: prompt }],
     });
     const result = message.content[0].type === "text" ? message.content[0].text : "";
-    return NextResponse.json({ result });
+    const newCount = cookieCount + 1;
+    const res = NextResponse.json({ result, count: newCount });
+    if (!isPremium) {
+      res.cookies.set(COOKIE_KEY, String(newCount), { maxAge: 60 * 60 * 24 * 30, sameSite: "lax", httpOnly: true, secure: true });
+    }
+    return res;
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "AIの処理中にエラーが発生しました" }, { status: 500 });
