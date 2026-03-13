@@ -289,7 +289,7 @@ export default function Home() {
         <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
           肌タイプ・悩み・ライフスタイルを入力するだけで、
           あなたの肌に有効な成分・NGな成分・朝夜ルーティンをAIが自動生成。
-          コスメカウンターより詳しく、皮膚科より安く。
+          コスメカウンターに相談するような感覚で、手軽に・無料3回から。
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
           <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
