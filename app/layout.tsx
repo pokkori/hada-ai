@@ -29,9 +29,59 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "AI美肌診断",
+      "url": SITE_URL,
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "description": DESC,
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "どんな肌の悩みに対応していますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "乾燥肌・脂性肌・混合肌・敏感肌・ニキビ・毛穴・シミ・くすみ・シワなど、幅広い肌悩みに対応しています。肌タイプを詳細分析し、朝・夜のスキンケアルーティンと注目成分を提案します。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "商品レコメンドはどんな基準で選ばれますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AIがあなたの肌タイプと悩みに合わせて、有効成分・価格帯・使いやすさを総合的に評価してコスパの良い商品を選定します。特定ブランドとの広告契約はなく、客観的な分析に基づき提案しています。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "無料で使えますか？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "登録不要で3回分の美肌診断を無料でお試しいただけます。プレミアムプラン（¥980/月）で診断回数無制限・詳細スキンケアルーティン・成分解析レポートが利用可能になります。"
+          }
+        },
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${geist.variable} antialiased`}>
         {children}
         <Analytics />
