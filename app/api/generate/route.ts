@@ -102,7 +102,7 @@ K-beautyの商品も積極的に取り入れてください。`;
   try {
     const message = await getClient().messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 1800,
+      max_tokens: 2800,
       messages: [{ role: "user", content: prompt }],
     });
     const result = message.content[0].type === "text" ? message.content[0].text : "";
