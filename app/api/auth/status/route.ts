@@ -15,7 +15,7 @@ export async function GET() {
     premium = await isActiveSubscription(email, APP_ID);
   }
   if (!premium) {
-    premium = cookieStore.get('stripe_premium')?.value === '1';
+    premium = cookieStore.get('stripe_premium')?.value === '1' || cookieStore.get('premium')?.value === '1';
   }
 
   return NextResponse.json({ premium });
