@@ -478,7 +478,17 @@ export default function Home() {
           <Link href="/terms" className="hover:text-gray-600">利用規約</Link>
         </div>
         <p className="text-xs text-gray-300 mb-2">本サービスはAIによる化粧品成分情報を提供するものです。医療行為・医学的診断には該当しません。肌トラブルには医師へのご相談をお勧めします。</p>
-        <p>© 2026 AI美肌診断 — ポッコリラボ</p>
+        <p className="mb-3">© 2026 AI美肌診断 — ポッコリラボ</p>
+        <div className="border-t border-gray-100 pt-3 text-xs">
+          <p className="mb-1">ポッコリラボの他のサービス</p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-gray-300">
+            <a href="https://uranai-ai-sigma.vercel.app" className="hover:text-gray-500">占いAI</a>
+            <a href="https://claim-ai-beryl.vercel.app" className="hover:text-gray-500">クレームAI</a>
+            <a href="https://rougo-sim-ai.vercel.app" className="hover:text-gray-500">老後シミュレーターAI</a>
+            <a href="https://hojyokin-ai-delta.vercel.app" className="hover:text-gray-500">補助金AI</a>
+            <a href="https://kokuhaku-line-ai.vercel.app" className="hover:text-gray-500">告白LINE返信AI</a>
+          </div>
+        </div>
       </footer>
     </main>
   );
