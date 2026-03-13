@@ -84,8 +84,20 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
         </div>
         <pre className="text-sm text-gray-800 whitespace-pre-wrap font-sans leading-relaxed">{section.content}</pre>
       </div>
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
+        {(() => {
+          const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
+          const firstLine = skinSection?.content.split('\n')[0] ?? "肌診断結果";
+          const shareText = `AI美肌診断で「${firstLine}」と診断されました💄\n成分・ルーティン・おすすめ商品まで全部わかる！\nhttps://hada-ai.vercel.app\n#AI美肌診断 #スキンケア`;
+          return (
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
+              target="_blank" rel="noopener noreferrer"
+              className="text-xs px-3 py-1 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-medium transition-colors">
+              診断結果をXでシェア
+            </a>
+          );
+        })()}
       </div>
     </div>
   );
