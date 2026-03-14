@@ -283,13 +283,11 @@ export default function Home() {
           成分科学 × AI診断
         </div>
         <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight text-gray-900">
-          スキンケアで失敗する理由は<br />
-          <span className="text-rose-500">「肌に合う成分を知らない」から</span>
+          皮膚科に行く前に、<br />
+          <span className="text-rose-500">AIに聞いてみてください。</span>
         </h1>
         <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
-          肌タイプ・悩み・ライフスタイルを入力するだけで、
-          あなたの肌に有効な成分・NGな成分・朝夜ルーティンをAIが自動生成。
-          コスメカウンターに相談するような感覚で、手軽に・無料3回から。
+          写真1枚をアップロードするだけで、肌質・毛穴・乾燥・ニキビのリスクをAIが分析します。診察料0円で、今すぐ始められます。
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
           <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
@@ -304,6 +302,14 @@ export default function Home() {
             <span className="text-rose-500 font-bold">K-beauty</span>
             <span className="text-gray-600">国産・韓国コスメ対応</span>
           </div>
+        </div>
+        <div className="bg-green-50 border border-green-300 rounded-xl p-4 my-4 max-w-md mx-auto text-left">
+          <h3 className="font-bold text-green-800 text-sm mb-2">🔒 プライバシーについて</h3>
+          <ul className="text-sm text-green-700 space-y-1">
+            <li>✓ アップロードした写真はAI分析後すぐに削除されます</li>
+            <li>✓ 写真はサーバーに保存されません（メモリ内処理のみ）</li>
+            <li>✓ 個人情報の登録不要・メールアドレスも不要</li>
+          </ul>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link

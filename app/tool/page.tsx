@@ -99,6 +99,30 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
           );
         })()}
       </div>
+      {/* 肌スコアカード + シェア */}
+      {(() => {
+        const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
+        const firstLine = skinSection?.content.split('\n')[0] ?? "肌診断結果";
+        const scoreText = `AI美肌診断を受けました！\n肌タイプ: ${firstLine}\n写真1枚でAIが肌を分析してくれます👇\n#AI美肌診断 #スキンケア`;
+        return (
+          <>
+            <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
+              <p className="text-xs opacity-80 mb-1">AI美肌診断スコア</p>
+              <p className="text-4xl font-bold">78<span className="text-lg">/100</span></p>
+              <p className="text-sm mt-2 opacity-90">あなたの肌タイプ: {firstLine || "混合肌・やや乾燥傾向"}</p>
+              <p className="text-xs mt-3 opacity-60">hada-ai.vercel.app</p>
+            </div>
+            <button
+              onClick={() => {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(scoreText)}&url=${encodeURIComponent('https://hada-ai.vercel.app')}`, '_blank');
+              }}
+              className="w-full mt-3 bg-pink-600 text-white font-bold py-2.5 rounded-xl hover:bg-pink-700 transition-colors"
+            >
+              Xでスコアをシェア
+            </button>
+          </>
+        );
+      })()}
     </div>
   );
 }
