@@ -7,7 +7,7 @@ const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 const SITE_URL = "https://hada-ai.vercel.app";
 const TITLE = "AI美肌診断 | あなたの肌タイプを分析してパーソナルスキンケアを提案";
-const DESC = "肌の悩みを入力するだけでAIが肌タイプを詳細分析。朝・夜のスキンケアルーティン・注目成分・コスパ商品レコメンドまで。無料3回試せる。¥980/月。";
+const DESC = "肌の悩みを入力するだけでAIが肌タイプを詳細分析。朝・夜のスキンケアルーティン・注目成分・コスパ商品レコメンドまで。無料3回試せる。¥1,980/月。";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -38,7 +38,7 @@ const jsonLd = {
       "url": SITE_URL,
       "applicationCategory": "HealthApplication",
       "operatingSystem": "Web",
-      "offers": { "@type": "Offer", "price": "980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥980/月" },
+      "offers": { "@type": "Offer", "price": "1980", "priceCurrency": "JPY", "description": "プレミアムプラン ¥1,980/月" },
       "description": DESC,
     },
     {
@@ -65,7 +65,7 @@ const jsonLd = {
           "name": "無料で使えますか？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "登録不要で3回分の美肌診断を無料でお試しいただけます。プレミアムプラン（¥980/月）で診断回数無制限・詳細スキンケアルーティン・成分解析レポートが利用可能になります。"
+            "text": "登録不要で3回分の美肌診断を無料でお試しいただけます。プレミアムプラン（¥1,980/月）で診断回数無制限・詳細スキンケアルーティン・成分解析レポートが利用可能になります。"
           }
         },
       ],

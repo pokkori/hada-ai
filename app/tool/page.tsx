@@ -46,7 +46,7 @@ function Paywall({ onClose, onOpenPayjp }: { onClose: () => void; onOpenPayjp: (
           <li>✓ いつでもキャンセル可能</li>
         </ul>
         <button onClick={onOpenPayjp} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3">
-          ¥980/月で始める
+          ¥1,980/月で始める
         </button>
         <button onClick={onClose} className="text-xs text-gray-400">閉じる</button>
       </div>
@@ -174,7 +174,7 @@ export default function HadaTool() {
       {showPayjp && (
         <PayjpModal
           publicKey={process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY!}
-          planLabel="AI美肌診断 プレミアム ¥980/月（いつでもキャンセル可）"
+          planLabel="AI美肌診断 プレミアム ¥1,980/月（いつでもキャンセル可）"
           onSuccess={() => { setShowPayjp(false); setShowPaywall(false); setIsPremium(true); }}
           onClose={() => setShowPayjp(false)}
         />

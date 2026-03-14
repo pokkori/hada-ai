@@ -270,7 +270,7 @@ export default function Home() {
       {showPayjp && (
         <PayjpModal
           publicKey={PAYJP_PUBLIC_KEY}
-          planLabel="プレミアムプラン ¥980/月 — 無制限診断"
+          planLabel="プレミアムプラン ¥1,980/月 — 無制限診断"
           plan="standard"
           onSuccess={() => { setShowPayjp(false); window.location.href = "/tool"; }}
           onClose={() => setShowPayjp(false)}
@@ -323,7 +323,7 @@ export default function Home() {
             disabled={loading}
             className="bg-white text-rose-600 border-2 border-rose-500 hover:bg-rose-50 font-bold py-4 px-8 rounded-xl text-lg transition-all disabled:opacity-50"
           >
-            {loading ? "処理中..." : "¥980/月で無制限に使う"}
+            {loading ? "処理中..." : "¥1,980/月で無制限に使う"}
           </button>
         </div>
         <p className="text-gray-400 text-sm">クレジットカード不要で3回無料 • いつでもキャンセル可能</p>
@@ -456,7 +456,7 @@ export default function Home() {
             <div className="bg-rose-500 rounded-2xl p-8 text-white">
               <div className="inline-block bg-white text-rose-600 text-xs font-black px-3 py-1 rounded-full mb-3">おすすめ</div>
               <h3 className="text-xl font-bold mb-2">プレミアム</h3>
-              <div className="text-4xl font-black mb-1">¥980<span className="text-lg font-normal">/月</span></div>
+              <div className="text-4xl font-black mb-1">¥1,980<span className="text-lg font-normal">/月</span></div>
               <p className="text-rose-200 text-xs mb-4">皮膚科の診察1回分以下</p>
               <ul className="space-y-2 mb-6 text-left text-sm">
                 <li className="flex gap-2"><span>✓</span> 何度でも無制限に診断</li>
