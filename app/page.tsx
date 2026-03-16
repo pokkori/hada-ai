@@ -287,7 +287,7 @@ export default function Home() {
           <span className="text-rose-500">AIに聞いてみてください。</span>
         </h1>
         <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
-          写真1枚をアップロードするだけで、肌質・毛穴・乾燥・ニキビのリスクをAIが分析します。診察料0円で、今すぐ始められます。
+          肌タイプ・悩み・スキンケアルーティンを入力するだけで、肌質・毛穴・乾燥・ニキビのリスクをAIが分析します。診察料0円で、今すぐ始められます。
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
           <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
@@ -306,8 +306,8 @@ export default function Home() {
         <div className="bg-green-50 border border-green-300 rounded-xl p-4 my-4 max-w-md mx-auto text-left">
           <h3 className="font-bold text-green-800 text-sm mb-2">🔒 プライバシーについて</h3>
           <ul className="text-sm text-green-700 space-y-1">
-            <li>✓ アップロードした写真はAI分析後すぐに削除されます</li>
-            <li>✓ 写真はサーバーに保存されません（メモリ内処理のみ）</li>
+            <li>✓ 入力した情報はAI分析後に破棄されます</li>
+            <li>✓ データはサーバーに保存されません（メモリ内処理のみ）</li>
             <li>✓ 個人情報の登録不要・メールアドレスも不要</li>
           </ul>
         </div>

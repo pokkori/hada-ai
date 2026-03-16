@@ -103,7 +103,7 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
       {(() => {
         const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
         const firstLine = skinSection?.content.split('\n')[0] ?? "肌診断結果";
-        const scoreText = `AI美肌診断を受けました！\n肌タイプ: ${firstLine}\n写真1枚でAIが肌を分析してくれます👇\n#AI美肌診断 #スキンケア`;
+        const scoreText = `AI美肌診断を受けました！\n肌タイプ: ${firstLine}\n肌の悩みをAIが徹底分析してくれます👇\n#AI美肌診断 #スキンケア`;
         return (
           <>
             <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
