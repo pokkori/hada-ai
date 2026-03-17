@@ -98,22 +98,51 @@ function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: stri
         const lifestyleBonus = lifestyle.includes("毎日") ? 3 : lifestyle.includes("少ない") ? -4 : 0;
         const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
         const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
-        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断で${skinType}と診断！スコア${skinScore}点 #AI美肌診断`)}&url=${encodeURIComponent(ogUrl)}`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断を受けてみた💄\n私の肌スコア: ${skinScore}点/100点（${skinType}）\n有効成分・NGリスト・ルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア #美容`)}&url=${encodeURIComponent(ogUrl)}`;
+        // スコアに応じたカラーと評価ラベル
+        const scoreColor = skinScore >= 80 ? "from-emerald-400 to-teal-400" : skinScore >= 70 ? "from-yellow-400 to-orange-300" : "from-rose-400 to-pink-400";
+        const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀✨" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
+        // SVGサークルゲージ用
+        const r = 44;
+        const circ = 2 * Math.PI * r;
+        const offset = circ - (skinScore / 100) * circ;
+        const ringColor = skinScore >= 80 ? "#10b981" : skinScore >= 70 ? "#f59e0b" : "#f43f5e";
         return (
           <>
-            <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
-              <p className="text-xs opacity-80 mb-1">AI美肌診断スコア</p>
-              <p className="text-4xl font-bold">{skinScore}<span className="text-lg">/100</span></p>
-              <p className="text-sm mt-2 opacity-90">あなたの肌タイプ: {firstLine || skinType}</p>
-              <p className="text-xs mt-3 opacity-60">hada-ai.vercel.app</p>
+            <div className={`mt-6 bg-gradient-to-br ${scoreColor} rounded-2xl p-5 text-white`}>
+              <p className="text-xs opacity-80 mb-3 text-center font-semibold tracking-wide">AI美肌診断スコア</p>
+              <div className="flex items-center gap-5">
+                {/* SVGスコアリング */}
+                <div className="shrink-0">
+                  <svg width="100" height="100" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="10" />
+                    <circle
+                      cx="50" cy="50" r={r} fill="none" stroke="white" strokeWidth="10"
+                      strokeDasharray={circ} strokeDashoffset={offset}
+                      transform="rotate(-90 50 50)" strokeLinecap="round"
+                    />
+                    <text x="50" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="bold">{skinScore}</text>
+                    <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">/100点</text>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-base font-bold mb-1">{scoreLabel}</p>
+                  <p className="text-xs opacity-90 leading-relaxed">{firstLine || skinType}</p>
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {["肌診断 ✓", "ルーティン ✓", "成分解析 ✓"].map(tag => (
+                      <span key={tag} className="text-xs bg-white/20 rounded-full px-2 py-0.5">{tag}</span>
+                    ))}
+                  </div>
+                  <p className="text-xs mt-2 opacity-60">hada-ai.vercel.app</p>
+                </div>
+              </div>
             </div>
             <button
-              onClick={() => {
-                window.open(tweetUrl, '_blank');
-              }}
-              className="w-full mt-3 bg-pink-500 hover:bg-pink-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
+              onClick={() => window.open(tweetUrl, '_blank')}
+              className="w-full mt-3 bg-rose-500 hover:bg-rose-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2"
             >
-              診断結果をXでシェア
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              肌スコア{skinScore}点をXでシェア 💄
             </button>
           </>
         );
