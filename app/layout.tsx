@@ -20,11 +20,13 @@ export const metadata: Metadata = {
     siteName: "AI美肌診断",
     locale: "ja_JP",
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "AI美肌診断" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESC,
+    images: ["/og.png"],
   },
   metadataBase: new URL(SITE_URL),
 };
