@@ -15,6 +15,7 @@ function parseResult(text: string): ParsedResult {
     { key: "スキンケアルーティン", icon: "📋" },
     { key: "注目成分", icon: "🧪" },
     { key: "商品レコメンド", icon: "🛒" },
+    { key: "1週間後", icon: "📅" },
   ];
   const sections: Section[] = [];
   const parts = text.split(/^---$/m);
