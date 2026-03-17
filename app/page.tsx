@@ -220,6 +220,23 @@ function SkinSampleSection() {
           <p className="text-sm text-gray-500 mt-2">肌悩みを入力するだけで、成分・ルーティン・商品まで個別生成</p>
         </div>
 
+        {/* 診断結果サンプルカード */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-10">
+          {[
+            { type: "乾燥敏感肌", score: 86, tag: "K-beautyタイプ", desc: "水分補給を最優先に。セラミド系アイテムがおすすめ", color: "pink" },
+            { type: "混合脂性肌", score: 72, tag: "バリア強化タイプ", desc: "Tゾーンの皮脂管理がカギ。ナイアシンアミドが効果的", color: "purple" },
+          ].map(card => (
+            <div key={card.type} className={`bg-${card.color}-50 border border-${card.color}-200 rounded-2xl p-5`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-lg">{card.type}</span>
+                <span className={`bg-${card.color}-500 text-white text-xs px-2 py-1 rounded-full`}>{card.tag}</span>
+              </div>
+              <div className="text-4xl font-black mb-1">{card.score}<span className="text-base text-gray-500">/100</span></div>
+              <p className="text-sm text-gray-600">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="flex gap-2 mb-4 flex-wrap justify-center">
           {SKIN_SAMPLES.map((s, i) => (
             <button key={i} onClick={() => { setActiveSkin(i); setActiveTab(0); }}
@@ -327,6 +344,12 @@ export default function Home() {
           </button>
         </div>
         <p className="text-gray-400 text-sm">クレジットカード不要で3回無料 • いつでもキャンセル可能</p>
+
+        {/* 季節バナー */}
+        <div className="bg-gradient-to-r from-pink-100 to-rose-50 border border-pink-200 rounded-2xl p-4 text-center mt-8 mb-2">
+          <p className="text-sm text-pink-700 font-bold">🌸 春の肌変化シーズン到来</p>
+          <p className="text-xs text-pink-600 mt-1">花粉・紫外線増加で肌荒れが起きやすい時期です。今すぐ肌チェック！</p>
+        </div>
       </section>
 
       {/* なぜ差別化できるか */}

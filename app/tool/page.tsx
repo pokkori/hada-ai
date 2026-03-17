@@ -86,24 +86,14 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
       </div>
       <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
-        {(() => {
-          const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
-          const firstLine = skinSection?.content.split('\n')[0] ?? "肌診断結果";
-          const shareText = `AI美肌診断で「${firstLine}」と診断されました💄\n成分・ルーティン・おすすめ商品まで全部わかる！\nhttps://hada-ai.vercel.app\n#AI美肌診断 #スキンケア`;
-          return (
-            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`}
-              target="_blank" rel="noopener noreferrer"
-              className="text-xs px-3 py-1 rounded-lg bg-rose-500 hover:bg-rose-600 text-white font-medium transition-colors">
-              診断結果をXでシェア
-            </a>
-          );
-        })()}
       </div>
       {/* 肌スコアカード + シェア */}
       {(() => {
         const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
-        const firstLine = skinSection?.content.split('\n')[0] ?? "肌診断結果";
-        const scoreText = `AI美肌診断を受けました！\n肌タイプ: ${firstLine}\n肌の悩みをAIが徹底分析してくれます👇\n#AI美肌診断 #スキンケア`;
+        const rawContent = skinSection?.content ?? "肌診断結果";
+        const first40 = rawContent.replace(/\n/g, ' ').slice(0, 40);
+        const shareText = `【AI美肌診断】AIが私の肌タイプを診断！「${first40}」あなたの肌タイプは？無料で診断 → https://hada-ai.vercel.app #AI美肌診断 #スキンケア #肌診断`;
+        const firstLine = rawContent.split('\n')[0] ?? "肌診断結果";
         return (
           <>
             <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
@@ -114,11 +104,11 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
             </div>
             <button
               onClick={() => {
-                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(scoreText)}&url=${encodeURIComponent('https://hada-ai.vercel.app')}`, '_blank');
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
               }}
-              className="w-full mt-3 bg-pink-600 text-white font-bold py-2.5 rounded-xl hover:bg-pink-700 transition-colors"
+              className="w-full mt-3 bg-pink-500 hover:bg-pink-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
             >
-              Xでスコアをシェア
+              診断結果をXでシェア
             </button>
           </>
         );
