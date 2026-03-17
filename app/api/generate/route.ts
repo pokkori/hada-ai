@@ -104,7 +104,7 @@ K-beautyの商品も積極的に取り入れてください。`;
   try {
     const newCount = cookieCount + 1;
     const stream = getClient().messages.stream({
-      model: "claude-haiku-4-5-20251001",
+      model: "claude-sonnet-4-6",
       max_tokens: 2800,
       messages: [{ role: "user", content: prompt }],
     });
