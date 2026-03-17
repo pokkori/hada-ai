@@ -92,13 +92,18 @@ function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: stri
         const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
         const rawContent = skinSection?.content ?? "肌診断結果";
         const firstLine = rawContent.split('\n')[0] ?? "肌診断結果";
-        const shareText = `AI美肌診断で${skinType}と診断！おすすめスキンケアも教えてもらえた✨ #美肌 #スキンケア #AI診断 https://hada-ai.vercel.app`;
+        // 動的スコア算出: 肌タイプ・悩みの数・ライフスタイルから計算
+        const concernCount = concerns.split(/[、,\n]/).filter(c => c.trim().length > 0).length;
+        const baseScore = skinType.includes("普通") ? 82 : skinType.includes("乾燥") ? 71 : skinType.includes("脂性") ? 68 : skinType.includes("混合") ? 75 : 74;
+        const lifestyleBonus = lifestyle.includes("毎日") ? 3 : lifestyle.includes("少ない") ? -4 : 0;
+        const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
+        const shareText = `AI美肌診断で${skinType}と診断！スコア${skinScore}点。おすすめスキンケアも教えてもらえた✨ #美肌 #スキンケア #AI診断 https://hada-ai.vercel.app`;
         return (
           <>
             <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
               <p className="text-xs opacity-80 mb-1">AI美肌診断スコア</p>
-              <p className="text-4xl font-bold">78<span className="text-lg">/100</span></p>
-              <p className="text-sm mt-2 opacity-90">あなたの肌タイプ: {firstLine || "混合肌・やや乾燥傾向"}</p>
+              <p className="text-4xl font-bold">{skinScore}<span className="text-lg">/100</span></p>
+              <p className="text-sm mt-2 opacity-90">あなたの肌タイプ: {firstLine || skinType}</p>
               <p className="text-xs mt-3 opacity-60">hada-ai.vercel.app</p>
             </div>
             <button
