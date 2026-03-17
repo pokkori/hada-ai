@@ -97,7 +97,8 @@ function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: stri
         const baseScore = skinType.includes("普通") ? 82 : skinType.includes("乾燥") ? 71 : skinType.includes("脂性") ? 68 : skinType.includes("混合") ? 75 : 74;
         const lifestyleBonus = lifestyle.includes("毎日") ? 3 : lifestyle.includes("少ない") ? -4 : 0;
         const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
-        const shareText = `AI美肌診断で${skinType}と診断！スコア${skinScore}点。おすすめスキンケアも教えてもらえた✨ #美肌 #スキンケア #AI診断 https://hada-ai.vercel.app`;
+        const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
+        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断で${skinType}と診断！スコア${skinScore}点 #AI美肌診断`)}&url=${encodeURIComponent(ogUrl)}`;
         return (
           <>
             <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
@@ -108,7 +109,7 @@ function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: stri
             </div>
             <button
               onClick={() => {
-                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
+                window.open(tweetUrl, '_blank');
               }}
               className="w-full mt-3 bg-pink-500 hover:bg-pink-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors"
             >
