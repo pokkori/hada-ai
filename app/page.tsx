@@ -294,61 +294,56 @@ export default function Home() {
         />
       )}
 
-      {/* Hero */}
-      <section className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <div className="inline-block bg-rose-500 text-white text-sm font-bold px-4 py-1 rounded-full mb-6">
+      {/* Hero — ビジュアル刷新 */}
+      <section className="bg-gradient-to-br from-pink-400 via-rose-300 to-orange-200 px-4 py-20 text-center">
+        <div className="max-w-4xl mx-auto">
+        <div className="inline-block bg-white/30 backdrop-blur text-rose-800 text-sm font-bold px-4 py-1 rounded-full mb-6 border border-white/40">
           成分科学 × AI診断
         </div>
-        <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight text-gray-900">
-          皮膚科に行く前に、<br />
-          <span className="text-rose-500">AIに聞いてみてください。</span>
+        <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight text-white drop-shadow-md">
+          あなたの肌タイプを<br />
+          <span className="text-rose-900">30秒で診断</span>
         </h1>
-        <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
-          肌タイプ・悩み・スキンケアルーティンを入力するだけで、肌質・毛穴・乾燥・ニキビのリスクをAIが分析します。診察料0円で、今すぐ始められます。
+        <p className="text-lg md:text-xl text-rose-900/80 mb-6 max-w-2xl mx-auto font-medium">
+          肌タイプ・悩み・スキンケアルーティンを入力するだけ。<br className="hidden md:block" />
+          AIが肌質・毛穴・乾燥・ニキビリスクを即分析。診察料0円。
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-8 text-sm">
-          <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-rose-500 font-bold">7タイプ</span>
-            <span className="text-gray-600">肌質別に個別処方</span>
+          <div className="flex items-center gap-1.5 bg-white/80 backdrop-blur border border-white rounded-full px-4 py-2 shadow-sm">
+            <span className="text-rose-600 font-bold">7タイプ</span>
+            <span className="text-rose-800">肌質別に個別処方</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-rose-500 font-bold">200種以上</span>
-            <span className="text-gray-600">の成分を解析</span>
+          <div className="flex items-center gap-1.5 bg-white/80 backdrop-blur border border-white rounded-full px-4 py-2 shadow-sm">
+            <span className="text-rose-600 font-bold">200種以上</span>
+            <span className="text-rose-800">の成分を解析</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-white border border-rose-100 rounded-full px-4 py-2 shadow-sm">
-            <span className="text-rose-500 font-bold">K-beauty</span>
-            <span className="text-gray-600">国産・韓国コスメ対応</span>
+          <div className="flex items-center gap-1.5 bg-white/80 backdrop-blur border border-white rounded-full px-4 py-2 shadow-sm">
+            <span className="text-rose-600 font-bold">K-beauty</span>
+            <span className="text-rose-800">国産・韓国コスメ対応</span>
           </div>
-        </div>
-        <div className="bg-green-50 border border-green-300 rounded-xl p-4 my-4 max-w-md mx-auto text-left">
-          <h3 className="font-bold text-green-800 text-sm mb-2">🔒 プライバシーについて</h3>
-          <ul className="text-sm text-green-700 space-y-1">
-            <li>✓ 入力した情報はAI分析後に破棄されます</li>
-            <li>✓ データはサーバーに保存されません（メモリ内処理のみ）</li>
-            <li>✓ 個人情報の登録不要・メールアドレスも不要</li>
-          </ul>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link
             href="/tool"
-            className="bg-rose-500 hover:bg-rose-600 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all shadow-lg shadow-rose-100"
+            className="bg-rose-700 hover:bg-rose-800 text-white font-black py-4 px-10 rounded-2xl text-xl transition-all shadow-2xl"
           >
-            無料で診断する（3回）
+            無料で30秒診断する →
           </Link>
           <button
             onClick={() => setShowPayjp(true)}
             disabled={loading}
-            className="bg-white text-rose-600 border-2 border-rose-500 hover:bg-rose-50 font-bold py-4 px-8 rounded-xl text-lg transition-all disabled:opacity-50"
+            className="bg-white/90 text-rose-700 border-2 border-white hover:bg-white font-bold py-4 px-8 rounded-2xl text-lg transition-all disabled:opacity-50 shadow-lg"
           >
-            {loading ? "処理中..." : "¥1,980/月で無制限に使う"}
+            {loading ? "処理中..." : "¥1,980/月で無制限"}
           </button>
         </div>
-        <p className="text-gray-400 text-sm">クレジットカード不要で3回無料 • いつでもキャンセル可能</p>
+        <p className="text-rose-900/60 text-sm">クレジットカード不要で3回無料 • いつでもキャンセル可能</p>
 
         {/* 季節バナー */}
-        <div className="bg-gradient-to-r from-pink-100 to-rose-50 border border-pink-200 rounded-2xl p-4 text-center mt-8 mb-2">
-          <p className="text-sm text-pink-700 font-bold">🌸 春の肌変化シーズン到来</p>
-          <p className="text-xs text-pink-600 mt-1">花粉・紫外線増加で肌荒れが起きやすい時期です。今すぐ肌チェック！</p>
+        <div className="bg-white/30 backdrop-blur border border-white/40 rounded-2xl p-4 text-center mt-8 mb-2">
+          <p className="text-sm text-rose-900 font-bold">🌸 春の肌変化シーズン到来</p>
+          <p className="text-xs text-rose-800 mt-1">花粉・紫外線増加で肌荒れが起きやすい時期です。今すぐ肌チェック！</p>
+        </div>
         </div>
       </section>
 

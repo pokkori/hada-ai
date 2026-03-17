@@ -57,18 +57,82 @@ function Paywall({ onClose, onOpenPayjp }: { onClose: () => void; onOpenPayjp: (
 function CopyButton({ text, label = "コピー" }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <button onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-      className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors">
-      {copied ? "✓ コピー済み" : label}
-    </button>
+    <div className="relative inline-block">
+      <button
+        onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+        className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors"
+      >
+        {copied ? "✓ コピー済み" : label}
+      </button>
+      {copied && (
+        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs rounded-lg px-2 py-1 whitespace-nowrap shadow-lg animate-bounce">
+          ✅ コピー完了！
+        </div>
+      )}
+    </div>
   );
 }
 
-function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: string }) {
+function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
+  parsed: ParsedResult;
+  skinType: string;
+  concerns: string;
+  lifestyle: string;
+}) {
   const [activeTab, setActiveTab] = useState(0);
   const section = parsed.sections[activeTab];
+
+  const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
+  const rawContent = skinSection?.content ?? "肌診断結果";
+  const firstLine = rawContent.split('\n')[0] ?? "肌診断結果";
+
+  // 動的スコア算出: 肌タイプ・悩みの数・ライフスタイルから計算
+  const concernCount = concerns.split(/[、,\n]/).filter(c => c.trim().length > 0).length;
+  const baseScore = skinType.includes("普通") ? 82 : skinType.includes("乾燥") ? 71 : skinType.includes("脂性") ? 68 : skinType.includes("混合") ? 75 : 74;
+  const lifestyleBonus = lifestyle.includes("毎日") ? 3 : lifestyle.includes("少ない") ? -4 : 0;
+  const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
+
+  const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断を受けてみた💄\n私の肌スコア: ${skinScore}点/100点（${skinType}）\n有効成分・NGリスト・ルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア #美容`)}&url=${encodeURIComponent(ogUrl)}`;
+
+  const scoreColor = skinScore >= 80 ? "from-emerald-400 to-teal-400" : skinScore >= 70 ? "from-yellow-400 to-orange-300" : "from-rose-400 to-pink-400";
+  const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀✨" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
+
+  const r = 44;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (skinScore / 100) * circ;
+
   return (
     <div className="flex flex-col gap-3">
+      {/* 肌スコアヒーローカード（結果最上部に大きく表示） */}
+      <div className={`bg-gradient-to-br ${scoreColor} rounded-2xl p-5 text-white shadow-lg`}>
+        <p className="text-xs opacity-80 mb-3 text-center font-semibold tracking-wide">AI美肌診断スコア</p>
+        <div className="flex items-center gap-5">
+          <div className="shrink-0">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="10" />
+              <circle
+                cx="50" cy="50" r={r} fill="none" stroke="white" strokeWidth="10"
+                strokeDasharray={circ} strokeDashoffset={offset}
+                transform="rotate(-90 50 50)" strokeLinecap="round"
+              />
+              <text x="50" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="bold">{skinScore}</text>
+              <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">/100点</text>
+            </svg>
+          </div>
+          <div className="flex-1">
+            <p className="text-base font-bold mb-1">{scoreLabel}</p>
+            <p className="text-xs opacity-90 leading-relaxed">{firstLine || skinType}</p>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {["肌診断 ✓", "ルーティン ✓", "成分解析 ✓"].map(tag => (
+                <span key={tag} className="text-xs bg-white/20 rounded-full px-2 py-0.5">{tag}</span>
+              ))}
+            </div>
+            <p className="text-xs mt-2 opacity-60">hada-ai.vercel.app</p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex gap-1 flex-wrap">
         {parsed.sections.map((s, i) => (
           <button key={i} onClick={() => setActiveTab(i)}
@@ -87,66 +151,13 @@ function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: stri
       <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
       </div>
-      {/* 肌スコアカード + シェア */}
-      {(() => {
-        const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
-        const rawContent = skinSection?.content ?? "肌診断結果";
-        const firstLine = rawContent.split('\n')[0] ?? "肌診断結果";
-        // 動的スコア算出: 肌タイプ・悩みの数・ライフスタイルから計算
-        const concernCount = concerns.split(/[、,\n]/).filter(c => c.trim().length > 0).length;
-        const baseScore = skinType.includes("普通") ? 82 : skinType.includes("乾燥") ? 71 : skinType.includes("脂性") ? 68 : skinType.includes("混合") ? 75 : 74;
-        const lifestyleBonus = lifestyle.includes("毎日") ? 3 : lifestyle.includes("少ない") ? -4 : 0;
-        const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
-        const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
-        const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断を受けてみた💄\n私の肌スコア: ${skinScore}点/100点（${skinType}）\n有効成分・NGリスト・ルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア #美容`)}&url=${encodeURIComponent(ogUrl)}`;
-        // スコアに応じたカラーと評価ラベル
-        const scoreColor = skinScore >= 80 ? "from-emerald-400 to-teal-400" : skinScore >= 70 ? "from-yellow-400 to-orange-300" : "from-rose-400 to-pink-400";
-        const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀✨" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
-        // SVGサークルゲージ用
-        const r = 44;
-        const circ = 2 * Math.PI * r;
-        const offset = circ - (skinScore / 100) * circ;
-        const ringColor = skinScore >= 80 ? "#10b981" : skinScore >= 70 ? "#f59e0b" : "#f43f5e";
-        return (
-          <>
-            <div className={`mt-6 bg-gradient-to-br ${scoreColor} rounded-2xl p-5 text-white`}>
-              <p className="text-xs opacity-80 mb-3 text-center font-semibold tracking-wide">AI美肌診断スコア</p>
-              <div className="flex items-center gap-5">
-                {/* SVGスコアリング */}
-                <div className="shrink-0">
-                  <svg width="100" height="100" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="10" />
-                    <circle
-                      cx="50" cy="50" r={r} fill="none" stroke="white" strokeWidth="10"
-                      strokeDasharray={circ} strokeDashoffset={offset}
-                      transform="rotate(-90 50 50)" strokeLinecap="round"
-                    />
-                    <text x="50" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="bold">{skinScore}</text>
-                    <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">/100点</text>
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="text-base font-bold mb-1">{scoreLabel}</p>
-                  <p className="text-xs opacity-90 leading-relaxed">{firstLine || skinType}</p>
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {["肌診断 ✓", "ルーティン ✓", "成分解析 ✓"].map(tag => (
-                      <span key={tag} className="text-xs bg-white/20 rounded-full px-2 py-0.5">{tag}</span>
-                    ))}
-                  </div>
-                  <p className="text-xs mt-2 opacity-60">hada-ai.vercel.app</p>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => window.open(tweetUrl, '_blank')}
-              className="w-full mt-3 bg-rose-500 hover:bg-rose-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2"
-            >
-              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              肌スコア{skinScore}点をXでシェア 💄
-            </button>
-          </>
-        );
-      })()}
+      <button
+        onClick={() => window.open(tweetUrl, '_blank')}
+        className="w-full mt-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2"
+      >
+        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        肌スコア{skinScore}点をXでシェア 💄
+      </button>
     </div>
   );
 }
@@ -163,6 +174,7 @@ export default function HadaTool() {
   const [showPayjp, setShowPayjp] = useState(false);
   const [error, setError] = useState("");
   const [isPremium, setIsPremium] = useState(false);
+  const [completionVisible, setCompletionVisible] = useState(false);
 
   useEffect(() => {
     setCount(parseInt(localStorage.getItem(KEY) || "0"));
@@ -174,7 +186,7 @@ export default function HadaTool() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isLimit) { setShowPaywall(true); return; }
-    setLoading(true); setParsed(null); setError("");
+    setLoading(true); setParsed(null); setError(""); setCompletionVisible(false);
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -208,6 +220,9 @@ export default function HadaTool() {
         }
         setParsed(parseResult(accumulated));
       }
+      // 達成感バナー表示
+      setCompletionVisible(true);
+      setTimeout(() => setCompletionVisible(false), 4000);
     } catch { setError("通信エラーが発生しました。"); }
     finally { setLoading(false); }
   };
@@ -281,6 +296,18 @@ export default function HadaTool() {
 
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-700 mb-2">診断結果</label>
+
+          {/* 達成感バナー */}
+          <div className={`transition-all duration-500 overflow-hidden ${completionVisible ? "max-h-24 opacity-100 mb-3" : "max-h-0 opacity-0"}`}>
+            <div className="bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
+              <span className="text-2xl">✅</span>
+              <div>
+                <p className="font-bold text-sm">肌診断 完了！</p>
+                <p className="text-xs opacity-80">あなたの美肌スコアをチェックしてください</p>
+              </div>
+            </div>
+          </div>
+
           {loading ? (
             <div className="flex-1 bg-white border border-gray-200 rounded-xl flex items-center justify-center min-h-[420px]">
               <div className="text-center">
@@ -290,7 +317,7 @@ export default function HadaTool() {
               </div>
             </div>
           ) : parsed ? (
-            <ResultTabs parsed={parsed} skinType={skinType} />
+            <ResultTabs parsed={parsed} skinType={skinType} concerns={concerns} lifestyle={lifestyle} />
           ) : (
             <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
               <div className="text-4xl">💄</div>
