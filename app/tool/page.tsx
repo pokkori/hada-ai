@@ -75,6 +75,93 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
   );
 }
 
+// 肌タイプ別アフィリエイトリンク設定
+const AFFILIATE_LINKS: Record<string, { label: string; url: string; desc: string }[]> = {
+  "乾燥": [
+    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_MOISTURIZER", desc: "セラミド1,3,6-II配合でバリア機能を直接補修" },
+    { label: "低刺激 クリーム をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_CREAM_DRY", desc: "シアバター・スクワラン配合でしっかり油分フタ" },
+  ],
+  "脂性": [
+    { label: "BHA（サリチル酸）配合 トナーをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_BHA", desc: "毛穴詰まり・ニキビ菌を溶解する定番成分" },
+    { label: "ナイアシンアミド 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_NIACINAMIDE", desc: "皮脂抑制・毛穴縮小・ニキビ跡改善の万能成分" },
+  ],
+  "混合": [
+    { label: "ナイアシンアミド 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_NIACINAMIDE", desc: "混合肌のTゾーン皮脂コントロールに最適" },
+    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_MOISTURIZER", desc: "乾燥しやすいUゾーンのバリア機能をケア" },
+  ],
+  "敏感": [
+    { label: "低刺激 敏感肌用 化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_SENSITIVE", desc: "無香料・無着色・ノンコメドジェニックのやさしい処方" },
+    { label: "パンテノール（ビタB5）配合 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_PANTHENOL", desc: "炎症を鎮静し傷ついた肌バリアを修復" },
+  ],
+  "default": [
+    { label: "人気スキンケアアイテムをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE", desc: "あなたの肌悩みに合ったアイテムを選んでください" },
+    { label: "おすすめ美容液セットをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_BEAUTY_SET", desc: "成分にこだわったコスパ重視のセット商品" },
+  ],
+};
+
+function getAffiliateLinks(skinType: string) {
+  if (skinType.includes("乾燥")) return AFFILIATE_LINKS["乾燥"];
+  if (skinType.includes("脂性") || skinType.includes("オイリー")) return AFFILIATE_LINKS["脂性"];
+  if (skinType.includes("混合")) return AFFILIATE_LINKS["混合"];
+  if (skinType.includes("敏感")) return AFFILIATE_LINKS["敏感"];
+  return AFFILIATE_LINKS["default"];
+}
+
+function AffiliateSection({ skinType }: { skinType: string }) {
+  const links = getAffiliateLinks(skinType);
+  return (
+    <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+      <p className="text-xs font-bold text-amber-700 mb-3">💛 あなたの肌タイプ（{skinType}）向けおすすめ商品</p>
+      <div className="space-y-2">
+        {links.map((link, i) => (
+          <a
+            key={i}
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 bg-white border border-amber-100 rounded-lg p-3 hover:bg-amber-50 transition-colors group"
+          >
+            <span className="text-xl shrink-0">🛒</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-amber-800 group-hover:text-amber-900">{link.label} →</p>
+              <p className="text-xs text-gray-500 mt-0.5">{link.desc}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 mt-2">※ Amazonアソシエイトリンクです。実際の商品は成分表示をご確認ください。</p>
+    </div>
+  );
+}
+
+function SkinTimeline({ skinScore }: { skinScore: number }) {
+  const week2 = skinScore >= 80 ? "肌のキメが整い、化粧水の浸透が改善します" :
+    skinScore >= 70 ? "乾燥・テカりのバランスが整い始めます" :
+    "炎症が落ち着き、ニキビの新規発生が減少します";
+  const month1 = skinScore >= 80 ? "くすみが改善し、透明感が増してきます" :
+    skinScore >= 70 ? "毛穴が目立ちにくくなり、メイクのりが改善します" :
+    "ニキビ跡が薄くなり、肌のざらつきが改善します";
+  const month3 = "正しいケアを続けることで、肌の「素地」そのものが改善します";
+
+  return (
+    <div className="mt-3 bg-rose-50 border border-rose-100 rounded-xl p-4">
+      <p className="text-xs font-bold text-rose-700 mb-3">📅 肌改善タイムライン（今日から始めた場合）</p>
+      <div className="space-y-2">
+        {[
+          { period: "2週間後", content: week2, color: "bg-green-100 text-green-700" },
+          { period: "1ヶ月後", content: month1, color: "bg-blue-100 text-blue-700" },
+          { period: "3ヶ月後", content: month3, color: "bg-purple-100 text-purple-700" },
+        ].map(({ period, content, color }) => (
+          <div key={period} className="flex gap-2 items-start">
+            <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${color}`}>{period}</span>
+            <p className="text-xs text-gray-600 leading-relaxed">{content}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   parsed: ParsedResult;
   skinType: string;
@@ -181,6 +268,13 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
       </div>
+
+      {/* 肌改善タイムライン（診断タブ表示時） */}
+      {activeTab === 0 && <SkinTimeline skinScore={skinScore} />}
+
+      {/* アフィリエイト導線（商品レコメンドタブ表示時） */}
+      {section.title.includes("商品") && <AffiliateSection skinType={skinType} />}
+
       <button
         onClick={() => window.open(tweetUrl, '_blank')}
         className="w-full mt-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-6 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2"

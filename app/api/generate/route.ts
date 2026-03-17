@@ -155,12 +155,6 @@ K-beautyの商品も積極的に取り入れてください。国内・海外含
     const stream = getClient().messages.stream({
       model: "claude-sonnet-4-6",
       max_tokens: 4000,
-
-  try {
-    const newCount = cookieCount + 1;
-    const stream = getClient().messages.stream({
-      model: "claude-sonnet-4-6",
-      max_tokens: 4000,
       messages: [{ role: "user", content: prompt }],
     });
     const encoder = new TextEncoder();
