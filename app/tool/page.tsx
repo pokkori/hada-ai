@@ -147,7 +147,35 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
           <span className="text-sm font-semibold text-gray-700">{section.icon} {section.title}</span>
           <CopyButton text={section.content} />
         </div>
-        <pre className="text-sm text-gray-800 whitespace-pre-wrap font-sans leading-relaxed">{section.content}</pre>
+        <div className="space-y-2">
+          {section.content.split('\n').map((line, i) => {
+            if (line.startsWith('## ') || line.startsWith('# ')) {
+              return (
+                <h3 key={i} className="text-sm font-black pt-2 pb-1 border-b border-rose-200 text-rose-700">
+                  {line.replace(/^#{1,3}\s/, '')}
+                </h3>
+              );
+            }
+            if (line.startsWith('✓') || line.match(/^[・•]\s/) || line.match(/^[-]\s/) || line.match(/^\d+\.\s/)) {
+              const isCheck = line.startsWith('✓');
+              return (
+                <div key={i} className="flex gap-2 items-start text-sm text-gray-700">
+                  <span className="flex-shrink-0 mt-0.5 text-rose-500 font-bold">{isCheck ? '✓' : '●'}</span>
+                  <span>{line.replace(/^[✓・•\-]\s*/, '').replace(/^\d+\.\s*/, '')}</span>
+                </div>
+              );
+            }
+            if (line.trim() === '') return <div key={i} className="h-1" />;
+            if (line.startsWith('【') || line.startsWith('■') || line.startsWith('▶')) {
+              return (
+                <p key={i} className="text-sm font-semibold text-gray-800 mt-2">{line}</p>
+              );
+            }
+            return (
+              <p key={i} className="text-sm leading-relaxed text-gray-700">{line}</p>
+            );
+          })}
+        </div>
       </div>
       <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
