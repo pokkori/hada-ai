@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import PayjpModal from "@/components/PayjpModal";
+import { track } from '@vercel/analytics';
 
 const FREE_LIMIT = 3;
 const KEY = "hada_count";
@@ -46,7 +47,7 @@ function Paywall({ onClose, onOpenPayjp }: { onClose: () => void; onOpenPayjp: (
           <li>✓ コスパ商品レコメンド</li>
           <li>✓ いつでもキャンセル可能</li>
         </ul>
-        <button onClick={onOpenPayjp} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3">
+        <button onClick={() => { track('upgrade_click', { service: 'AI美肌診断', plan: 'premium' }); onOpenPayjp(); }} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3">
           ¥1,980/月で始める
         </button>
         <button onClick={onClose} className="text-xs text-gray-400">閉じる</button>
@@ -214,7 +215,8 @@ export default function HadaTool() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLimit) { setShowPaywall(true); return; }
+    if (isLimit) { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); return; }
+    track('ai_generated', { service: 'AI美肌診断' });
     setLoading(true); setParsed(null); setError(""); setCompletionVisible(false);
     try {
       const res = await fetch("/api/generate", {
@@ -222,7 +224,7 @@ export default function HadaTool() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skinType, concerns, routine, lifestyle }),
       });
-      if (res.status === 429) { setShowPaywall(true); setLoading(false); return; }
+      if (res.status === 429) { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); setLoading(false); return; }
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "エラーが発生しました"); setLoading(false); return;
@@ -242,7 +244,7 @@ export default function HadaTool() {
             const newCount = meta.count ?? count + 1;
             localStorage.setItem(KEY, String(newCount));
             setCount(newCount);
-            if (!isPremium && newCount >= FREE_LIMIT) setTimeout(() => setShowPaywall(true), 1500);
+            if (!isPremium && newCount >= FREE_LIMIT) setTimeout(() => { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); }, 1500);
           } catch { /* ignore */ }
         } else {
           accumulated += chunk;
