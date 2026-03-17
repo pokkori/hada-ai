@@ -64,7 +64,7 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
   );
 }
 
-function ResultTabs({ parsed }: { parsed: ParsedResult }) {
+function ResultTabs({ parsed, skinType }: { parsed: ParsedResult; skinType: string }) {
   const [activeTab, setActiveTab] = useState(0);
   const section = parsed.sections[activeTab];
   return (
@@ -91,9 +91,8 @@ function ResultTabs({ parsed }: { parsed: ParsedResult }) {
       {(() => {
         const skinSection = parsed.sections.find(s => s.title.includes("肌") || s.title.includes("診断"));
         const rawContent = skinSection?.content ?? "肌診断結果";
-        const first40 = rawContent.replace(/\n/g, ' ').slice(0, 40);
-        const shareText = `【AI美肌診断】AIが私の肌タイプを診断！「${first40}」あなたの肌タイプは？無料で診断 → https://hada-ai.vercel.app #AI美肌診断 #スキンケア #肌診断`;
         const firstLine = rawContent.split('\n')[0] ?? "肌診断結果";
+        const shareText = `AI美肌診断で${skinType}と診断！おすすめスキンケアも教えてもらえた✨ #美肌 #スキンケア #AI診断 https://hada-ai.vercel.app`;
         return (
           <>
             <div className="mt-6 bg-gradient-to-br from-pink-400 to-rose-300 rounded-2xl p-5 text-white text-center">
@@ -256,7 +255,7 @@ export default function HadaTool() {
               </div>
             </div>
           ) : parsed ? (
-            <ResultTabs parsed={parsed} />
+            <ResultTabs parsed={parsed} skinType={skinType} />
           ) : (
             <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
               <div className="text-4xl">💄</div>

@@ -400,6 +400,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ビフォーアフター */}
+      <section className="py-16 px-4 bg-gradient-to-b from-rose-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">診断前 vs 診断後</div>
+            <h2 className="text-2xl font-black text-gray-900">AI診断で、スキンケアの迷いがなくなる</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6">
+              <div className="text-3xl mb-3 text-center">😕</div>
+              <h3 className="text-lg font-bold text-gray-600 text-center mb-4">診断前</h3>
+              <ul className="space-y-3 text-sm text-gray-500">
+                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>スキンケア選びに迷う。何が自分に合うか分からない</span></li>
+                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>口コミだけで選んで、合わなくて無駄遣い</span></li>
+                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>成分表示が読めず、何が良いのか悪いのか不明</span></li>
+                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>朝と夜で何を使えばいいか順番が分からない</span></li>
+              </ul>
+            </div>
+            <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 relative overflow-hidden">
+              <div className="absolute top-3 right-3 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full">AI診断後</div>
+              <div className="text-3xl mb-3 text-center">✨</div>
+              <h3 className="text-lg font-bold text-rose-700 text-center mb-4">診断後</h3>
+              <ul className="space-y-3 text-sm text-rose-700">
+                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>自分に合ったケアが明確に。成分ベースで選べる</span></li>
+                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>有効成分とNG成分リストで、失敗購入ゼロへ</span></li>
+                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>プチプラ〜ミドルの具体的な商品名まで提案</span></li>
+                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>朝・夜のステップ別ルーティンが即わかる</span></li>
+              </ul>
+            </div>
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100 text-lg">
+              今すぐ無料で診断する →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 診断サンプル */}
       <SkinSampleSection />
 
