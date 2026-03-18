@@ -532,6 +532,21 @@ export default function Home() {
         </div>
       </section>
 
+      {/* X Share */}
+      <section className="py-8 px-6 max-w-3xl mx-auto text-center">
+        <a
+          href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent("AI美肌診断 — 肌タイプ・悩みを入力するだけでAIが成分・スキンケアルーティン・商品まで個別提案✨ 無料で試してみて！ → https://hada-ai.vercel.app #AI美肌診断 #スキンケア #美肌")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          Xでシェアする
+        </a>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-gray-200 py-8 text-center text-gray-400 text-sm bg-white">
         <div className="flex justify-center gap-6 mb-4">
