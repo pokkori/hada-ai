@@ -553,6 +553,24 @@ export default function Home() {
         </ol>
       </section>
 
+      {/* FAQ */}
+      <section className="py-16 px-6 max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-10">よくある質問</h2>
+        <div className="space-y-4">
+          {[
+            { q: "診断は医学的なものですか？", a: "本サービスはAIによるエンターテインメント目的の参考情報です。医療診断ではありません。" },
+            { q: "写真は保存されますか？", a: "アップロードされた写真はAI分析後に即時削除します。" },
+            { q: "無料で使えますか？", a: "基本診断は無料です。詳細レポートは有料プランでご利用いただけます。" },
+            { q: "どんな肌質に対応していますか？", a: "乾燥肌・オイリー肌・混合肌・敏感肌の4タイプすべてに対応しています。" },
+          ].map((faq) => (
+            <div key={faq.q} className="border border-rose-200 rounded-xl p-5 bg-rose-50">
+              <h3 className="font-bold text-gray-900 mb-2 text-sm">Q. {faq.q}</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">A. {faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* X Share */}
       <section className="py-8 px-6 max-w-3xl mx-auto text-center">
         <a
