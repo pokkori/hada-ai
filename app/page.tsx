@@ -532,6 +532,27 @@ export default function Home() {
         </div>
       </section>
 
+      {/* もっと活用する3選 */}
+      <section className="py-8 px-4 max-w-lg mx-auto">
+        <h2 className="text-center text-base font-bold text-rose-700 mb-4">✨ AI美肌診断をもっと活用する3選</h2>
+        <ol className="space-y-3">
+          {[
+            { icon: "📅", title: "季節ごとに再診断する", desc: "春夏秋冬で肌の状態は変わります。季節の変わり目に再診断してスキンケアを最適化しよう。" },
+            { icon: "🛒", title: "おすすめ商品を実際に試す", desc: "AIが提案した成分・商品を実際に購入して肌の変化を記録。自分に合うルーティンを見つけよう。" },
+            { icon: "👥", title: "家族・友人の肌診断もしてあげる", desc: "親や友人の悩みを入力して、AIの肌アドバイスをプレゼントしよう。喜ばれること間違いなし！" },
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-3 rounded-xl p-3"
+              style={{ background: "rgba(225,29,72,0.05)", border: "1px solid rgba(225,29,72,0.12)" }}>
+              <span style={{ fontSize: "22px", lineHeight: "1" }}>{item.icon}</span>
+              <div>
+                <div className="text-rose-800 font-bold text-sm">{i + 1}. {item.title}</div>
+                <div className="text-rose-600 text-xs mt-0.5 opacity-80">{item.desc}</div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {/* X Share */}
       <section className="py-8 px-6 max-w-3xl mx-auto text-center">
         <a
