@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import PayjpModal from "@/components/PayjpModal";
+import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
 
 const FREE_LIMIT = 3;
@@ -33,26 +33,20 @@ function parseResult(text: string): ParsedResult {
   return { sections, raw: text };
 }
 
-function Paywall({ onClose, onOpenPayjp }: { onClose: () => void; onOpenPayjp: () => void }) {
+function Paywall({ onClose }: { onClose: () => void; onOpenPayjp?: () => void }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-      <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center">
-        <div className="text-3xl mb-3">💄</div>
-        <h2 className="text-lg font-bold mb-2">無料診断回数を使い切りました</h2>
-        <p className="text-sm text-gray-500 mb-4">プレミアムプランで肌診断が無制限に</p>
-        <div className="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mb-3">🛡️ 30日間返金保証</div>
-        <ul className="text-xs text-gray-400 text-left mb-5 space-y-1">
-          <li>✓ 肌タイプ詳細診断（無制限）</li>
-          <li>✓ パーソナルスキンケアルーティン</li>
-          <li>✓ 有効成分・避ける成分解説</li>
-          <li>✓ コスパ商品レコメンド</li>
-          <li>✓ いつでもキャンセル可能</li>
-          <li>✓ 30日間返金保証（安心トライアル）</li>
-        </ul>
-        <button onClick={() => { track('upgrade_click', { service: 'AI美肌診断', plan: 'premium' }); onOpenPayjp(); }} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3 hover:scale-105 transition-all">
-          ¥1,980/月で始める →
-        </button>
-        <button onClick={onClose} className="text-xs text-gray-400">閉じる</button>
+      <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
+        <div className="text-3xl mb-3">⭐</div>
+        <h2 className="text-lg font-bold mb-2">無料枠を使い切りました</h2>
+        <p className="text-sm text-gray-500 mb-4">プレミアムプランで全機能を使えます</p>
+        <KomojuButton
+          planId="standard"
+          planLabel="プレミアム ¥1,980/月を始める"
+          className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        />
+        <button onClick={onClose} className="text-xs text-gray-400 hover:text-gray-600 mt-3 block w-full">閉じる</button>
       </div>
     </div>
   );
@@ -397,14 +391,17 @@ export default function HadaTool() {
   return (
     <main className="min-h-screen bg-gray-50">
       {showPayjp && (
-        <PayjpModal
-          publicKey={process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY!}
-          planLabel="AI美肌診断 プレミアム ¥1,980/月（いつでもキャンセル可）"
-          onSuccess={() => { setShowPayjp(false); setShowPaywall(false); setIsPremium(true); }}
-          onClose={() => setShowPayjp(false)}
-        />
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
+            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <div className="text-3xl mb-3 text-center">✨</div>
+            <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
+            <p className="text-sm text-gray-500 mb-4 text-center">AI美肌診断 無制限（いつでもキャンセル可）</p>
+            <KomojuButton planId="standard" planLabel="AI美肌診断 プレミアム ¥1,980/月" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
+          </div>
+        </div>
       )}
-      {showPaywall && <Paywall onClose={() => setShowPaywall(false)} onOpenPayjp={() => { setShowPaywall(false); setShowPayjp(true); }} />}
+      {showPaywall && <Paywall onClose={() => setShowPaywall(false)} />}
       <nav className="bg-white border-b px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/" className="font-bold text-gray-900">💄 AI美肌診断</Link>
