@@ -80,24 +80,24 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
 // 肌タイプ別アフィリエイトリンク設定
 const AFFILIATE_LINKS: Record<string, { label: string; url: string; desc: string }[]> = {
   "乾燥": [
-    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_MOISTURIZER", desc: "セラミド1,3,6-II配合でバリア機能を直接補修" },
-    { label: "低刺激 クリーム をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_CREAM_DRY", desc: "シアバター・スクワラン配合でしっかり油分フタ" },
+    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%82%BB%E3%83%A9%E3%83%9F%E3%83%89+%E4%BF%9D%E6%B9%BF+%E5%8C%96%E7%B2%A7%E6%B0%B4&i=beauty", desc: "セラミド1,3,6-II配合でバリア機能を直接補修" },
+    { label: "低刺激 保湿クリームをAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E4%BF%9D%E6%B9%BF+%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%A0+%E4%B9%BE%E7%87%A5%E8%82%8C+%E3%82%B7%E3%82%A2%E3%83%90%E3%82%BF%E3%83%BC&i=beauty", desc: "シアバター・スクワラン配合でしっかり油分フタ" },
   ],
   "脂性": [
-    { label: "BHA（サリチル酸）配合 トナーをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_BHA", desc: "毛穴詰まり・ニキビ菌を溶解する定番成分" },
-    { label: "ナイアシンアミド 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_NIACINAMIDE", desc: "皮脂抑制・毛穴縮小・ニキビ跡改善の万能成分" },
+    { label: "BHA（サリチル酸）配合 トナーをAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%82%B5%E3%83%AA%E3%83%81%E3%83%AB%E9%85%B8+%E6%AF%9B%E7%A9%B4+%E3%83%88%E3%83%8A%E3%83%BC&i=beauty", desc: "毛穴詰まり・ニキビ菌を溶解する定番成分" },
+    { label: "ナイアシンアミド配合 美容液をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%83%8A%E3%82%A4%E3%82%A2%E3%82%B7%E3%83%B3%E3%82%A2%E3%83%9F%E3%83%89+%E7%BE%8E%E5%AE%B9%E6%B6%B2&i=beauty", desc: "皮脂抑制・毛穴縮小・ニキビ跡改善の万能成分" },
   ],
   "混合": [
-    { label: "ナイアシンアミド 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_NIACINAMIDE", desc: "混合肌のTゾーン皮脂コントロールに最適" },
-    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_MOISTURIZER", desc: "乾燥しやすいUゾーンのバリア機能をケア" },
+    { label: "ナイアシンアミド配合 美容液をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%83%8A%E3%82%A4%E3%82%A2%E3%82%B7%E3%83%B3%E3%82%A2%E3%83%9F%E3%83%89+%E7%BE%8E%E5%AE%B9%E6%B6%B2&i=beauty", desc: "混合肌のTゾーン皮脂コントロールに最適" },
+    { label: "セラミド配合 保湿化粧水をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%82%BB%E3%83%A9%E3%83%9F%E3%83%89+%E4%BF%9D%E6%B9%BF+%E5%8C%96%E7%B2%A7%E6%B0%B4&i=beauty", desc: "乾燥しやすいUゾーンのバリア機能をケア" },
   ],
   "敏感": [
-    { label: "低刺激 敏感肌用 化粧水をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_SENSITIVE", desc: "無香料・無着色・ノンコメドジェニックのやさしい処方" },
-    { label: "パンテノール（ビタB5）配合 美容液をAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE_PANTHENOL", desc: "炎症を鎮静し傷ついた肌バリアを修復" },
+    { label: "低刺激 敏感肌用 化粧水をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E6%95%8F%E6%84%9F%E8%82%8C+%E5%8C%96%E7%B2%A7%E6%B0%B4+%E7%84%A1%E9%A6%99%E6%96%99+%E4%BD%8E%E5%88%BA%E6%BF%80&i=beauty", desc: "無香料・無着色・ノンコメドジェニックのやさしい処方" },
+    { label: "パンテノール（ビタB5）配合 美容液をAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E3%83%91%E3%83%B3%E3%83%86%E3%83%8E%E3%83%BC%E3%83%AB+%E7%BE%8E%E5%AE%B9%E6%B6%B2+%E6%95%8F%E6%84%9F%E8%82%8C&i=beauty", desc: "炎症を鎮静し傷ついた肌バリアを修復" },
   ],
   "default": [
-    { label: "人気スキンケアアイテムをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_SKIN_CARE", desc: "あなたの肌悩みに合ったアイテムを選んでください" },
-    { label: "おすすめ美容液セットをAmazonで探す", url: "https://amzn.to/PLACEHOLDER_BEAUTY_SET", desc: "成分にこだわったコスパ重視のセット商品" },
+    { label: "人気スキンケアランキングをAmazonで見る", url: "https://www.amazon.co.jp/s?k=%E3%82%B9%E3%82%AD%E3%83%B3%E3%82%B1%E3%82%A2+%E5%8C%96%E7%B2%A7%E6%B0%B4&i=beauty&s=review-rank", desc: "レビュー高評価のスキンケアを選んでください" },
+    { label: "プチプラ美容液セットをAmazonで探す", url: "https://www.amazon.co.jp/s?k=%E7%BE%8E%E5%AE%B9%E6%B6%B2+%E3%83%97%E3%83%81%E3%83%97%E3%83%A9+%E3%82%BB%E3%83%83%E3%83%88&i=beauty", desc: "成分にこだわったコスパ重視のセット商品" },
   ],
 };
 
