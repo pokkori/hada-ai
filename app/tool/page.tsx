@@ -40,15 +40,17 @@ function Paywall({ onClose, onOpenPayjp }: { onClose: () => void; onOpenPayjp: (
         <div className="text-3xl mb-3">💄</div>
         <h2 className="text-lg font-bold mb-2">無料診断回数を使い切りました</h2>
         <p className="text-sm text-gray-500 mb-4">プレミアムプランで肌診断が無制限に</p>
+        <div className="inline-block bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full mb-3">🛡️ 30日間返金保証</div>
         <ul className="text-xs text-gray-400 text-left mb-5 space-y-1">
-          <li>✓ 肌タイプ詳細診断</li>
+          <li>✓ 肌タイプ詳細診断（無制限）</li>
           <li>✓ パーソナルスキンケアルーティン</li>
           <li>✓ 有効成分・避ける成分解説</li>
           <li>✓ コスパ商品レコメンド</li>
           <li>✓ いつでもキャンセル可能</li>
+          <li>✓ 30日間返金保証（安心トライアル）</li>
         </ul>
-        <button onClick={() => { track('upgrade_click', { service: 'AI美肌診断', plan: 'premium' }); onOpenPayjp(); }} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3">
-          ¥1,980/月で始める
+        <button onClick={() => { track('upgrade_click', { service: 'AI美肌診断', plan: 'premium' }); onOpenPayjp(); }} className="block w-full bg-rose-500 text-white font-bold py-3 rounded-xl hover:bg-rose-600 mb-3 hover:scale-105 transition-all">
+          ¥1,980/月で始める →
         </button>
         <button onClick={onClose} className="text-xs text-gray-400">閉じる</button>
       </div>
