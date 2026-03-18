@@ -284,6 +284,30 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
         <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         肌スコア{skinScore}点をXでシェア 💄
       </button>
+      {/* A8.netアフィリエイト：美容・ダイエット */}
+      <div className="mt-4 bg-pink-950 border border-pink-800 rounded-xl p-4">
+        <p className="text-xs font-bold text-pink-200 mb-3">✨ 美肌をさらに磨くために（PR）</p>
+        <div className="space-y-2">
+          {[
+            { icon: "🏃", label: "ハビットパーソナルジム", desc: "失敗したら全額返金！2ヶ月ダイエットコース", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5TKLPU+56HC+5YJRM" },
+            { icon: "💪", label: "ビーコンセプト", desc: "女性向け下半身痩せ専門パーソナルジム", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5X57CI+3UK2+5YRHE" },
+            { icon: "🧬", label: "CLOUD GYM", desc: "遺伝子検査×オンラインパーソナルトレーニング", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM" },
+            { icon: "🌸", label: "Dione 全身脱毛", desc: "敏感肌専門の脱毛サロン。全身脱毛体験受付中", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H" },
+            { icon: "💎", label: "韓国美顔器 Dr.tengle", desc: "メイクさん愛用の韓国スキンケア美顔器", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI" },
+            { icon: "🧘", label: "SOELU オンラインヨガ", desc: "本格ヨガ・フィットネスを自宅で。トライアル1,000円", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9" },
+          ].map((item, i) => (
+            <a key={i} href={item.url} target="_blank" rel="noopener noreferrer sponsored"
+              className="flex items-center gap-3 bg-pink-900 hover:bg-pink-800 border border-pink-700 rounded-lg p-3 transition-colors group">
+              <span className="text-xl shrink-0">{item.icon}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-pink-100 group-hover:text-white">{item.label} →</p>
+                <p className="text-xs text-pink-300 mt-0.5">{item.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* 次のアクション3選 */}
       <div className="mt-4 bg-pink-50 border border-pink-200 rounded-xl p-4">
         <p className="text-sm font-bold text-pink-800 mb-3">💄 次にやるべきこと3選</p>
