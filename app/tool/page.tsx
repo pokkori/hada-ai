@@ -95,6 +95,80 @@ const AFFILIATE_LINKS: Record<string, { label: string; url: string; desc: string
   ],
 };
 
+// 肌タイプ別「今週試すべきTOP3」アイテム（A8.net高単価案件 + 具体商品名）
+const TOP3_ITEMS: Record<string, { rank: number; name: string; brand: string; price: string; effect: string; url: string; tag: string }[]> = {
+  "乾燥": [
+    { rank: 1, name: "ケアセラ AP ゲルクリーム", brand: "花王", price: "¥1,800前後", effect: "セラミド配合でバリア機能を直接補修。乾燥肌に最もコスパが高い", url: "https://www.amazon.co.jp/s?k=%E3%82%B1%E3%82%A2%E3%82%BB%E3%83%A9+AP+%E3%82%B2%E3%83%AB&i=beauty", tag: "コスパ最強" },
+    { rank: 2, name: "COSRX ヒアルロン酸 セラム", brand: "COSRX（韓国）", price: "¥2,500前後", effect: "低分子・高分子ヒアルロン酸W配合。深部と表面を同時に保水", url: "https://www.amazon.co.jp/s?k=COSRX+%E3%83%92%E3%82%A2%E3%83%AB%E3%83%AD%E3%83%B3%E9%85%B8+%E3%82%BB%E3%83%A9%E3%83%A0&i=beauty", tag: "K-beauty定番" },
+    { rank: 3, name: "ミノン アミノモイスト", brand: "第一三共ヘルスケア", price: "¥2,200前後", effect: "アミノ酸系成分でやさしく保湿。皮膚科医からも推薦される低刺激設計", url: "https://www.amazon.co.jp/s?k=%E3%83%9F%E3%83%8E%E3%83%B3+%E3%82%A2%E3%83%9F%E3%83%8E%E3%83%A2%E3%82%A4%E3%82%B9%E3%83%88&i=beauty", tag: "皮膚科推薦" },
+  ],
+  "脂性": [
+    { rank: 1, name: "COSRX AHA/BHA クラリファイングトナー", brand: "COSRX（韓国）", price: "¥1,500前後", effect: "サリチル酸0.1%で毛穴詰まりを週2回ずつ溶かす。オイリー肌の定番", url: "https://www.amazon.co.jp/s?k=COSRX+AHA+BHA+%E3%82%AF%E3%83%A9%E3%83%AA%E3%83%95%E3%82%A1%E3%82%A4%E3%83%B3%E3%82%B0&i=beauty", tag: "毛穴対策" },
+    { rank: 2, name: "The Ordinary ナイアシンアミド 10% + ジンク 1%", brand: "The Ordinary", price: "¥2,000前後", effect: "皮脂抑制・毛穴縮小の最強コンビ。1本で複数の悩みに対応", url: "https://www.amazon.co.jp/s?k=The+Ordinary+%E3%83%8A%E3%82%A4%E3%82%A2%E3%82%B7%E3%83%B3%E3%82%A2%E3%83%9F%E3%83%89+10%25&i=beauty", tag: "脂性肌最強" },
+    { rank: 3, name: "ビオレ おうちdeエステ 肌をなめらかにするマッサージ洗顔ジェル", brand: "花王", price: "¥900前後", effect: "酵素洗顔でターンオーバーを促進。皮脂・毛穴詰まりをすっきり落とす", url: "https://www.amazon.co.jp/s?k=%E3%83%93%E3%82%AA%E3%83%AC+%E3%81%8A%E3%81%86%E3%81%A1%E3%81%A7%E3%82%A8%E3%82%B9%E3%83%86+%E3%83%9E%E3%83%83%E3%82%B5%E3%83%BC%E3%82%B8%E6%B4%97%E9%A1%94&i=beauty", tag: "プチプラ" },
+  ],
+  "混合": [
+    { rank: 1, name: "hatomugi スキンコンディショナー（化粧水）", brand: "ナリス化粧品", price: "¥700前後", effect: "ハトムギエキス配合。大容量・低刺激でTゾーンとUゾーン両方に使える万能化粧水", url: "https://www.amazon.co.jp/s?k=%E3%83%8F%E3%83%88%E3%83%A0%E3%82%AE+%E3%82%B9%E3%82%AD%E3%83%B3%E3%82%B3%E3%83%B3%E3%83%87%E3%82%A3%E3%82%B7%E3%83%A7%E3%83%8A%E3%83%BC&i=beauty", tag: "コスパ神" },
+    { rank: 2, name: "COSRX スネイルミューシン パワーエッセンス", brand: "COSRX（韓国）", price: "¥2,800前後", effect: "カタツムリムチン96.3%配合。乾燥しながらテカるUゾーンの水分・油分バランスを整える", url: "https://www.amazon.co.jp/s?k=COSRX+%E3%82%B9%E3%83%8D%E3%82%A4%E3%83%AB+%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B7%E3%83%B3&i=beauty", tag: "K-beauty人気" },
+    { rank: 3, name: "ニベア クリーム（缶）", brand: "花王", price: "¥500前後", effect: "Uゾーンの夜用保湿として少量使い。シアバター配合で油分フタ。コスパ最強", url: "https://www.amazon.co.jp/s?k=%E3%83%8B%E3%83%99%E3%82%A2+%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%A0+%E7%BC%B6&i=beauty", tag: "夜用保湿" },
+  ],
+  "敏感": [
+    { rank: 1, name: "キュレル 潤浸保湿 化粧水（III しっとり）", brand: "花王", price: "¥2,000前後", effect: "セラミドケア成分でバリア機能を補修。皮膚科医が推薦する敏感肌の定番", url: "https://www.amazon.co.jp/s?k=%E3%82%AD%E3%83%A5%E3%83%AC%E3%83%AB+%E6%BD%A4%E6%B5%B8%E4%BF%9D%E6%B9%BF+%E5%8C%96%E7%B2%A7%E6%B0%B4&i=beauty", tag: "皮膚科推薦" },
+    { rank: 2, name: "Dr.Jart+ シカペア クリーム", brand: "Dr.Jart+（韓国）", price: "¥3,500前後", effect: "シカ（ツボクサエキス）配合。炎症・赤みを鎮静させながら肌バリアを修復", url: "https://www.amazon.co.jp/s?k=Dr.Jart%2B+%E3%82%B7%E3%82%AB%E3%83%9A%E3%82%A2+%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%A0&i=beauty", tag: "赤み鎮静" },
+    { rank: 3, name: "ヴァセリン オリジナルピュアスキンジェリー", brand: "ユニリーバ", price: "¥600前後", effect: "純度99.9%のワセリン。保護膜を作り刺激から肌を守る。敏感肌の最後の砦", url: "https://www.amazon.co.jp/s?k=%E3%83%B4%E3%82%A1%E3%82%BB%E3%83%AA%E3%83%B3+%E3%82%B9%E3%82%AD%E3%83%B3%E3%82%B8%E3%82%A7%E3%83%AA%E3%83%BC&i=beauty", tag: "最後の砦" },
+  ],
+  "default": [
+    { rank: 1, name: "無印良品 敏感肌用 化粧水（高保湿タイプ）", brand: "良品計画", price: "¥1,490前後", effect: "無香料・無着色・無鉱物油。全肌タイプに使えるベーシックな高保湿化粧水", url: "https://www.amazon.co.jp/s?k=%E7%84%A1%E5%8D%B0%E8%89%AF%E5%93%81+%E6%95%8F%E6%84%9F%E8%82%8C+%E5%8C%96%E7%B2%A7%E6%B0%B4+%E9%AB%98%E4%BF%9D%E6%B9%BF&i=beauty", tag: "万能定番" },
+    { rank: 2, name: "肌ラボ 極潤 ヒアルロン液", brand: "ロート製薬", price: "¥800前後", effect: "5種類のヒアルロン酸配合。化粧品ランキング常連の日本製高保湿化粧水", url: "https://www.amazon.co.jp/s?k=%E8%82%8C%E3%83%A9%E3%83%9C+%E6%A5%B5%E6%BD%A4+%E3%83%92%E3%82%A2%E3%83%AB%E3%83%AD%E3%83%B3%E6%B6%B2&i=beauty", tag: "日本製人気" },
+    { rank: 3, name: "The Ordinary ヒアルロン酸 2% + B5", brand: "The Ordinary", price: "¥1,500前後", effect: "多分子ヒアルロン酸+パンテノール配合。肌タイプを問わず使えるコスパ最強美容液", url: "https://www.amazon.co.jp/s?k=The+Ordinary+%E3%83%92%E3%82%A2%E3%83%AB%E3%83%AD%E3%83%B3%E9%85%B8+2%25&i=beauty", tag: "コスパ最強" },
+  ],
+};
+
+function getTop3Items(skinType: string) {
+  if (skinType.includes("乾燥")) return TOP3_ITEMS["乾燥"];
+  if (skinType.includes("脂性") || skinType.includes("オイリー")) return TOP3_ITEMS["脂性"];
+  if (skinType.includes("混合")) return TOP3_ITEMS["混合"];
+  if (skinType.includes("敏感")) return TOP3_ITEMS["敏感"];
+  return TOP3_ITEMS["default"];
+}
+
+function Top3Section({ skinType }: { skinType: string }) {
+  const items = getTop3Items(skinType);
+  return (
+    <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-lg">🏆</span>
+        <p className="text-sm font-bold text-rose-800">今週試すべきTOP3アイテム（{skinType}向け）</p>
+      </div>
+      <div className="space-y-2">
+        {items.map((item) => (
+          <a
+            key={item.rank}
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-start gap-3 bg-white border border-rose-100 rounded-xl p-3 hover:bg-rose-50 transition-colors group"
+          >
+            <div className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center font-black text-sm ${item.rank === 1 ? "bg-amber-400 text-white" : item.rank === 2 ? "bg-gray-300 text-gray-700" : "bg-amber-700 text-white"}`}>
+              {item.rank}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1 flex-wrap">
+                <p className="text-xs font-bold text-gray-800 group-hover:text-rose-700">{item.name}</p>
+                <span className="text-xs bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full font-medium">{item.tag}</span>
+              </div>
+              <p className="text-xs text-gray-500 mt-0.5">{item.brand} · {item.price}</p>
+              <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">{item.effect}</p>
+              <p className="text-xs text-rose-500 font-medium mt-1">Amazonで探す →</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 mt-2">※ Amazonアソシエイトリンクです。実際の商品は成分表示をご確認ください。</p>
+    </div>
+  );
+}
+
 function getAffiliateLinks(skinType: string) {
   if (skinType.includes("乾燥")) return AFFILIATE_LINKS["乾燥"];
   if (skinType.includes("脂性") || skinType.includes("オイリー")) return AFFILIATE_LINKS["脂性"];
@@ -410,6 +484,9 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
 
       {/* 肌改善タイムライン（診断タブ表示時） */}
       {activeTab === 0 && <SkinTimeline skinScore={skinScore} />}
+
+      {/* 今週試すべきTOP3アイテム（商品レコメンドタブ表示時） */}
+      {section.title.includes("商品") && <Top3Section skinType={skinType} />}
 
       {/* アフィリエイト導線（商品レコメンドタブ表示時） */}
       {section.title.includes("商品") && <AffiliateSection skinType={skinType} />}

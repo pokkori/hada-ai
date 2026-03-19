@@ -555,6 +555,33 @@ export default function Home() {
         </ol>
       </section>
 
+      {/* A8.net スキンケア・美容アフィリエイト */}
+      <section className="py-10 px-4 bg-gradient-to-b from-white to-rose-50">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-5">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-2">PR・おすすめ</div>
+            <h2 className="text-base font-bold text-gray-800">美肌を加速するおすすめサービス</h2>
+          </div>
+          <div className="space-y-2">
+            {[
+              { icon: "💎", label: "韓国美顔器 Dr.tengle", desc: "メイクさん・美容師に愛用される韓国スキンケア美顔器。プロも認める本格ケア", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI" },
+              { icon: "🌸", label: "Dione 全身脱毛サロン", desc: "敏感肌専門・全身脱毛。肌ケアと並行してムダ毛を処理して清潔な肌へ", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H" },
+              { icon: "🧬", label: "CLOUD GYM（遺伝子検査×パーソナル）", desc: "遺伝子検査で自分の体質を知り、スキンケアと並行して体内から美肌を目指す", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM" },
+              { icon: "🧘", label: "SOELU オンラインヨガ", desc: "ストレスは肌荒れの大敵。ヨガで自律神経を整えて内側から美肌へ。トライアル1,000円", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9" },
+            ].map((item, i) => (
+              <a key={i} href={item.url} target="_blank" rel="noopener noreferrer sponsored"
+                className="flex items-center gap-3 bg-white border border-rose-100 rounded-xl p-3 hover:bg-rose-50 transition-colors shadow-sm group">
+                <span className="text-2xl shrink-0">{item.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-gray-800 group-hover:text-rose-700">{item.label} →</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="py-16 px-6 max-w-3xl mx-auto">
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-10">よくある質問</h2>
