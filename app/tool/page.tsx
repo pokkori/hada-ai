@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
@@ -154,6 +154,149 @@ function SkinTimeline({ skinScore }: { skinScore: number }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+const DIARY_KEY = "skincare_diary";
+const STREAK_KEY = "skincare_streak";
+const LAST_DATE_KEY = "skincare_last_date";
+
+type DiaryState = { [item: string]: boolean };
+
+function getTodayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function SkincareDiary() {
+  const morning = ["洗顔", "化粧水", "日焼け止め"];
+  const night = ["クレンジング", "洗顔", "保湿クリーム"];
+  const allItems = [...morning.map(i => `am_${i}`), ...night.map(i => `pm_${i}`)];
+
+  const [checks, setChecks] = useState<DiaryState>({});
+  const [streak, setStreak] = useState(0);
+  const [showComplete, setShowComplete] = useState(false);
+  const [prevComplete, setPrevComplete] = useState(false);
+
+  useEffect(() => {
+    const today = getTodayStr();
+    const saved = localStorage.getItem(DIARY_KEY);
+    if (saved) {
+      const data = JSON.parse(saved);
+      if (data.date === today) {
+        setChecks(data.checks || {});
+      }
+    }
+    const savedStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0");
+    setStreak(savedStreak);
+  }, []);
+
+  const handleCheck = useCallback((key: string) => {
+    const today = getTodayStr();
+    setChecks(prev => {
+      const next = { ...prev, [key]: !prev[key] };
+      localStorage.setItem(DIARY_KEY, JSON.stringify({ date: today, checks: next }));
+
+      const allDone = allItems.every(k => next[k]);
+      if (allDone && !prevComplete) {
+        const lastDate = localStorage.getItem(LAST_DATE_KEY);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().slice(0, 10);
+        const savedStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0");
+        const newStreak = lastDate === yesterdayStr ? savedStreak + 1 : 1;
+        localStorage.setItem(STREAK_KEY, String(newStreak));
+        localStorage.setItem(LAST_DATE_KEY, today);
+        setStreak(newStreak);
+        setShowComplete(true);
+        setPrevComplete(true);
+        setTimeout(() => setShowComplete(false), 3500);
+      }
+      return next;
+    });
+  }, [allItems, prevComplete]);
+
+  const doneCount = allItems.filter(k => checks[k]).length;
+  const allDone = doneCount === allItems.length;
+
+  return (
+    <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-bold text-rose-800">📔 今日のスキンケア日記</p>
+        <div className="flex items-center gap-2">
+          <span className="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">
+            🔥 連続ケア {streak}日
+          </span>
+          <span className="text-xs text-gray-500">{doneCount}/{allItems.length}</span>
+        </div>
+      </div>
+
+      {showComplete && (
+        <div className="mb-3 bg-gradient-to-r from-rose-500 to-pink-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 shadow animate-bounce">
+          <span className="text-lg">✨</span>
+          <p className="text-sm font-bold">今日のスキンケア完了！✨</p>
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-white rounded-lg p-3 border border-rose-100">
+          <p className="text-xs font-bold text-amber-600 mb-2">☀️ 朝のケア</p>
+          <div className="space-y-2">
+            {morning.map(item => {
+              const key = `am_${item}`;
+              return (
+                <label key={key} className="flex items-center gap-2 cursor-pointer group">
+                  <div
+                    onClick={() => handleCheck(key)}
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0 cursor-pointer ${
+                      checks[key] ? "bg-rose-500 border-rose-500" : "border-gray-300 group-hover:border-rose-300"
+                    }`}
+                  >
+                    {checks[key] && <span className="text-white text-xs font-bold">✓</span>}
+                  </div>
+                  <span className={`text-xs transition-colors ${checks[key] ? "line-through text-gray-400" : "text-gray-700"}`}>
+                    {item}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg p-3 border border-rose-100">
+          <p className="text-xs font-bold text-indigo-600 mb-2">🌙 夜のケア</p>
+          <div className="space-y-2">
+            {night.map(item => {
+              const key = `pm_${item}`;
+              return (
+                <label key={key} className="flex items-center gap-2 cursor-pointer group">
+                  <div
+                    onClick={() => handleCheck(key)}
+                    className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0 cursor-pointer ${
+                      checks[key] ? "bg-rose-500 border-rose-500" : "border-gray-300 group-hover:border-rose-300"
+                    }`}
+                  >
+                    {checks[key] && <span className="text-white text-xs font-bold">✓</span>}
+                  </div>
+                  <span className={`text-xs transition-colors ${checks[key] ? "line-through text-gray-400" : "text-gray-700"}`}>
+                    {item}
+                  </span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {allDone && (
+        <div className="mt-3 text-center">
+          <span className="text-xs bg-rose-100 text-rose-700 font-bold px-3 py-1 rounded-full">
+            本日のケア達成！{streak}日連続継続中 🏆
+          </span>
+        </div>
+      )}
+
+      <p className="text-xs text-gray-400 mt-2 text-center">毎日ケアを続けてストリークを伸ばしましょう</p>
     </div>
   );
 }
@@ -329,6 +472,9 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
           ))}
         </ol>
       </div>
+
+      {/* スキンケア日記 */}
+      <SkincareDiary />
     </div>
   );
 }
@@ -487,7 +633,7 @@ export default function HadaTool() {
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
         </form>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           <label className="text-sm font-medium text-gray-700 mb-2">診断結果</label>
 
           {/* 達成感バナー */}
@@ -512,17 +658,20 @@ export default function HadaTool() {
           ) : parsed ? (
             <ResultTabs parsed={parsed} skinType={skinType} concerns={concerns} lifestyle={lifestyle} />
           ) : (
-            <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
-              <div className="text-4xl">💄</div>
-              <p className="text-sm text-center font-medium text-gray-500">肌の情報を入力して<br />「肌を診断する」を押してください</p>
-              <div className="bg-gray-50 rounded-lg p-4 text-xs space-y-2 w-full max-w-[260px]">
-                <p className="font-semibold text-gray-600">診断でわかること：</p>
-                <p className="text-gray-500">🔬 あなたの肌タイプ詳細分析</p>
-                <p className="text-gray-500">📋 朝・夜のスキンケアルーティン</p>
-                <p className="text-gray-500">🧪 注目すべき成分と避ける成分</p>
-                <p className="text-gray-500">🛒 コスパ重視の商品レコメンド</p>
+            <>
+              <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
+                <div className="text-4xl">💄</div>
+                <p className="text-sm text-center font-medium text-gray-500">肌の情報を入力して<br />「肌を診断する」を押してください</p>
+                <div className="bg-gray-50 rounded-lg p-4 text-xs space-y-2 w-full max-w-[260px]">
+                  <p className="font-semibold text-gray-600">診断でわかること：</p>
+                  <p className="text-gray-500">🔬 あなたの肌タイプ詳細分析</p>
+                  <p className="text-gray-500">📋 朝・夜のスキンケアルーティン</p>
+                  <p className="text-gray-500">🧪 注目すべき成分と避ける成分</p>
+                  <p className="text-gray-500">🛒 コスパ重視の商品レコメンド</p>
+                </div>
               </div>
-            </div>
+              <SkincareDiary />
+            </>
           )}
         </div>
       </div>
