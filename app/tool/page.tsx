@@ -441,6 +441,24 @@ export default function HadaTool() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               肌の悩み <span className="text-red-500">*</span>
             </label>
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {[
+                { emoji: "🕳️", label: "毛穴・黒ずみ", text: "毛穴が目立つ（特にTゾーン）\n黒ずみ・白ずみが気になる" },
+                { emoji: "💧", label: "乾燥・かさつき", text: "乾燥によるかさつき・ひきつれ\n化粧水が浸透しにくい" },
+                { emoji: "🔴", label: "ニキビ・吹き出物", text: "繰り返すニキビ・吹き出物\nニキビ跡が残りやすい" },
+                { emoji: "✨", label: "くすみ・透明感", text: "くすみが気になる\n透明感・ハリが欲しい" },
+                { emoji: "☀️", label: "シミ・色素沈着", text: "シミ・そばかす・色素沈着\n紫外線ダメージが蓄積してきた" },
+              ].map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => setConcerns(prev => prev ? prev + "\n" + p.text : p.text)}
+                  className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full transition font-medium"
+                >
+                  {p.emoji} {p.label}
+                </button>
+              ))}
+            </div>
             <textarea value={concerns} onChange={e => setConcerns(e.target.value)} rows={4} required
               placeholder={"例:\n・毛穴が目立つ（特にTゾーン）\n・乾燥による小ジワが気になる\n・ニキビ跡が残りやすい\n・くすみ・透明感が欲しい"}
               className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
