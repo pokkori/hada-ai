@@ -534,6 +534,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 肌スコア推移グラフ訴求 */}
+      <section className="py-14 px-4 bg-gradient-to-b from-pink-50 to-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">新機能：スコア推移記録</div>
+            <h2 className="text-2xl font-black text-gray-900">診断するたびに肌スコアが記録される</h2>
+            <p className="text-sm text-gray-500 mt-2">毎日・毎週診断することで肌の変化をグラフで可視化。ケアの効果を数値で確認できます。</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { icon: "📈", title: "スコア推移グラフ", desc: "診断するたびにスコアを自動保存。最大10回分の推移をグラフで表示。" },
+              { icon: "🎂", title: "推定肌年齢診断", desc: "肌スコアから実年齢との差を推定。ケアの効果が「若返り」で実感できる。" },
+              { icon: "🔥", title: "ケアストリーク記録", desc: "毎日のスキンケア日記でストリークを積み上げ。継続モチベーションUP！" },
+            ].map((item) => (
+              <div key={item.title} className="bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h3 className="font-bold text-gray-900 mb-1 text-sm">{item.title}</h3>
+                <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6">
+            <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-rose-600 shadow-md text-sm">
+              診断してスコアを記録する →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* もっと活用する3選 */}
       <section className="py-8 px-4 max-w-lg mx-auto">
         <h2 className="text-center text-base font-bold text-rose-700 mb-4">✨ AI美肌診断をもっと活用する3選</h2>

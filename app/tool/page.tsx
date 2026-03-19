@@ -235,6 +235,98 @@ function SkinTimeline({ skinScore }: { skinScore: number }) {
 const DIARY_KEY = "skincare_diary";
 const STREAK_KEY = "skincare_streak";
 const LAST_DATE_KEY = "skincare_last_date";
+const HISTORY_KEY = "hada_score_history";
+
+// 肌スコア履歴の型
+type ScoreEntry = { date: string; score: number; skinType: string };
+
+// 肌スコア履歴の保存
+function saveScoreHistory(score: number, skinType: string) {
+  try {
+    const history: ScoreEntry[] = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+    const today = new Date().toISOString().slice(0, 10);
+    // 同日の重複を避けつつ最大10件保存
+    const filtered = history.filter(h => h.date !== today);
+    filtered.push({ date: today, score, skinType });
+    if (filtered.length > 10) filtered.shift();
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered));
+  } catch { /* ignore */ }
+}
+
+// 肌スコア推移グラフ
+function SkinScoreHistory({ currentScore, skinType }: { currentScore: number; skinType: string }) {
+  const [history, setHistory] = useState<ScoreEntry[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+      setHistory(Array.isArray(raw) ? raw : []);
+    } catch { setHistory([]); }
+  }, [currentScore]);
+
+  if (history.length < 2) {
+    return (
+      <div className="mt-4 bg-rose-50 border border-rose-200 rounded-xl p-4">
+        <p className="text-xs font-bold text-rose-700 mb-1">📈 肌スコア推移グラフ</p>
+        <p className="text-xs text-gray-500">2回以上診断すると推移グラフが表示されます。定期的に再診断してスコア変化を記録しましょう！</p>
+      </div>
+    );
+  }
+
+  const maxScore = Math.max(...history.map(h => h.score), 100);
+  const minScore = Math.min(...history.map(h => h.score), 50);
+  const range = maxScore - minScore || 10;
+  const width = 280;
+  const height = 80;
+  const padX = 8;
+  const padY = 8;
+  const chartW = width - padX * 2;
+  const chartH = height - padY * 2;
+
+  const points = history.map((h, i) => {
+    const x = padX + (i / Math.max(history.length - 1, 1)) * chartW;
+    const y = padY + chartH - ((h.score - minScore) / range) * chartH;
+    return { x, y, ...h };
+  });
+
+  const polyline = points.map(p => `${p.x},${p.y}`).join(" ");
+  const latest = points[points.length - 1];
+  const prev = points[points.length - 2];
+  const diff = latest.score - prev.score;
+
+  return (
+    <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-xs font-bold text-rose-700">📈 肌スコア推移グラフ</p>
+        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${diff >= 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
+          {diff >= 0 ? "↑" : "↓"} {Math.abs(diff)}点
+        </span>
+      </div>
+      <svg width={width} height={height} className="w-full" viewBox={`0 0 ${width} ${height}`}>
+        <polyline
+          points={polyline}
+          fill="none"
+          stroke="#f43f5e"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {points.map((p, i) => (
+          <g key={i}>
+            <circle cx={p.x} cy={p.y} r="4" fill={i === points.length - 1 ? "#f43f5e" : "#fda4af"} />
+            <text x={p.x} y={p.y - 7} textAnchor="middle" fontSize="8" fill="#be185d" fontWeight="bold">{p.score}</text>
+          </g>
+        ))}
+      </svg>
+      <div className="flex justify-between mt-1">
+        {history.map((h, i) => (
+          <span key={i} className="text-xs text-gray-400" style={{ fontSize: "9px" }}>{h.date.slice(5)}</span>
+        ))}
+      </div>
+      <p className="text-xs text-gray-400 mt-1">継続ケアでスコアアップを目指そう！ ({history.length}回記録)</p>
+    </div>
+  );
+}
 
 type DiaryState = { [item: string]: boolean };
 
@@ -404,6 +496,11 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   const circ = 2 * Math.PI * r;
   const offset = circ - (skinScore / 100) * circ;
 
+  // スコアを履歴に保存
+  useEffect(() => {
+    saveScoreHistory(skinScore, skinType);
+  }, [skinScore, skinType]);
+
   return (
     <div className="flex flex-col gap-3">
       {/* 肌スコアヒーローカード（結果最上部に大きく表示） */}
@@ -552,6 +649,34 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
 
       {/* スキンケア日記 */}
       <SkincareDiary />
+
+      {/* 肌スコア推移グラフ */}
+      <SkinScoreHistory currentScore={skinScore} skinType={skinType} />
+
+      {/* 肌年齢診断 */}
+      <div className="mt-4 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-xl p-4">
+        <p className="text-sm font-bold text-pink-800 mb-2">🎂 あなたの推定肌年齢</p>
+        <div className="flex items-center gap-4">
+          <div className="shrink-0 text-center">
+            <div className="text-4xl font-black text-rose-600">
+              {skinScore >= 85 ? "-5" : skinScore >= 75 ? "-2" : skinScore >= 65 ? "±0" : skinScore >= 55 ? "+3" : "+5"}
+            </div>
+            <div className="text-xs text-gray-500">歳（実年齢比）</div>
+          </div>
+          <div className="flex-1">
+            <p className="text-xs text-gray-600 leading-relaxed">
+              {skinScore >= 85
+                ? "肌状態が非常に良好です。適切なケアを続けることで実年齢より若く見える肌を維持できています。"
+                : skinScore >= 75
+                ? "肌状態は良好です。保湿・紫外線対策を継続することで肌年齢の改善が期待できます。"
+                : skinScore >= 65
+                ? "肌状態は平均的です。成分を意識したスキンケアで実年齢相応の美肌を目指しましょう。"
+                : "肌ケアを見直すチャンスです。ルーティンタブのアドバイスを参考に改善を始めましょう。"}
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-gray-400 mt-2">※ 肌年齢はAIによる推定参考値です。医療的診断ではありません。</p>
+      </div>
     </div>
   );
 }
