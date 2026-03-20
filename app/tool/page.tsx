@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
@@ -682,7 +682,10 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   );
 }
 
+type InputMode = "camera" | "text";
+
 export default function HadaTool() {
+  const [inputMode, setInputMode] = useState<InputMode>("camera");
   const [skinType, setSkinType] = useState("混合肌");
   const [concerns, setConcerns] = useState("");
   const [routine, setRoutine] = useState("");
@@ -696,12 +699,83 @@ export default function HadaTool() {
   const [isPremium, setIsPremium] = useState(false);
   const [completionVisible, setCompletionVisible] = useState(false);
 
+  // Camera / image state
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [capturedMime, setCapturedMime] = useState<string>("image/jpeg");
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     setCount(parseInt(localStorage.getItem(KEY) || "0"));
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.premium));
   }, []);
 
   const isLimit = !isPremium && count >= FREE_LIMIT;
+
+  const handleImageCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const mime = file.type || "image/jpeg";
+    setCapturedMime(mime);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      // Extract base64 part (remove data:image/...;base64, prefix)
+      const base64 = result.split(",")[1];
+      if (base64) setCapturedImage(base64);
+    };
+    reader.readAsDataURL(file);
+    // Reset the input so the same file can be selected again
+    e.target.value = "";
+  };
+
+  const streamResponse = async (res: Response) => {
+    const reader = res.body?.getReader();
+    const decoder = new TextDecoder();
+    let accumulated = "";
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      if (chunk.includes("\nDONE:")) {
+        const idx = chunk.indexOf("\nDONE:");
+        accumulated += chunk.slice(0, idx);
+        try {
+          const meta = JSON.parse(chunk.slice(idx + 6));
+          const newCount = meta.count ?? count + 1;
+          localStorage.setItem(KEY, String(newCount));
+          setCount(newCount);
+          if (!isPremium && newCount >= FREE_LIMIT) setTimeout(() => { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); }, 1500);
+        } catch { /* ignore */ }
+      } else {
+        accumulated += chunk;
+      }
+      setParsed(parseResult(accumulated));
+    }
+  };
+
+  const handleCameraSubmit = async () => {
+    if (!capturedImage) return;
+    if (isLimit) { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); return; }
+    track('ai_generated', { service: 'AI美肌診断_camera' });
+    setLoading(true); setParsed(null); setError(""); setCompletionVisible(false);
+    try {
+      const res = await fetch("/api/analyze-skin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64: capturedImage, mimeType: capturedMime }),
+      });
+      if (res.status === 429) { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); setLoading(false); return; }
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "エラーが発生しました"); setLoading(false); return;
+      }
+      await streamResponse(res);
+      setCompletionVisible(true);
+      setTimeout(() => setCompletionVisible(false), 4000);
+    } catch { setError("通信エラーが発生しました。"); }
+    finally { setLoading(false); }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -719,29 +793,7 @@ export default function HadaTool() {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "エラーが発生しました"); setLoading(false); return;
       }
-      const reader = res.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-      while (reader) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        if (chunk.includes("\nDONE:")) {
-          const idx = chunk.indexOf("\nDONE:");
-          accumulated += chunk.slice(0, idx);
-          try {
-            const meta = JSON.parse(chunk.slice(idx + 6));
-            const newCount = meta.count ?? count + 1;
-            localStorage.setItem(KEY, String(newCount));
-            setCount(newCount);
-            if (!isPremium && newCount >= FREE_LIMIT) setTimeout(() => { track('paywall_shown', { service: 'AI美肌診断' }); setShowPaywall(true); }, 1500);
-          } catch { /* ignore */ }
-        } else {
-          accumulated += chunk;
-        }
-        setParsed(parseResult(accumulated));
-      }
-      // 達成感バナー表示
+      await streamResponse(res);
       setCompletionVisible(true);
       setTimeout(() => setCompletionVisible(false), 4000);
     } catch { setError("通信エラーが発生しました。"); }
@@ -772,69 +824,185 @@ export default function HadaTool() {
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">あなたの肌情報を入力</h1>
-            <p className="text-sm text-gray-500 mt-1">詳しく入力するほど、精度の高い診断が得られます。</p>
+            <h1 className="text-xl font-bold text-gray-900">AI肌診断</h1>
+            <p className="text-sm text-gray-500 mt-1">写真撮影またはテキスト入力で診断できます。</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">肌タイプ</label>
-            <select value={skinType} onChange={e => setSkinType(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-              {["乾燥肌", "混合肌", "脂性肌（オイリー）", "敏感肌", "普通肌", "よく分からない"].map(o => <option key={o}>{o}</option>)}
-            </select>
+          {/* 入力モード切り替えタブ */}
+          <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
+            <button
+              onClick={() => setInputMode("camera")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === "camera" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+            >
+              <span>📷</span> カメラ撮影
+              <span className="text-xs bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full font-semibold">NEW</span>
+            </button>
+            <button
+              onClick={() => setInputMode("text")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === "text" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+            >
+              <span>✏️</span> テキスト入力
+            </button>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              肌の悩み <span className="text-red-500">*</span>
-            </label>
-            <div className="flex flex-wrap gap-1.5 mb-2">
-              {[
-                { emoji: "🕳️", label: "毛穴・黒ずみ", text: "毛穴が目立つ（特にTゾーン）\n黒ずみ・白ずみが気になる" },
-                { emoji: "💧", label: "乾燥・かさつき", text: "乾燥によるかさつき・ひきつれ\n化粧水が浸透しにくい" },
-                { emoji: "🔴", label: "ニキビ・吹き出物", text: "繰り返すニキビ・吹き出物\nニキビ跡が残りやすい" },
-                { emoji: "✨", label: "くすみ・透明感", text: "くすみが気になる\n透明感・ハリが欲しい" },
-                { emoji: "☀️", label: "シミ・色素沈着", text: "シミ・そばかす・色素沈着\n紫外線ダメージが蓄積してきた" },
-              ].map((p) => (
-                <button
-                  key={p.label}
-                  type="button"
-                  onClick={() => setConcerns(prev => prev ? prev + "\n" + p.text : p.text)}
-                  className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full transition font-medium"
-                >
-                  {p.emoji} {p.label}
-                </button>
-              ))}
+          {/* カメラ撮影モード */}
+          {inputMode === "camera" && (
+            <div className="space-y-4">
+              <p className="text-xs text-gray-500 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
+                💡 <strong>写真解析</strong>でより精度の高い肌診断が可能です。自然光の下で撮影すると正確な診断になります。
+              </p>
+
+              {/* カメラ/ギャラリーボタン */}
+              <div className="flex gap-3">
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    ref={cameraInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="user"
+                    className="hidden"
+                    onChange={handleImageCapture}
+                  />
+                  <div className="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-4 px-3 text-center transition-colors">
+                    <div className="text-2xl mb-1">📷</div>
+                    <div className="text-sm font-bold">自撮りで診断</div>
+                    <div className="text-xs opacity-80 mt-0.5">フロントカメラ</div>
+                  </div>
+                </label>
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageCapture}
+                  />
+                  <div className="bg-rose-50 hover:bg-rose-100 text-rose-700 border-2 border-rose-300 rounded-xl py-4 px-3 text-center transition-colors">
+                    <div className="text-2xl mb-1">🖼️</div>
+                    <div className="text-sm font-bold">写真から診断</div>
+                    <div className="text-xs text-rose-500 mt-0.5">ギャラリー選択</div>
+                  </div>
+                </label>
+              </div>
+
+              {/* 撮影した画像プレビュー */}
+              {capturedImage && (
+                <div className="space-y-3">
+                  <div className="relative rounded-xl overflow-hidden border-2 border-rose-300 bg-gray-50">
+                    <img
+                      src={`data:${capturedMime};base64,${capturedImage}`}
+                      alt="診断する肌写真"
+                      className="w-full max-h-64 object-cover"
+                    />
+                    <div className="absolute top-2 right-2">
+                      <button
+                        onClick={() => setCapturedImage(null)}
+                        className="bg-black/50 hover:bg-black/70 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                      ✅ 写真を取り込みました
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleCameraSubmit}
+                    disabled={loading}
+                    className={`w-full font-bold py-3.5 rounded-xl text-white transition-colors text-base ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50"}`}
+                  >
+                    {loading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                        肌を分析中...
+                      </span>
+                    ) : isLimit ? "プレミアムで無制限に診断" : "この写真で肌診断する（無料）"}
+                  </button>
+                </div>
+              )}
+
+              {!capturedImage && (
+                <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 text-center">
+                  <div className="text-4xl mb-2">🤳</div>
+                  <p className="text-sm text-gray-500 font-medium">上のボタンで写真を撮影または選択してください</p>
+                  <p className="text-xs text-gray-400 mt-1">顔全体が映るように撮影すると精度が上がります</p>
+                  <div className="mt-3 text-xs text-gray-400 space-y-0.5">
+                    <p>✓ 自然光（窓際）での撮影を推奨</p>
+                    <p>✓ メイクを落とした素肌が理想</p>
+                    <p>✓ 正面から明るく撮影</p>
+                  </div>
+                </div>
+              )}
+
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+              <p className="text-xs text-gray-400 text-center">※ 送信した画像はAI分析にのみ使用し、保存されません。</p>
             </div>
-            <textarea value={concerns} onChange={e => setConcerns(e.target.value)} rows={4} required
-              placeholder={"例:\n・毛穴が目立つ（特にTゾーン）\n・乾燥による小ジワが気になる\n・ニキビ跡が残りやすい\n・くすみ・透明感が欲しい"}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
-            <p className="text-xs text-gray-400 mt-1">具体的に書くほど精度UP（{concerns.length}文字）</p>
-          </div>
+          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">現在のスキンケア</label>
-            <textarea value={routine} onChange={e => setRoutine(e.target.value)} rows={3}
-              placeholder={"例:\n・洗顔料: ○○（泡立てて使用）\n・化粧水: △△\n・乳液: 使っていない\n・日焼け止め: SPF50を使用"}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
-          </div>
+          {/* テキスト入力モード */}
+          {inputMode === "text" && (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">肌タイプ</label>
+                <select value={skinType} onChange={e => setSkinType(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                  {["乾燥肌", "混合肌", "脂性肌（オイリー）", "敏感肌", "普通肌", "よく分からない"].map(o => <option key={o}>{o}</option>)}
+                </select>
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">ライフスタイル</label>
-            <select value={lifestyle} onChange={e => setLifestyle(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-              {["インドア中心（紫外線少なめ）", "普通（週3〜4回洗顔）", "運動多め・汗をよくかく", "マスク長時間着用", "睡眠不足気味・ストレス多め"].map(o => <option key={o}>{o}</option>)}
-            </select>
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  肌の悩み <span className="text-red-500">*</span>
+                </label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {[
+                    { emoji: "🕳️", label: "毛穴・黒ずみ", text: "毛穴が目立つ（特にTゾーン）\n黒ずみ・白ずみが気になる" },
+                    { emoji: "💧", label: "乾燥・かさつき", text: "乾燥によるかさつき・ひきつれ\n化粧水が浸透しにくい" },
+                    { emoji: "🔴", label: "ニキビ・吹き出物", text: "繰り返すニキビ・吹き出物\nニキビ跡が残りやすい" },
+                    { emoji: "✨", label: "くすみ・透明感", text: "くすみが気になる\n透明感・ハリが欲しい" },
+                    { emoji: "☀️", label: "シミ・色素沈着", text: "シミ・そばかす・色素沈着\n紫外線ダメージが蓄積してきた" },
+                  ].map((p) => (
+                    <button
+                      key={p.label}
+                      type="button"
+                      onClick={() => setConcerns(prev => prev ? prev + "\n" + p.text : p.text)}
+                      className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full transition font-medium"
+                    >
+                      {p.emoji} {p.label}
+                    </button>
+                  ))}
+                </div>
+                <textarea value={concerns} onChange={e => setConcerns(e.target.value)} rows={4} required
+                  placeholder={"例:\n・毛穴が目立つ（特にTゾーン）\n・乾燥による小ジワが気になる\n・ニキビ跡が残りやすい\n・くすみ・透明感が欲しい"}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
+                <p className="text-xs text-gray-400 mt-1">具体的に書くほど精度UP（{concerns.length}文字）</p>
+              </div>
 
-          <button type="submit" disabled={loading || !concerns.trim()}
-            className={`w-full font-bold py-3 rounded-lg text-white transition-colors ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300"}`}>
-            {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
-          </button>
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-        </form>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">現在のスキンケア</label>
+                <textarea value={routine} onChange={e => setRoutine(e.target.value)} rows={3}
+                  placeholder={"例:\n・洗顔料: ○○（泡立てて使用）\n・化粧水: △△\n・乳液: 使っていない\n・日焼け止め: SPF50を使用"}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">ライフスタイル</label>
+                <select value={lifestyle} onChange={e => setLifestyle(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                  {["インドア中心（紫外線少なめ）", "普通（週3〜4回洗顔）", "運動多め・汗をよくかく", "マスク長時間着用", "睡眠不足気味・ストレス多め"].map(o => <option key={o}>{o}</option>)}
+                </select>
+              </div>
+
+              <button type="submit" disabled={loading || !concerns.trim()}
+                className={`w-full font-bold py-3 rounded-lg text-white transition-colors ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300"}`}>
+                {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
+              </button>
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+            </form>
+          )}
+        </div>
 
         <div className="flex flex-col gap-4">
           <label className="text-sm font-medium text-gray-700 mb-2">診断結果</label>
@@ -854,8 +1022,12 @@ export default function HadaTool() {
             <div className="flex-1 bg-white border border-gray-200 rounded-xl flex items-center justify-center min-h-[420px]">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-rose-500 mx-auto mb-3" />
-                <p className="text-sm text-gray-500 font-medium">AIが肌を分析しています...</p>
-                <p className="text-xs text-gray-400 mt-2">🔬 肌診断 → 📋 ルーティン → 🧪 成分解析</p>
+                <p className="text-sm text-gray-500 font-medium">
+                  {inputMode === "camera" ? "写真から肌を解析しています..." : "AIが肌を分析しています..."}
+                </p>
+                <p className="text-xs text-gray-400 mt-2">
+                  {inputMode === "camera" ? "📷 画像解析 → 🔬 肌診断 → 📋 ルーティン提案" : "🔬 肌診断 → 📋 ルーティン → 🧪 成分解析"}
+                </p>
               </div>
             </div>
           ) : parsed ? (
