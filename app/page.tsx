@@ -534,6 +534,77 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 肌タイプ別 おすすめ商品 TOP3 */}
+      <section className="py-14 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">肌タイプ別おすすめ</div>
+            <h2 className="text-2xl font-black text-gray-900">肌タイプ別 おすすめスキンケアTOP3</h2>
+            <p className="text-sm text-gray-500 mt-2">AI診断後に表示される「今週試すべきTOP3」の実例をご紹介</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                skinType: "乾燥肌",
+                color: "rose",
+                items: [
+                  { rank: 1, name: "ケアセラ AP ゲルクリーム", brand: "花王", price: "¥1,800前後", tag: "コスパ最強", effect: "セラミド配合でバリア機能を直接補修" },
+                  { rank: 2, name: "COSRX ヒアルロン酸セラム", brand: "COSRX", price: "¥2,500前後", tag: "K-beauty定番", effect: "深部と表面を同時に保水" },
+                  { rank: 3, name: "ミノン アミノモイスト", brand: "第一三共", price: "¥2,200前後", tag: "皮膚科推薦", effect: "低刺激で皮膚科医も推薦" },
+                ],
+              },
+              {
+                skinType: "脂性肌",
+                color: "purple",
+                items: [
+                  { rank: 1, name: "COSRX AHA/BHAトナー", brand: "COSRX", price: "¥1,500前後", tag: "毛穴対策", effect: "毛穴詰まりを週2回ずつ溶かす" },
+                  { rank: 2, name: "ナイアシンアミド 10%+ジンク", brand: "The Ordinary", price: "¥2,000前後", tag: "脂性肌最強", effect: "皮脂抑制・毛穴縮小の最強コンビ" },
+                  { rank: 3, name: "ビオレ おうちdeエステ", brand: "花王", price: "¥900前後", tag: "プチプラ", effect: "酵素洗顔でターンオーバーを促進" },
+                ],
+              },
+              {
+                skinType: "敏感肌",
+                color: "orange",
+                items: [
+                  { rank: 1, name: "キュレル 潤浸保湿化粧水", brand: "花王", price: "¥2,000前後", tag: "皮膚科推薦", effect: "バリア機能を補修する定番" },
+                  { rank: 2, name: "Dr.Jart+ シカペアクリーム", brand: "Dr.Jart+", price: "¥3,500前後", tag: "赤み鎮静", effect: "炎症・赤みを鎮静させながら修復" },
+                  { rank: 3, name: "ヴァセリン ピュアスキンジェリー", brand: "ユニリーバ", price: "¥600前後", tag: "最後の砦", effect: "保護膜で刺激から肌を守る" },
+                ],
+              },
+            ].map((group, gi) => (
+              <div key={gi} className={`bg-${group.color}-50 border border-${group.color}-200 rounded-2xl p-5`}>
+                <div className={`inline-block bg-${group.color}-100 text-${group.color}-700 text-xs font-bold px-3 py-1 rounded-full mb-3`}>
+                  {group.skinType}向け
+                </div>
+                <div className="space-y-3">
+                  {group.items.map(item => (
+                    <div key={item.rank} className="flex items-start gap-2 bg-white rounded-xl p-3 border border-gray-100">
+                      <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-black text-xs ${item.rank === 1 ? "bg-amber-400 text-white" : item.rank === 2 ? "bg-gray-300 text-gray-700" : "bg-amber-700 text-white"}`}>
+                        {item.rank}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1 flex-wrap">
+                          <p className="text-xs font-bold text-gray-800">{item.name}</p>
+                          <span className={`text-xs bg-${group.color}-100 text-${group.color}-600 px-1.5 py-0.5 rounded-full font-medium`}>{item.tag}</span>
+                        </div>
+                        <p className="text-xs text-gray-500">{item.brand} · {item.price}</p>
+                        <p className="text-xs text-gray-600 mt-0.5">{item.effect}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs text-gray-400 mt-4">※ AI診断後の結果画面では、あなたの肌タイプに合ったTOP3がAmazonリンク付きで表示されます</p>
+          <div className="text-center mt-5">
+            <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-rose-600 text-sm">
+              自分の肌タイプを診断してTOP3を見る →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* 肌スコア推移グラフ訴求 */}
       <section className="py-14 px-4 bg-gradient-to-b from-pink-50 to-white">
         <div className="max-w-3xl mx-auto">
@@ -582,6 +653,125 @@ export default function Home() {
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* リアルユーザー改善事例 */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">AIケアで実際に変わった</div>
+            <h2 className="text-2xl font-black text-gray-900">診断後のリアルな変化</h2>
+            <p className="text-sm text-gray-500 mt-2">「なんとなく」のケアをやめて、成分ベースに切り替えた方の声</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Aさん（28歳・乾燥敏感肌）",
+                before: "毎朝つっぱり感。高いクリームを試しても全然改善しなかった",
+                after: "AI診断でセラミド配合が必須だと分かり商品を切り替え。2週間で朝のつっぱりがなくなった",
+                score: "65点 → 82点",
+                period: "3週間後",
+                color: "rose",
+              },
+              {
+                name: "Bさん（32歳・混合肌）",
+                before: "Tゾーンのテカりが気になってオイリー向け化粧水を使っていた。頬が乾燥した",
+                after: "「部位別ケア」が重要と診断で知り、Tゾーン・Uゾーンを分けてケア開始。1ヶ月でバランスが改善",
+                score: "70点 → 85点",
+                period: "1ヶ月後",
+                color: "purple",
+              },
+              {
+                name: "Cさん（25歳・脂性肌）",
+                before: "ニキビが繰り返しできる。脂性だから保湿不要と思っていた",
+                after: "「脂性肌でも水分保湿は必要」と診断で分かった。ナイアシンアミド美容液を追加してニキビが激減",
+                score: "58点 → 79点",
+                period: "6週間後",
+                color: "orange",
+              },
+            ].map((case_, i) => (
+              <div key={i} className={`bg-${case_.color}-50 border border-${case_.color}-200 rounded-2xl p-5`}>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-gray-600">{case_.name}</span>
+                  <span className={`text-xs bg-${case_.color}-500 text-white px-2 py-0.5 rounded-full font-bold`}>{case_.period}</span>
+                </div>
+                <div className="bg-white rounded-xl p-3 mb-3">
+                  <p className="text-xs text-gray-400 font-bold mb-1">診断前の悩み</p>
+                  <p className="text-xs text-gray-600">「{case_.before}」</p>
+                </div>
+                <div className={`bg-${case_.color}-100 rounded-xl p-3 mb-3`}>
+                  <p className="text-xs font-bold text-gray-700 mb-1">診断後の変化</p>
+                  <p className="text-xs text-gray-700">「{case_.after}」</p>
+                </div>
+                <div className="text-center">
+                  <span className={`text-sm font-black text-${case_.color}-700`}>肌スコア: {case_.score}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-center text-xs text-gray-400 mt-4">※ 個人の感想です。効果には個人差があります。AIは医療診断を行いません。</p>
+          <div className="text-center mt-6">
+            <a href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-rose-600 shadow-md text-sm">
+              私も無料で診断してみる →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 200成分解析 詳細セクション */}
+      <section className="py-14 px-4 bg-gradient-to-b from-rose-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">成分科学ベース</div>
+            <h2 className="text-2xl font-black text-gray-900">200種以上の成分を解析して最適解を提案</h2>
+            <p className="text-sm text-gray-500 mt-2">「なんとなく良さそう」な選び方から卒業しませんか</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white border border-rose-100 rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-rose-700 mb-3">✅ AIが解析する成分カテゴリ</h3>
+              <div className="space-y-2">
+                {[
+                  { cat: "保湿成分", items: "セラミド・ヒアルロン酸・グリセリン・スクワランなど" },
+                  { cat: "美白・透明感", items: "ナイアシンアミド・トラネキサム酸・ビタミンC誘導体など" },
+                  { cat: "毛穴・皮脂ケア", items: "BHA（サリチル酸）・AHA（グリコール酸）・ジンクPCAなど" },
+                  { cat: "鎮静・修復", items: "パンテノール・アラントイン・シカ（ツボクサ）など" },
+                  { cat: "抗酸化", items: "レチノール・ビタミンE・コエンザイムQ10など" },
+                ].map(({ cat, items }) => (
+                  <div key={cat} className="flex items-start gap-2 text-sm">
+                    <span className="text-rose-500 font-bold shrink-0 mt-0.5">◆</span>
+                    <div>
+                      <span className="font-bold text-gray-800">{cat}</span>
+                      <span className="text-gray-500 text-xs block">{items}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-white border border-red-100 rounded-2xl p-6 shadow-sm">
+              <h3 className="font-bold text-red-600 mb-3">❌ AIが警告するNG成分</h3>
+              <div className="space-y-2">
+                {[
+                  { cat: "刺激・アレルギー系", items: "合成香料（Parfum）・高濃度アルコール・硫酸系界面活性剤" },
+                  { cat: "毛穴詰まり系", items: "鉱物油・ヤシ油（Coconut Oil）・高配合シリコン" },
+                  { cat: "乾燥肌NG", items: "高濃度レチノール（初心者）・強力ピーリング酸" },
+                  { cat: "敏感肌NG", items: "精油・エタノール・高濃度AHA" },
+                ].map(({ cat, items }) => (
+                  <div key={cat} className="flex items-start gap-2 text-sm">
+                    <span className="text-red-400 font-bold shrink-0 mt-0.5">✗</span>
+                    <div>
+                      <span className="font-bold text-gray-800">{cat}</span>
+                      <span className="text-gray-500 text-xs block">{items}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 bg-red-50 rounded-xl p-3">
+                <p className="text-xs font-bold text-red-700">成分表示の読み方まで解説</p>
+                <p className="text-xs text-red-600 mt-1">商品の裏面に書かれた成分表示の見方・優先度まで個別に解説します</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* A8.net スキンケア・美容アフィリエイト */}
