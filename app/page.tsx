@@ -329,12 +329,20 @@ export default function Home() {
             href="/tool"
             className="bg-rose-700 hover:bg-rose-800 text-white font-black py-4 px-10 rounded-2xl text-xl transition-all shadow-2xl"
           >
-            無料で30秒診断する →
+            ✏️ テキストで診断（30秒）
           </Link>
+          <Link
+            href="/tool?mode=camera"
+            className="bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all shadow-lg"
+          >
+            📸 写真で診断（AI画像解析）
+          </Link>
+        </div>
+        <div className="flex justify-center mb-4">
           <button
             onClick={() => setShowPayjp(true)}
             disabled={loading}
-            className="bg-white/90 text-rose-700 border-2 border-white hover:bg-white font-bold py-4 px-8 rounded-2xl text-lg transition-all disabled:opacity-50 shadow-lg"
+            className="bg-white/90 text-rose-700 border-2 border-white hover:bg-white font-bold py-3 px-8 rounded-2xl text-base transition-all disabled:opacity-50 shadow-lg"
           >
             {loading ? "処理中..." : "¥1,980/月で無制限"}
           </button>
