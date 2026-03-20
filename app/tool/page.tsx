@@ -232,6 +232,167 @@ function SkinTimeline({ skinScore }: { skinScore: number }) {
   );
 }
 
+// ルーティンカード（AM/PM視覚表示）
+function SkinRoutineCard({ content }: { content: string }) {
+  const lines = content.split('\n').filter(l => l.trim());
+  const amStart = lines.findIndex(l => l.includes('朝') || l.includes('AM') || l.includes('Morning'));
+  const pmStart = lines.findIndex(l => l.includes('夜') || l.includes('PM') || l.includes('Night'));
+  const weeklyStart = lines.findIndex(l => l.includes('週') || l.includes('スペシャル'));
+
+  const getSteps = (start: number, end: number) => {
+    if (start < 0) return [];
+    const sl = lines.slice(start + 1, end > start ? end : undefined);
+    return sl.filter(l => l.match(/^Step\d|^・|^\d+\.|^-/i) && l.trim().length > 2).slice(0, 5);
+  };
+
+  const amSteps = getSteps(amStart, pmStart > amStart ? pmStart : weeklyStart);
+  const pmSteps = getSteps(pmStart, weeklyStart > pmStart ? weeklyStart : lines.length);
+  const weeklySteps = weeklyStart >= 0 ? lines.slice(weeklyStart + 1).filter(l => l.startsWith('・') || l.startsWith('-')).slice(0, 3) : [];
+
+  const formatStep = (s: string) => s.replace(/^Step\d+[:：\s]*/i, '').replace(/^[・\-\d]+\.\s*/, '').trim();
+
+  const amIcons = ['🧴', '💧', '☀️', '🛡️', '✨'];
+  const pmIcons = ['🧼', '💦', '🌙', '✨', '💊'];
+
+  if (amSteps.length === 0 && pmSteps.length === 0) {
+    return (
+      <div className="space-y-2">
+        {lines.map((line, i) => (
+          <p key={i} className="text-sm leading-relaxed text-gray-700">{line}</p>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {amSteps.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">☀️</span>
+            <p className="text-sm font-bold text-amber-700">朝のルーティン（Morning Care）</p>
+          </div>
+          <div className="space-y-2">
+            {amSteps.map((step, i) => (
+              <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-2.5 border border-amber-100">
+                <span className="text-lg shrink-0">{amIcons[i] ?? '✅'}</span>
+                <div className="flex-1">
+                  <span className="text-xs font-bold text-amber-600 mr-1">Step{i + 1}</span>
+                  <span className="text-xs text-gray-700">{formatStep(step)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {pmSteps.length > 0 && (
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">🌙</span>
+            <p className="text-sm font-bold text-indigo-700">夜のルーティン（Night Care）</p>
+          </div>
+          <div className="space-y-2">
+            {pmSteps.map((step, i) => (
+              <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-2.5 border border-indigo-100">
+                <span className="text-lg shrink-0">{pmIcons[i] ?? '✅'}</span>
+                <div className="flex-1">
+                  <span className="text-xs font-bold text-indigo-600 mr-1">Step{i + 1}</span>
+                  <span className="text-xs text-gray-700">{formatStep(step)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {weeklySteps.length > 0 && (
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-lg">💜</span>
+            <p className="text-sm font-bold text-purple-700">週1〜2回のスペシャルケア</p>
+          </div>
+          <div className="space-y-1">
+            {weeklySteps.map((step, i) => (
+              <p key={i} className="text-xs text-gray-700 leading-relaxed">{step.replace(/^[・\-]\s*/, '• ')}</p>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Before/After比較パネル
+const BEFORE_AFTER_KEY = "hada_before_after";
+type DiagnosisSnapshot = { date: string; score: number; skinType: string; concerns: string; summary: string };
+
+function saveBeforeAfterSnapshot(score: number, skinType: string, concerns: string, summary: string) {
+  try {
+    const prev = JSON.parse(localStorage.getItem(BEFORE_AFTER_KEY) || "null") as DiagnosisSnapshot | null;
+    const today = new Date().toISOString().slice(0, 10);
+    if (prev && prev.date === today) return; // 同日は更新しない
+    const next: DiagnosisSnapshot = { date: today, score, skinType, concerns, summary };
+    // 現在を「before」に移動して保存
+    const storage: { before?: DiagnosisSnapshot; current?: DiagnosisSnapshot } = JSON.parse(localStorage.getItem(BEFORE_AFTER_KEY + "_v2") || "{}");
+    storage.before = storage.current;
+    storage.current = next;
+    localStorage.setItem(BEFORE_AFTER_KEY + "_v2", JSON.stringify(storage));
+  } catch { /* ignore */ }
+}
+
+function BeforeAfterPanel({ currentScore, skinType, concerns }: { currentScore: number; skinType: string; concerns: string }) {
+  const [data, setData] = useState<{ before?: DiagnosisSnapshot; current?: DiagnosisSnapshot }>({});
+
+  useEffect(() => {
+    try {
+      const raw = JSON.parse(localStorage.getItem(BEFORE_AFTER_KEY + "_v2") || "{}");
+      setData(raw);
+    } catch { /* ignore */ }
+  }, [currentScore]);
+
+  if (!data.before) {
+    return (
+      <div className="mt-4 bg-rose-50 border border-rose-200 rounded-xl p-4">
+        <p className="text-xs font-bold text-rose-700 mb-1">📊 Before/After 比較</p>
+        <p className="text-xs text-gray-500">2回以上別の日に診断すると、前回との変化が表示されます。今日の診断を「Before」として保存しました。</p>
+      </div>
+    );
+  }
+
+  const diff = currentScore - data.before.score;
+  const improved = diff > 0;
+  const sameDay = data.before.date === new Date().toISOString().slice(0, 10);
+
+  if (sameDay) return null;
+
+  return (
+    <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
+      <p className="text-sm font-bold text-rose-700 mb-3">📊 Before/After 肌スコア比較</p>
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        <div className="bg-white border border-rose-100 rounded-xl p-3 text-center">
+          <p className="text-xs text-gray-400 mb-1">Before（{data.before.date}）</p>
+          <p className="text-3xl font-black text-gray-400">{data.before.score}</p>
+          <p className="text-xs text-gray-500 mt-1">{data.before.skinType}</p>
+        </div>
+        <div className="bg-white border border-rose-300 rounded-xl p-3 text-center">
+          <p className="text-xs text-rose-500 mb-1 font-bold">After（今日）</p>
+          <p className={`text-3xl font-black ${improved ? 'text-emerald-500' : diff < 0 ? 'text-rose-500' : 'text-gray-600'}`}>{currentScore}</p>
+          <p className="text-xs text-gray-500 mt-1">{skinType}</p>
+        </div>
+      </div>
+      <div className={`text-center py-2 rounded-xl font-black text-lg ${improved ? 'bg-emerald-100 text-emerald-700' : diff < 0 ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'}`}>
+        {improved ? `↑ +${diff}点 改善！` : diff < 0 ? `↓ ${diff}点 ダウン` : '→ 変化なし'}
+      </div>
+      {diff !== 0 && (
+        <p className="text-xs text-gray-500 text-center mt-2">
+          {improved
+            ? `前回から${Math.abs(diff)}点アップしました！ケアの成果が出ています✨`
+            : `前回から${Math.abs(diff)}点ダウン。ルーティンを見直してみましょう。`}
+        </p>
+      )}
+    </div>
+  );
+}
+
 const DIARY_KEY = "skincare_diary";
 const STREAK_KEY = "skincare_streak";
 const LAST_DATE_KEY = "skincare_last_date";
@@ -497,10 +658,12 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   const circ = 2 * Math.PI * r;
   const offset = circ - (skinScore / 100) * circ;
 
-  // スコアを履歴に保存
+  // スコアを履歴・Before/Afterに保存
   useEffect(() => {
     saveScoreHistory(skinScore, skinType);
-  }, [skinScore, skinType]);
+    const summary = parsed.sections[0]?.content.split('\n')[0] ?? skinType;
+    saveBeforeAfterSnapshot(skinScore, skinType, concerns, summary);
+  }, [skinScore, skinType, concerns, parsed.sections]);
 
   return (
     <div className="flex flex-col gap-3">
@@ -546,39 +709,46 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
           <span className="text-sm font-semibold text-gray-700">{section.icon} {section.title}</span>
           <CopyButton text={section.content} />
         </div>
-        <div className="space-y-2">
-          {section.content.split('\n').map((line, i) => {
-            if (line.startsWith('## ') || line.startsWith('# ')) {
+        {section.title.includes("ルーティン") ? (
+          <SkinRoutineCard content={section.content} />
+        ) : (
+          <div className="space-y-2">
+            {section.content.split('\n').map((line, i) => {
+              if (line.startsWith('## ') || line.startsWith('# ')) {
+                return (
+                  <h3 key={i} className="text-sm font-black pt-2 pb-1 border-b border-rose-200 text-rose-700">
+                    {line.replace(/^#{1,3}\s/, '')}
+                  </h3>
+                );
+              }
+              if (line.startsWith('✓') || line.match(/^[・•]\s/) || line.match(/^[-]\s/) || line.match(/^\d+\.\s/)) {
+                const isCheck = line.startsWith('✓');
+                return (
+                  <div key={i} className="flex gap-2 items-start text-sm text-gray-700">
+                    <span className="flex-shrink-0 mt-0.5 text-rose-500 font-bold">{isCheck ? '✓' : '●'}</span>
+                    <span>{line.replace(/^[✓・•\-]\s*/, '').replace(/^\d+\.\s*/, '')}</span>
+                  </div>
+                );
+              }
+              if (line.trim() === '') return <div key={i} className="h-1" />;
+              if (line.startsWith('【') || line.startsWith('■') || line.startsWith('▶')) {
+                return (
+                  <p key={i} className="text-sm font-semibold text-gray-800 mt-2">{line}</p>
+                );
+              }
               return (
-                <h3 key={i} className="text-sm font-black pt-2 pb-1 border-b border-rose-200 text-rose-700">
-                  {line.replace(/^#{1,3}\s/, '')}
-                </h3>
+                <p key={i} className="text-sm leading-relaxed text-gray-700">{line}</p>
               );
-            }
-            if (line.startsWith('✓') || line.match(/^[・•]\s/) || line.match(/^[-]\s/) || line.match(/^\d+\.\s/)) {
-              const isCheck = line.startsWith('✓');
-              return (
-                <div key={i} className="flex gap-2 items-start text-sm text-gray-700">
-                  <span className="flex-shrink-0 mt-0.5 text-rose-500 font-bold">{isCheck ? '✓' : '●'}</span>
-                  <span>{line.replace(/^[✓・•\-]\s*/, '').replace(/^\d+\.\s*/, '')}</span>
-                </div>
-              );
-            }
-            if (line.trim() === '') return <div key={i} className="h-1" />;
-            if (line.startsWith('【') || line.startsWith('■') || line.startsWith('▶')) {
-              return (
-                <p key={i} className="text-sm font-semibold text-gray-800 mt-2">{line}</p>
-              );
-            }
-            return (
-              <p key={i} className="text-sm leading-relaxed text-gray-700">{line}</p>
-            );
-          })}
-        </div>
+            })}
+          </div>
+        )}
       </div>
       <div className="flex gap-2 justify-end flex-wrap">
         <CopyButton text={parsed.raw} label="全文コピー" />
       </div>
+
+      {/* Before/After比較パネル */}
+      {activeTab === 0 && <BeforeAfterPanel currentScore={skinScore} skinType={skinType} concerns={concerns} />}
 
       {/* 肌改善タイムライン（診断タブ表示時） */}
       {activeTab === 0 && <SkinTimeline skinScore={skinScore} />}
