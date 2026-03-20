@@ -487,7 +487,8 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   const skinScore = Math.min(95, Math.max(55, baseScore - concernCount * 3 + lifestyleBonus));
 
   const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
-  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI美肌診断を受けてみた💄\n私の肌スコア: ${skinScore}点/100点（${skinType}）\n有効成分・NGリスト・ルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア #美容`)}&url=${encodeURIComponent(ogUrl)}`;
+  const skinLabel = skinType.includes("乾燥") ? "乾燥肌" : skinType.includes("脂性") || skinType.includes("オイリー") ? "脂性肌" : skinType.includes("混合") ? "混合肌" : skinType.includes("敏感") ? "敏感肌" : skinType;
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`私の肌タイプは「${skinLabel}」でした💄\n\nAI美肌診断スコア: ${skinScore}点/100点\n✅ 有効成分リスト\n✅ NG成分リスト\n✅ 朝・夜ルーティン\n全部AIが個別に教えてくれた✨\n無料で診断 → https://hada-ai.vercel.app\n#AI美肌診断 #スキンケア #${skinLabel}`)}`;
 
   const scoreColor = skinScore >= 80 ? "from-emerald-400 to-teal-400" : skinScore >= 70 ? "from-yellow-400 to-orange-300" : "from-rose-400 to-pink-400";
   const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀✨" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";

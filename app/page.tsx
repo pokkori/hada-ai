@@ -403,34 +403,80 @@ export default function Home() {
           <div className="text-center mb-10">
             <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">診断前 vs 診断後</div>
             <h2 className="text-2xl font-black text-gray-900">AI診断で、スキンケアの迷いがなくなる</h2>
+            <p className="text-sm text-gray-500 mt-2">「なんとなく」から「根拠ある選択」へ。肌ケアが変わります。</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            <div className="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6">
-              <div className="text-3xl mb-3 text-center">😕</div>
-              <h3 className="text-lg font-bold text-gray-600 text-center mb-4">診断前</h3>
-              <ul className="space-y-3 text-sm text-gray-500">
-                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>スキンケア選びに迷う。何が自分に合うか分からない</span></li>
-                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>口コミだけで選んで、合わなくて無駄遣い</span></li>
-                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>成分表示が読めず、何が良いのか悪いのか不明</span></li>
-                <li className="flex items-start gap-2"><span className="text-gray-400 mt-0.5">✗</span><span>朝と夜で何を使えばいいか順番が分からない</span></li>
-              </ul>
+
+          {/* メインビフォーアフター比較 */}
+          <div className="relative max-w-3xl mx-auto mb-10">
+            {/* 中央アロー */}
+            <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-rose-500 rounded-full items-center justify-center shadow-lg shadow-rose-200">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white"><path d="M13 5l7 7-7 7M5 12h15"/></svg>
             </div>
-            <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 relative overflow-hidden">
-              <div className="absolute top-3 right-3 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded-full">AI診断後</div>
-              <div className="text-3xl mb-3 text-center">✨</div>
-              <h3 className="text-lg font-bold text-rose-700 text-center mb-4">診断後</h3>
-              <ul className="space-y-3 text-sm text-rose-700">
-                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>自分に合ったケアが明確に。成分ベースで選べる</span></li>
-                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>有効成分とNG成分リストで、失敗購入ゼロへ</span></li>
-                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>プチプラ〜ミドルの具体的な商品名まで提案</span></li>
-                <li className="flex items-start gap-2"><span className="text-rose-500 mt-0.5 font-bold">✓</span><span>朝・夜のステップ別ルーティンが即わかる</span></li>
-              </ul>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="text-2xl">😕</div>
+                  <h3 className="text-base font-bold text-gray-500">診断前</h3>
+                </div>
+                <ul className="space-y-3 text-sm text-gray-500">
+                  {[
+                    "スキンケア選びに迷う。何が自分に合うか分からない",
+                    "口コミだけで選んで、合わなくて無駄遣いを繰り返す",
+                    "成分表示が読めず、良い・悪い成分の区別がつかない",
+                    "朝と夜で何を・どの順番で使えばいいか不明",
+                    "韓国コスメを試したいが何を買えばいいか分からない",
+                  ].map((text, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-gray-300 mt-0.5 font-bold shrink-0">✗</span>
+                      <span>{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl">AI診断後</div>
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="text-2xl">✨</div>
+                  <h3 className="text-base font-bold text-rose-700">診断後</h3>
+                </div>
+                <ul className="space-y-3 text-sm text-rose-700">
+                  {[
+                    "自分の肌タイプが明確に。成分ベースで選択できる",
+                    "有効成分・NG成分リストで失敗購入がなくなる",
+                    "プチプラ〜ミドルの具体的な商品名がすぐ分かる",
+                    "朝6ステップ・夜6ステップのパーソナルルーティン完成",
+                    "K-beautyと国産コスメを横断比較。コスパ最良を選択",
+                  ].map((text, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-rose-500 mt-0.5 font-bold shrink-0">✓</span>
+                      <span>{text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-          <div className="text-center mt-8">
+
+          {/* 変化の数値インジケーター */}
+          <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+            {[
+              { value: "30秒", label: "診断にかかる時間", icon: "⏱️" },
+              { value: "200種+", label: "解析する成分データ", icon: "🧪" },
+              { value: "¥0", label: "無料で3回試せる", icon: "💰" },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-white border border-rose-100 rounded-2xl p-4 text-center shadow-sm">
+                <div className="text-2xl mb-1">{stat.icon}</div>
+                <div className="text-xl font-black text-rose-600">{stat.value}</div>
+                <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
             <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100 text-lg">
               今すぐ無料で診断する →
             </Link>
+            <p className="text-xs text-gray-400 mt-2">クレジットカード不要・登録不要</p>
           </div>
         </div>
       </section>
@@ -848,29 +894,148 @@ export default function Home() {
         </div>
       </section>
 
-      {/* A8.net スキンケア・美容アフィリエイト */}
-      <section className="py-10 px-4 bg-gradient-to-b from-white to-rose-50">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center mb-5">
-            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-2">PR・おすすめ</div>
-            <h2 className="text-base font-bold text-gray-800">美肌を加速するおすすめサービス</h2>
+      {/* 肌タイプ別アフィリエイト強化セクション */}
+      <section className="py-14 px-4 bg-gradient-to-b from-rose-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">PR・成分科学で選んだおすすめ</div>
+            <h2 className="text-2xl font-black text-gray-900">美肌ケアを加速するブランド別おすすめ</h2>
+            <p className="text-sm text-gray-500 mt-2">AI診断と合わせて使うとさらに効果的なスキンケアサービス</p>
           </div>
-          <div className="space-y-2">
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
             {[
-              { icon: "💎", label: "韓国美顔器 Dr.tengle", desc: "メイクさん・美容師に愛用される韓国スキンケア美顔器。プロも認める本格ケア", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI" },
-              { icon: "🌸", label: "Dione 全身脱毛サロン", desc: "敏感肌専門・全身脱毛。肌ケアと並行してムダ毛を処理して清潔な肌へ", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H" },
-              { icon: "🧬", label: "CLOUD GYM（遺伝子検査×パーソナル）", desc: "遺伝子検査で自分の体質を知り、スキンケアと並行して体内から美肌を目指す", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM" },
-              { icon: "🧘", label: "SOELU オンラインヨガ", desc: "ストレスは肌荒れの大敵。ヨガで自律神経を整えて内側から美肌へ。トライアル1,000円", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9" },
+              {
+                icon: "💎",
+                badge: "美顔器",
+                label: "韓国美顔器 Dr.tengle",
+                desc: "メイクさん・美容師に愛用される韓国スキンケア美顔器。EMS・超音波・光LED複合ケアでプロも認める本格美肌ケア。自宅でエステサロン級のケアが実現。",
+                cta: "詳細を見る →",
+                url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI",
+                color: "rose",
+              },
+              {
+                icon: "🌸",
+                badge: "脱毛サロン",
+                label: "Dione 全身脱毛サロン",
+                desc: "敏感肌専門・全身脱毛サロン。医療レーザーに近い効果で、肌ケアと並行してムダ毛を処理。清潔な肌でスキンケアの浸透率UP。体験コース受付中。",
+                cta: "無料体験を予約 →",
+                url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H",
+                color: "pink",
+              },
+              {
+                icon: "🧬",
+                badge: "体内から美肌",
+                label: "CLOUD GYM（遺伝子検査×パーソナル）",
+                desc: "遺伝子検査で自分の体質を知り、スキンケアと並行して体内から美肌を目指す。「外側のケア」と「内側の改善」を組み合わせることで美肌効果が最大化。",
+                cta: "遺伝子検査を試す →",
+                url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM",
+                color: "purple",
+              },
+              {
+                icon: "🧘",
+                badge: "ストレスケア",
+                label: "SOELU オンラインヨガ",
+                desc: "ストレス・睡眠不足は肌荒れの最大の敵。ヨガで自律神経を整え、ホルモンバランスを改善することで内側から美肌へ。オンラインでトライアル1,000円から始められる。",
+                cta: "トライアルを見る →",
+                url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9",
+                color: "green",
+              },
             ].map((item, i) => (
               <a key={i} href={item.url} target="_blank" rel="noopener noreferrer sponsored"
-                className="flex items-center gap-3 bg-white border border-rose-100 rounded-xl p-3 hover:bg-rose-50 transition-colors shadow-sm group">
-                <span className="text-2xl shrink-0">{item.icon}</span>
+                className="flex items-start gap-4 bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-md transition-all shadow-sm group">
+                <span className="text-3xl shrink-0 mt-1">{item.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold text-gray-800 group-hover:text-rose-700">{item.label} →</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`text-xs bg-${item.color}-100 text-${item.color}-700 font-bold px-2 py-0.5 rounded-full`}>{item.badge}</span>
+                  </div>
+                  <p className="text-sm font-bold text-gray-800 group-hover:text-rose-700 mb-1">{item.label} →</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                  <p className={`text-xs font-bold text-${item.color}-600 mt-2`}>{item.cta}</p>
                 </div>
               </a>
             ))}
+          </div>
+          <p className="text-center text-xs text-gray-400">※ 広告・PR表記あり。各サービスの詳細は各社サイトをご確認ください。</p>
+        </div>
+      </section>
+
+      {/* SEOテキスト: AI肌診断とは */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">サービス概要</div>
+            <h2 className="text-2xl font-black text-gray-900">AI肌診断とは？</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 mb-10">
+            <div>
+              <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                AI美肌診断は、最新のAIが化粧品成分学をベースに<strong>あなたの肌タイプ・悩みを深掘り分析</strong>するサービスです。肌の悩みをテキストで入力するだけで、乾燥肌・脂性肌・混合肌・敏感肌など7タイプの肌質を判別し、200種以上の成分データベースと照合して<strong>個別のスキンケア処方</strong>を生成します。
+              </p>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                皮膚科の診察（保険外¥5,000〜）に行かなくても、コスメカウンターで自社ブランドに誘導されなくても、あなたの肌に本当に必要な成分と商品が30秒で分かります。韓国コスメ（K-beauty）と国産コスメを横断比較し、プチプラからミドルまでコスパ重視で提案するのも特徴です。
+              </p>
+            </div>
+            <div className="bg-rose-50 rounded-2xl p-6">
+              <h3 className="font-bold text-rose-800 mb-4 text-sm">AI肌診断で得られる情報</h3>
+              <ul className="space-y-2.5">
+                {[
+                  { icon: "🔬", text: "肌タイプ・水分量・皮脂量・敏感度の詳細分析" },
+                  { icon: "📋", text: "朝・夜それぞれ6ステップのパーソナルルーティン" },
+                  { icon: "🧪", text: "積極的に選ぶ成分・避けるべきNG成分リスト" },
+                  { icon: "🛒", text: "肌タイプ別おすすめ商品TOP3（Amazon直リンク）" },
+                  { icon: "📅", text: "2週間・1ヶ月・3ヶ月後の肌改善タイムライン" },
+                ].map((item) => (
+                  <li key={item.icon} className="flex items-start gap-2 text-sm text-gray-700">
+                    <span className="shrink-0 mt-0.5">{item.icon}</span>
+                    <span>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* おすすめの使い方 */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-black text-gray-900">おすすめの使い方</h2>
+            <p className="text-sm text-gray-500 mt-2">効果を最大限引き出す3ステップ</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {[
+              {
+                step: "Step 1",
+                icon: "📝",
+                title: "肌の悩みを具体的に入力",
+                desc: "「毛穴が詰まる」「乾燥で小ジワが出る」など、具体的に書くほどAIの診断精度が上がります。現在使っているスキンケア商品を入力するとさらに的確なアドバイスが得られます。",
+                color: "rose",
+              },
+              {
+                step: "Step 2",
+                icon: "🔬",
+                title: "診断結果でNGを排除",
+                desc: "「注目成分」タブを開き、あなたの肌に不要なNG成分リストを手元に保存。次のスキンケア購入時に成分表示と照らし合わせて「失敗購入」をゼロにしましょう。",
+                color: "pink",
+              },
+              {
+                step: "Step 3",
+                icon: "📅",
+                title: "2週間後に再診断して効果確認",
+                desc: "提案ルーティンを2週間続けたら再診断。肌スコアの変化をグラフで確認できます。季節の変わり目（春・秋）にも再診断してスキンケアを最適化しましょう。",
+                color: "purple",
+              },
+            ].map((item) => (
+              <div key={item.step} className={`bg-${item.color}-50 border border-${item.color}-200 rounded-2xl p-5`}>
+                <div className={`inline-block bg-${item.color}-500 text-white text-xs font-bold px-2 py-0.5 rounded-full mb-3`}>{item.step}</div>
+                <div className="text-3xl mb-2">{item.icon}</div>
+                <h3 className="font-bold text-gray-900 mb-2 text-sm">{item.title}</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100 text-lg">
+              今すぐ無料でAI肌診断を始める →
+            </Link>
+            <p className="text-xs text-gray-400 mt-2">3回無料・クレジットカード不要</p>
           </div>
         </div>
       </section>
@@ -880,10 +1045,11 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center text-gray-900 mb-10">よくある質問</h2>
         <div className="space-y-4">
           {[
-            { q: "診断は医学的なものですか？", a: "本サービスはAIによるエンターテインメント目的の参考情報です。医療診断ではありません。" },
-            { q: "写真は保存されますか？", a: "アップロードされた写真はAI分析後に即時削除します。" },
-            { q: "無料で使えますか？", a: "基本診断は無料です。詳細レポートは有料プランでご利用いただけます。" },
-            { q: "どんな肌質に対応していますか？", a: "乾燥肌・オイリー肌・混合肌・敏感肌の4タイプすべてに対応しています。" },
+            { q: "診断は医学的なものですか？", a: "本サービスはAIによるエンターテインメント目的の参考情報です。医療診断ではありません。肌トラブルが続く場合は皮膚科への相談をお勧めします。" },
+            { q: "無料で使えますか？", a: "登録不要で3回分の美肌診断を無料でお試しいただけます。プレミアムプラン（¥1,980/月）で診断回数無制限・詳細スキンケアルーティン・成分解析レポートが利用可能になります。" },
+            { q: "どんな肌質に対応していますか？", a: "乾燥肌・脂性肌（オイリー）・混合肌・敏感肌・普通肌の5タイプ、さらに複合タイプ（乾燥敏感肌など）にも対応しています。肌の悩みをできるだけ具体的に入力することで精度が上がります。" },
+            { q: "スキンケアのルーティンはどのくらい詳しく教えてもらえますか？", a: "朝・夜それぞれ6ステップのパーソナルルーティンを提案します。使うべき成分・商品カテゴリ・使用量・順番・注意点まで個別に生成されます。乾燥肌には保湿強化ルーティン、脂性肌には皮脂コントロールルーティンなど肌タイプ別に最適化されます。" },
+            { q: "韓国コスメ（K-beauty）にも対応していますか？", a: "はい、対応しています。COSRX・Dr.Jart+・The Ordinaryなど日本国内で人気の韓国・海外ブランドを含め、200種以上の成分データベースをもとに国産・K-beautyを横断的に比較・提案します。" },
           ].map((faq) => (
             <div key={faq.q} className="border border-rose-200 rounded-xl p-5 bg-rose-50">
               <h3 className="font-bold text-gray-900 mb-2 text-sm">Q. {faq.q}</h3>
