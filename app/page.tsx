@@ -605,6 +605,80 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 肌年齢診断・30日プラン・専門家CTA */}
+      <section className="py-14 px-4 bg-gradient-to-br from-rose-50 via-pink-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-3">新機能：肌年齢＋30日プラン</div>
+            <h2 className="text-2xl font-black text-gray-900">診断結果で「肌年齢」と「30日改善プラン」が分かる</h2>
+            <p className="text-sm text-gray-500 mt-2">実年齢との差を数値で可視化。あなた専用の1ヶ月スキンケアロードマップを提供します</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {/* 肌年齢カード */}
+            <div className="bg-white border-2 border-rose-200 rounded-2xl p-6 shadow-sm text-center">
+              <div className="text-4xl mb-3">🎂</div>
+              <h3 className="font-bold text-gray-900 mb-2">肌年齢診断</h3>
+              <div className="bg-gradient-to-br from-rose-500 to-pink-400 rounded-2xl p-4 text-white mb-3">
+                <div className="text-xs opacity-80 mb-1">実年齢 28歳の場合</div>
+                <div className="text-4xl font-black">-3<span className="text-lg">歳</span></div>
+                <div className="text-sm opacity-90 mt-1">推定肌年齢: 25歳</div>
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed">肌スコアから実年齢との差を自動計算。ケアの効果を「若返り」で実感できます。</p>
+            </div>
+            {/* 30日プランカード */}
+            <div className="bg-white border-2 border-pink-200 rounded-2xl p-6 shadow-sm">
+              <div className="text-4xl mb-3 text-center">📅</div>
+              <h3 className="font-bold text-gray-900 mb-3 text-center">30日スキンケアプラン</h3>
+              <div className="space-y-2">
+                {[
+                  { week: "Week 1", action: "洗顔・化粧水のルーティン確立", color: "bg-rose-100 text-rose-700" },
+                  { week: "Week 2", action: "美容液・セラミド導入開始", color: "bg-pink-100 text-pink-700" },
+                  { week: "Week 3", action: "週1ピーリングを追加", color: "bg-purple-100 text-purple-700" },
+                  { week: "Week 4", action: "肌スコア再診断で効果確認", color: "bg-indigo-100 text-indigo-700" },
+                ].map(({ week, action, color }) => (
+                  <div key={week} className="flex items-start gap-2">
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${color}`}>{week}</span>
+                    <p className="text-xs text-gray-600 leading-relaxed">{action}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-400 mt-3">※診断結果により肌タイプ別にカスタマイズされます</p>
+            </div>
+            {/* 専門家CTA */}
+            <div className="bg-white border-2 border-amber-200 rounded-2xl p-6 shadow-sm text-center">
+              <div className="text-4xl mb-3">👩‍⚕️</div>
+              <h3 className="font-bold text-gray-900 mb-2">専門家への相談</h3>
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">AIで改善が難しい肌トラブルは、専門家への相談が最短ルートです。</p>
+              <div className="space-y-2">
+                <a
+                  href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="block bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors"
+                >
+                  美容サロンを探す →
+                </a>
+                <a
+                  href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI"
+                  target="_blank"
+                  rel="noopener noreferrer sponsored"
+                  className="block bg-amber-50 border border-amber-300 text-amber-700 font-bold py-2.5 px-4 rounded-xl text-xs hover:bg-amber-100 transition-colors"
+                >
+                  美顔器で自宅ケア →
+                </a>
+              </div>
+              <p className="text-xs text-gray-400 mt-2">※広告・PR</p>
+            </div>
+          </div>
+          <div className="text-center">
+            <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100 text-lg">
+              肌年齢を診断する →
+            </Link>
+            <p className="text-xs text-gray-400 mt-2">無料3回 • クレジットカード不要</p>
+          </div>
+        </div>
+      </section>
+
       {/* 肌スコア推移グラフ訴求 */}
       <section className="py-14 px-4 bg-gradient-to-b from-pink-50 to-white">
         <div className="max-w-3xl mx-auto">
