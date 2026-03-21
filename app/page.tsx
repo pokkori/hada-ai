@@ -278,6 +278,119 @@ function SkinSampleSection() {
   );
 }
 
+// 4肌タイプタブ切り替え
+function SkinTypeTabsSection() {
+  const [activeTab, setActiveTab] = useState(0);
+  const skinTypes = [
+    {
+      id: "dry-sensitive",
+      label: "乾燥敏感",
+      icon: "🌿",
+      color: "from-green-100 to-emerald-50",
+      border: "border-green-300",
+      accent: "text-green-700",
+      bgActive: "bg-green-600 text-white",
+      traits: ["肌がつっぱりやすい", "赤みが出やすい", "季節の変わり目に荒れる"],
+      care: "セラミド・ナイアシンアミド配合の低刺激化粧水を中心に、油分でバリアを補修。SPF30+の敏感肌用日焼け止め必須。",
+      recommend: "セラミド化粧水 + スクワランオイル",
+    },
+    {
+      id: "oily",
+      label: "脂性",
+      icon: "💧",
+      color: "from-blue-100 to-sky-50",
+      border: "border-blue-300",
+      accent: "text-blue-700",
+      bgActive: "bg-blue-600 text-white",
+      traits: ["Tゾーンがテカる", "毛穴が開きやすい", "ニキビができやすい"],
+      care: "ノンコメドジェニック・オイルフリーの軽いテクスチャーを選ぶ。BHA（サリチル酸）で毛穴ケア。保湿は軽めジェルタイプ。",
+      recommend: "BHA洗顔 + ナイアシンアミドジェル",
+    },
+    {
+      id: "combination",
+      label: "混合",
+      icon: "🔀",
+      color: "from-purple-100 to-violet-50",
+      border: "border-purple-300",
+      accent: "text-purple-700",
+      bgActive: "bg-purple-600 text-white",
+      traits: ["Tゾーン油性・頬乾燥", "部位で肌質が違う", "ケアが難しい"],
+      care: "Tゾーンと頬で別のケア（ゾーンケア）が有効。Tゾーンは軽め・頬はしっかり保湿。AHA+BHAの混合ピーリングが効果的。",
+      recommend: "ゾーン別保湿 + AHA/BHAトナー",
+    },
+    {
+      id: "normal",
+      label: "普通",
+      icon: "✨",
+      color: "from-amber-100 to-yellow-50",
+      border: "border-amber-300",
+      accent: "text-amber-700",
+      bgActive: "bg-amber-600 text-white",
+      traits: ["大きなトラブルが少ない", "水分・油分バランス良好", "季節変化に比較的強い"],
+      care: "現状維持がベース。エイジングケアとして低濃度レチノール・ビタミンC誘導体を予防的に。UVケアを確実に。",
+      recommend: "ビタミンC美容液 + レチノールクリーム",
+    },
+  ];
+  const skin = skinTypes[activeTab];
+  return (
+    <section className="bg-rose-50 py-12 px-4">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-6">
+          <div className="inline-block bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1 rounded-full mb-2">肌タイプ別ガイド</div>
+          <h2 className="text-2xl font-black text-gray-900">あなたの肌はどのタイプ？</h2>
+          <p className="text-gray-500 text-sm mt-1">タブを切り替えて、タイプ別のケア方法を確認できます</p>
+        </div>
+        <div className="flex gap-2 justify-center mb-6 flex-wrap">
+          {skinTypes.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => setActiveTab(i)}
+              className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${activeTab === i ? s.bgActive : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"}`}
+            >
+              {s.icon} {s.label}
+            </button>
+          ))}
+        </div>
+        <div className={`bg-gradient-to-br ${skin.color} border ${skin.border} rounded-2xl p-6`}>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-3xl">{skin.icon}</span>
+            <h3 className={`text-xl font-black ${skin.accent}`}>{skin.label}肌タイプ</h3>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div>
+              <p className="text-sm font-bold text-gray-700 mb-2">こんな特徴があります</p>
+              <ul className="space-y-2">
+                {skin.traits.map((t, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                    <span className={`w-5 h-5 rounded-full ${skin.bgActive} text-xs flex items-center justify-center shrink-0`}>{i+1}</span>
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-sm font-bold text-gray-700 mb-2">おすすめケア</p>
+              <p className="text-sm text-gray-600 leading-relaxed mb-3">{skin.care}</p>
+              <div className="bg-white/60 rounded-xl p-3 border border-white">
+                <p className="text-xs font-bold text-gray-500 mb-1">おすすめアイテム</p>
+                <p className={`text-sm font-bold ${skin.accent}`}>{skin.recommend}</p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 text-center">
+            <Link
+              href="/tool?mode=camera"
+              className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold px-8 py-3 rounded-xl text-sm transition-all shadow-lg"
+            >
+              📷 自分の肌タイプを正確に診断する →
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [showPayjp, setShowPayjp] = useState(false);
@@ -326,16 +439,17 @@ export default function Home() {
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link
-            href="/tool"
-            className="bg-rose-700 hover:bg-rose-800 text-white font-black py-4 px-10 rounded-2xl text-xl transition-all shadow-2xl"
+            href="/tool?mode=camera"
+            className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-black px-12 py-5 rounded-2xl text-xl transition-all shadow-2xl animate-bounce"
+            style={{ animationDuration: "3s" }}
           >
-            ✏️ テキストで診断（30秒）
+            📷 今すぐ肌診断する
           </Link>
           <Link
-            href="/tool?mode=camera"
-            className="bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all shadow-lg"
+            href="/tool"
+            className="bg-white/80 hover:bg-white text-rose-700 font-bold py-4 px-8 rounded-2xl text-lg transition-all shadow-lg border border-white"
           >
-            📸 写真で診断（AI画像解析）
+            ✏️ テキストで診断
           </Link>
         </div>
         <div className="flex justify-center mb-4">
@@ -356,6 +470,9 @@ export default function Home() {
         </div>
         </div>
       </section>
+
+      {/* 4肌タイプタブ切り替え */}
+      <SkinTypeTabsSection />
 
       {/* なぜ差別化できるか */}
       <section className="bg-white py-16 px-4">
