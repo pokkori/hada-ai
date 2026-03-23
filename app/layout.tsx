@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-
-const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 const SITE_URL = "https://hada-ai.vercel.app";
 const TITLE = "AI美肌診断 | あなたの肌タイプを分析してパーソナルスキンケアを提案";
@@ -100,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${geist.variable} antialiased`}>
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>
