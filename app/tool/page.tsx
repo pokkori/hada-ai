@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { track } from '@vercel/analytics';
+import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 
 const FREE_LIMIT = 3;
 const KEY = "hada_count";
@@ -763,14 +764,15 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       {section.title.includes("商品") && <AffiliateSection skinType={skinType} />}
 
       <div className="flex gap-2 mt-1">
-        <button
-          onClick={() => window.open(tweetUrl, '_blank')}
-          className="flex-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-4 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
-          aria-label="肌診断結果をXでシェアする"
+        <a
+          href={tweetUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 text-xs px-3 py-1.5 rounded-lg bg-black hover:bg-gray-800 text-white font-medium transition-colors flex items-center justify-center gap-2 min-h-[44px]"
+          aria-label="AI美肌診断の結果をXにシェアする"
         >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          X でシェア
-        </button>
+          Xでシェア
+        </a>
         <a
           href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://hada-ai.vercel.app`)}&text=${encodeURIComponent(`AI美肌診断で肌スコア${skinScore}点でした💄（${skinType}）\n有効成分・NGリスト・ケアルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア`)}`}
           target="_blank"
@@ -873,6 +875,8 @@ export default function HadaTool() {
   const [error, setError] = useState("");
   const [isPremium, setIsPremium] = useState(false);
   const [completionVisible, setCompletionVisible] = useState(false);
+  const [streak, setStreak] = useState<StreakData | null>(null);
+  const [streakMsg, setStreakMsg] = useState<string | null>(null);
 
   // Camera / image state
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -883,6 +887,7 @@ export default function HadaTool() {
   useEffect(() => {
     setCount(parseInt(localStorage.getItem(KEY) || "0"));
     fetch("/api/auth/status").then(r => r.json()).then(d => setIsPremium(d.premium));
+    setStreak(loadStreak("hada"));
   }, []);
 
   const isLimit = !isPremium && count >= FREE_LIMIT;
@@ -948,6 +953,10 @@ export default function HadaTool() {
       await streamResponse(res);
       setCompletionVisible(true);
       setTimeout(() => setCompletionVisible(false), 4000);
+      const s = updateStreak("hada");
+      setStreak(s);
+      const msg = getStreakMilestoneMessage(s.count);
+      if (msg) setStreakMsg(msg);
     } catch { setError("通信エラーが発生しました。"); }
     finally { setLoading(false); }
   };
@@ -971,6 +980,10 @@ export default function HadaTool() {
       await streamResponse(res);
       setCompletionVisible(true);
       setTimeout(() => setCompletionVisible(false), 4000);
+      const s = updateStreak("hada");
+      setStreak(s);
+      const msg = getStreakMilestoneMessage(s.count);
+      if (msg) setStreakMsg(msg);
     } catch { setError("通信エラーが発生しました。"); }
     finally { setLoading(false); }
   };
@@ -991,11 +1004,19 @@ export default function HadaTool() {
       {showPaywall && <Paywall onClose={() => setShowPaywall(false)} />}
       <nav className="bg-white border-b px-6 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <Link href="/" className="font-bold text-gray-900">💄 AI美肌診断</Link>
+          <Link href="/" className="font-bold text-gray-900">
+            AI美肌診断
+            {streak && streak.count > 0 && (
+              <span className="ml-2 text-xs bg-amber-400 text-amber-900 px-2 py-0.5 rounded-full font-bold" aria-label={`${streak.count}日連続利用中`}>{streak.count}日連続</span>
+            )}
+          </Link>
           <span className={`text-xs px-3 py-1 rounded-full ${isPremium ? "bg-rose-100 text-rose-600" : isLimit ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"}`}>
             {isPremium ? "プレミアム" : isLimit ? "無料枠終了" : `無料あと${FREE_LIMIT - count}回`}
           </span>
         </div>
+        {streakMsg && (
+          <div className="max-w-5xl mx-auto mt-1 text-xs text-amber-600 font-bold animate-bounce">{streakMsg}</div>
+        )}
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
