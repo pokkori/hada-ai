@@ -37,7 +37,7 @@ function Paywall({ onClose }: { onClose: () => void; onOpenPayjp?: () => void })
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center relative">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold">×</button>
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="無料枠上限ダイアログを閉じる">×</button>
         <div className="text-3xl mb-3">⭐</div>
         <h2 className="text-lg font-bold mb-2">無料枠を使い切りました</h2>
         <p className="text-sm text-gray-500 mb-4">プレミアムプランで全機能を使えます</p>
@@ -46,7 +46,7 @@ function Paywall({ onClose }: { onClose: () => void; onOpenPayjp?: () => void })
           planLabel="プレミアム ¥1,980/月を始める"
           className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         />
-        <button onClick={onClose} className="text-xs text-gray-400 hover:text-gray-600 mt-3 block w-full">閉じる</button>
+        <button onClick={onClose} className="text-xs text-gray-400 hover:text-gray-600 mt-3 block w-full min-h-[44px]" aria-label="プレミアムプランに登録せず閉じる">閉じる</button>
       </div>
     </div>
   );
@@ -58,7 +58,8 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
     <div className="relative inline-block">
       <button
         onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-        className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors"
+        className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors min-h-[44px]"
+        aria-label={copied ? "コピー済み" : `${label}をクリップボードにコピーする`}
       >
         {copied ? "✓ コピー済み" : label}
       </button>
@@ -699,7 +700,9 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       <div className="flex gap-1 flex-wrap">
         {parsed.sections.map((s, i) => (
           <button key={i} onClick={() => setActiveTab(i)}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${activeTab === i ? "bg-rose-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors min-h-[44px] ${activeTab === i ? "bg-rose-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+            aria-label={`${s.title}タブを表示する`}
+            aria-selected={activeTab === i}>
             <span>{s.icon}</span><span>{s.title}</span>
           </button>
         ))}
@@ -762,7 +765,8 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       <div className="flex gap-2 mt-1">
         <button
           onClick={() => window.open(tweetUrl, '_blank')}
-          className="flex-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-4 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-rose-500 hover:bg-rose-400 text-white font-bold px-4 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
+          aria-label="肌診断結果をXでシェアする"
         >
           <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.892-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           X でシェア
@@ -975,7 +979,7 @@ export default function HadaTool() {
       {showPayjp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
-            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl">✕</button>
+            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランダイアログを閉じる">✕</button>
             <div className="text-3xl mb-3 text-center">✨</div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
             <p className="text-sm text-gray-500 mb-4 text-center">AI美肌診断 無制限（いつでもキャンセル可）</p>
@@ -1004,14 +1008,18 @@ export default function HadaTool() {
           <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
             <button
               onClick={() => setInputMode("camera")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === "camera" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all min-h-[44px] ${inputMode === "camera" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+              aria-label="カメラ撮影モードに切り替える"
+              aria-pressed={inputMode === "camera"}
             >
               <span>📷</span> カメラ撮影
               <span className="text-xs bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full font-semibold">NEW</span>
             </button>
             <button
               onClick={() => setInputMode("text")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all ${inputMode === "text" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-bold transition-all min-h-[44px] ${inputMode === "text" ? "bg-white text-rose-600 shadow" : "text-gray-500 hover:text-gray-700"}`}
+              aria-label="テキスト入力モードに切り替える"
+              aria-pressed={inputMode === "text"}
             >
               <span>✏️</span> テキスト入力
             </button>
@@ -1034,6 +1042,7 @@ export default function HadaTool() {
                     capture="user"
                     className="hidden"
                     onChange={handleImageCapture}
+                    aria-label="フロントカメラで自撮り撮影して肌診断"
                   />
                   <div className="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-4 px-3 text-center transition-colors">
                     <div className="text-2xl mb-1">📷</div>
@@ -1048,6 +1057,7 @@ export default function HadaTool() {
                     accept="image/*"
                     className="hidden"
                     onChange={handleImageCapture}
+                    aria-label="ギャラリーから写真を選択して肌診断"
                   />
                   <div className="bg-rose-50 hover:bg-rose-100 text-rose-700 border-2 border-rose-300 rounded-xl py-4 px-3 text-center transition-colors">
                     <div className="text-2xl mb-1">🖼️</div>
@@ -1070,6 +1080,7 @@ export default function HadaTool() {
                       <button
                         onClick={() => setCapturedImage(null)}
                         className="bg-black/50 hover:bg-black/70 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm transition-colors"
+                        aria-label="選択した写真を削除する"
                       >
                         ×
                       </button>
@@ -1081,7 +1092,8 @@ export default function HadaTool() {
                   <button
                     onClick={handleCameraSubmit}
                     disabled={loading}
-                    className={`w-full font-bold py-3.5 rounded-xl text-white transition-colors text-base ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50"}`}
+                    className={`w-full font-bold py-3.5 rounded-xl text-white transition-colors text-base min-h-[44px] ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50"}`}
+                    aria-label="撮影した写真で肌診断を実行する"
                   >
                     {loading ? (
                       <span className="flex items-center justify-center gap-2">
@@ -1117,7 +1129,8 @@ export default function HadaTool() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">肌タイプ</label>
                 <select value={skinType} onChange={e => setSkinType(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  aria-label="肌タイプを選択">
                   {["乾燥肌", "混合肌", "脂性肌（オイリー）", "敏感肌", "普通肌", "よく分からない"].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
@@ -1138,7 +1151,8 @@ export default function HadaTool() {
                       key={p.label}
                       type="button"
                       onClick={() => setConcerns(prev => prev ? prev + "\n" + p.text : p.text)}
-                      className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full transition font-medium"
+                      className="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-2.5 py-1 rounded-full transition font-medium min-h-[44px]"
+                      aria-label={`${p.label}の悩みプリセットを入力する`}
                     >
                       {p.emoji} {p.label}
                     </button>
@@ -1146,7 +1160,8 @@ export default function HadaTool() {
                 </div>
                 <textarea value={concerns} onChange={e => setConcerns(e.target.value)} rows={4} required
                   placeholder={"例:\n・毛穴が目立つ（特にTゾーン）\n・乾燥による小ジワが気になる\n・ニキビ跡が残りやすい\n・くすみ・透明感が欲しい"}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
+                  aria-label="肌の悩み（必須）" />
                 <p className="text-xs text-gray-400 mt-1">具体的に書くほど精度UP（{concerns.length}文字）</p>
               </div>
 
@@ -1154,19 +1169,22 @@ export default function HadaTool() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">現在のスキンケア</label>
                 <textarea value={routine} onChange={e => setRoutine(e.target.value)} rows={3}
                   placeholder={"例:\n・洗顔料: ○○（泡立てて使用）\n・化粧水: △△\n・乳液: 使っていない\n・日焼け止め: SPF50を使用"}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none" />
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
+                  aria-label="現在のスキンケアルーティン（任意）" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">ライフスタイル</label>
                 <select value={lifestyle} onChange={e => setLifestyle(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  aria-label="ライフスタイルを選択">
                   {["インドア中心（紫外線少なめ）", "普通（週3〜4回洗顔）", "運動多め・汗をよくかく", "マスク長時間着用", "睡眠不足気味・ストレス多め"].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
 
               <button type="submit" disabled={loading || !concerns.trim()}
-                className={`w-full font-bold py-3 rounded-lg text-white transition-colors ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300"}`}>
+                className={`w-full font-bold py-3 rounded-lg text-white transition-colors min-h-[44px] ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300"}`}
+                aria-label="入力した情報をもとに肌診断を実行する">
                 {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
               </button>
               {error && <p className="text-sm text-red-500 text-center">{error}</p>}
