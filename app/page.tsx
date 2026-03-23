@@ -7,11 +7,11 @@ const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
 const SKIN_SAMPLES = [
   {
-    type: "🌿 乾燥×敏感肌",
+    type: "乾燥×敏感肌",
     profile: "28歳女性・乾燥が強く少し赤みが出やすい・韓国コスメに興味あり",
     tabs: [
       {
-        label: "🔬 肌タイプ",
+        label: "肌タイプ",
         content: `【診断結果】乾燥敏感肌（Dry-Sensitive）タイプ
 
 ━━ あなたの肌の状態 ━━
@@ -27,7 +27,7 @@ const SKIN_SAMPLES = [
 ・刺激の強い商品でかぶれた経験がある`,
       },
       {
-        label: "📋 ルーティン",
+        label: "ルーティン",
         content: `【朝のスキンケア（推奨手順）】
 
 ① 洗顔（ぬるま湯か超低刺激フォーム）
@@ -52,33 +52,33 @@ const SKIN_SAMPLES = [
 ④ 保湿クリーム（夜は朝の1.5倍の量で）`,
       },
       {
-        label: "🧪 注目成分",
+        label: "注目成分",
         content: `【乾燥敏感肌タイプ向け — 有効成分リスト】
 
-✅ 積極的に選ぶ成分:
+【積極的に選ぶ成分】
 ・セラミド（1,3,6-Ⅱ）— バリア機能を直接補修
 ・ナイアシンアミド（2-5%）— 赤み・くすみ・毛穴に効く万能成分
 ・ヒアルロン酸（低分子・高分子混合）— 深部と表面両方に保水
 ・スクワラン — 皮脂に近い保湿。べたつかない
 ・パンテノール（ビタB5）— 炎症を鎮静、傷ついた肌を修復
 
-⚠️ 避けるべき成分:
+【避けるべき成分】
 ・合成香料（Parfum/Fragrance）— 刺激・アレルギーの原因No.1
 ・アルコール（Alcohol denat.）— 乾燥・バリア破壊
 ・高濃度レチノール（初心者）— 1%以上は刺激が強すぎる
 ・硫酸系界面活性剤（SLS/SLES）— 過度な洗浄で乾燥悪化
 
-💡 今週から試せること:
+【今週から試せること】
 「ドラッグストアで買える最強コスパ」→ ケアセラAPゲル（セラミド豊富・¥1,800）`,
       },
     ],
   },
   {
-    type: "💧 混合肌（Tゾーン脂性）",
+    type: "混合肌（Tゾーン脂性）",
     profile: "32歳女性・Tゾーンが午後にテカる・頬は乾燥・ニキビができやすい",
     tabs: [
       {
-        label: "🔬 肌タイプ",
+        label: "肌タイプ",
         content: `【診断結果】混合肌（Combination / Tzone-Oily）タイプ
 
 ━━ あなたの肌の状態 ━━
@@ -94,7 +94,7 @@ Uゾーン（頬・顎）：乾燥気味・外的刺激に敏感
 ・オイリー肌向け商品を使うと頬が荒れる`,
       },
       {
-        label: "📋 ルーティン",
+        label: "ルーティン",
         content: `【混合肌の黄金ルール：「部位別ケア」】
 
 ━━ 朝 ━━
@@ -116,35 +116,35 @@ Uゾーン（頬・顎）：乾燥気味・外的刺激に敏感
 ・シートマスク（Uゾーン中心に）`,
       },
       {
-        label: "🧪 注目成分",
+        label: "注目成分",
         content: `【混合肌タイプ向け — 有効成分リスト】
 
-✅ Tゾーン（脂性・毛穴）向け:
+【Tゾーン（脂性・毛穴）向け】
 ・BHA（サリチル酸0.5-2%）— 毛穴の黒ずみ・ニキビ菌を溶解
 ・ナイアシンアミド（5-10%）— 皮脂分泌抑制 + 毛穴を目立たなくする
 ・グリコール酸（AHA 5%以下）— 古い角質オフ
 
-✅ Uゾーン（乾燥）向け:
+【Uゾーン（乾燥）向け】
 ・セラミド — バリア機能補修
 ・ヒアルロン酸 — 保水
 ・スクワラン — 油分フタ
 
-⚠️ 全顔NGの成分:
+【全顔NGの成分】
 ・coconut oil（ヤシ油）— コメドジェニック性高い
 ・合成香料 — 刺激
 ・高濃度アルコール
 
-💡 今週から試せること:
+【今週から試せること】
 「COSRX AHA/BHAクラリファイングトナー（¥1,500）」でTゾーンだけ週2回ケア`,
       },
     ],
   },
   {
-    type: "✨ 脂性肌（オイリー）",
+    type: "脂性肌（オイリー）",
     profile: "25歳女性・午前中からテカる・ニキビ跡が残りやすい・毛穴が開いている",
     tabs: [
       {
-        label: "🔬 肌タイプ",
+        label: "肌タイプ",
         content: `【診断結果】脂性肌（Oily）タイプ
 
 ━━ あなたの肌の状態 ━━
@@ -159,7 +159,7 @@ Uゾーン（頬・顎）：乾燥気味・外的刺激に敏感
 「水分たっぷり・油分は最小限」のバランスが正解。`,
       },
       {
-        label: "📋 ルーティン",
+        label: "ルーティン",
         content: `【脂性肌の最重要ポイント：「水分で保湿・油分でふたをしない」】
 
 ━━ 朝 ━━
@@ -183,23 +183,23 @@ Uゾーン（頬・顎）：乾燥気味・外的刺激に敏感
 ・吸水系のパウダー乱用（乾燥→皮脂爆発のループ）`,
       },
       {
-        label: "🧪 注目成分",
+        label: "注目成分",
         content: `【脂性肌タイプ向け — 有効成分リスト】
 
-✅ 積極的に選ぶ成分:
+【積極的に選ぶ成分】
 ・ナイアシンアミド（5-10%）— 皮脂抑制・毛穴縮小・ニキビ跡の色素沈着改善
 ・BHA（サリチル酸1-2%）— 毛穴の皮脂詰まりを溶かす
 ・ジンクPCA（亜鉛）— 皮脂分泌を直接抑制
 ・グリコール酸（AHA）— ターンオーバーを促進、ニキビ跡フェード
 ・アゼライン酸（10-20%）— 抗菌+ニキビ改善+色素沈着対策の万能酸
 
-⚠️ NGの成分:
+【NGの成分】
 ・鉱物油（ミネラルオイル）— 毛穴を詰まらせる
 ・coconut oil — コメドジェニック性最高レベル
 ・高配合シリコン — 毛穴に蓄積
 ・高濃度レチノール（単独使用）— 乾燥しすぎると皮脂が増加
 
-💡 今週から試せること:
+【今週から試せること】
 「Paula's Choice BHA（¥3,800）or COSRX One Step Original Clear Pad（¥1,800）」`,
       },
     ],
@@ -258,7 +258,7 @@ function SkinSampleSection() {
               {sample.tabs.map((tab, i) => (
                 <button key={i} onClick={() => setActiveTab(i)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors min-h-[44px] ${activeTab === i ? "bg-rose-500 text-white" : "bg-white border border-rose-200 text-rose-600 hover:bg-rose-50"}`}
-                  aria-label={`${tab.label.replace(/[🔬📋🧪🛒📅]/g, '').trim()}タブを表示する`}
+                  aria-label={`${tab.label}タブを表示する`}
                   aria-selected={activeTab === i}>
                   {tab.label}
                 </button>
@@ -289,7 +289,7 @@ function SkinTypeTabsSection() {
     {
       id: "dry-sensitive",
       label: "乾燥敏感",
-      icon: "🌿",
+      icon: "●",
       color: "from-green-100 to-emerald-50",
       border: "border-green-300",
       accent: "text-green-700",
@@ -301,7 +301,7 @@ function SkinTypeTabsSection() {
     {
       id: "oily",
       label: "脂性",
-      icon: "💧",
+      icon: "○",
       color: "from-blue-100 to-sky-50",
       border: "border-blue-300",
       accent: "text-blue-700",
@@ -313,7 +313,7 @@ function SkinTypeTabsSection() {
     {
       id: "combination",
       label: "混合",
-      icon: "🔀",
+      icon: "◇",
       color: "from-purple-100 to-violet-50",
       border: "border-purple-300",
       accent: "text-purple-700",
@@ -325,7 +325,7 @@ function SkinTypeTabsSection() {
     {
       id: "normal",
       label: "普通",
-      icon: "✨",
+      icon: "★",
       color: "from-amber-100 to-yellow-50",
       border: "border-amber-300",
       accent: "text-amber-700",
@@ -388,7 +388,7 @@ function SkinTypeTabsSection() {
               href="/tool?mode=camera"
               className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold px-8 py-3 rounded-xl text-sm transition-all shadow-lg"
             >
-              📷 自分の肌タイプを正確に診断する →
+              自分の肌タイプを正確に診断する →
             </Link>
           </div>
         </div>
@@ -407,7 +407,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
             <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランダイアログを閉じる">✕</button>
-            <div className="text-3xl mb-3 text-center">✨</div>
+            <div className="text-3xl mb-3 text-center text-yellow-400 font-bold">◆</div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
             <p className="text-sm text-gray-500 mb-4 text-center">無制限診断（いつでもキャンセル可）</p>
             <KomojuButton planId="standard" planLabel="プレミアムプラン ¥1,980/月" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
@@ -449,13 +449,13 @@ export default function Home() {
             className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-black px-12 py-5 rounded-2xl text-xl transition-all shadow-2xl animate-bounce"
             style={{ animationDuration: "3s" }}
           >
-            📷 今すぐ肌診断する
+            今すぐ肌診断する
           </Link>
           <Link
             href="/tool"
             className="bg-white/80 hover:bg-white text-rose-700 font-bold py-4 px-8 rounded-2xl text-lg transition-all shadow-lg border border-white"
           >
-            ✏️ テキストで診断
+            テキストで診断
           </Link>
         </div>
         <div className="flex justify-center mb-4">
@@ -472,7 +472,7 @@ export default function Home() {
 
         {/* 季節バナー */}
         <div className="bg-white/30 backdrop-blur border border-white/40 rounded-2xl p-4 text-center mt-8 mb-2">
-          <p className="text-sm text-rose-900 font-bold">🌸 春の肌変化シーズン到来</p>
+          <p className="text-sm text-rose-900 font-bold">春の肌変化シーズン到来</p>
           <p className="text-xs text-rose-800 mt-1">花粉・紫外線増加で肌荒れが起きやすい時期です。今すぐ肌チェック！</p>
         </div>
         </div>
@@ -491,21 +491,21 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-4 mb-10">
             {[
               {
-                icon: "🏪",
+                icon: "◎",
                 label: "コスメカウンター",
                 pros: "接客で悩みを聞いてもらえる",
                 cons: "自社ブランドのみ推薦。他社の良い商品は紹介されない。成分の説明がない",
                 color: "border-gray-200",
               },
               {
-                icon: "🏥",
+                icon: "◎",
                 label: "皮膚科",
                 pros: "医学的に正確な診断ができる",
                 cons: "保険外は¥5,000〜。スキンケア商品の具体的な成分アドバイスは範囲外",
                 color: "border-gray-200",
               },
               {
-                icon: "🤖",
+                icon: "◎",
                 label: "AI美肌診断（当サービス）",
                 pros: "成分ベースで全ブランド横断比較。朝夜ルーティン＋NG成分リストまで個別生成",
                 cons: "医療行為ではありません（参考情報）",
@@ -515,8 +515,8 @@ export default function Home() {
               <div key={item.label} className={`rounded-2xl border-2 p-5 ${item.color}`}>
                 <div className="text-3xl mb-2">{item.icon}</div>
                 <p className="font-bold text-gray-900 mb-2">{item.label}</p>
-                <p className="text-xs text-green-600 mb-1">✅ {item.pros}</p>
-                <p className="text-xs text-red-500">⚠️ {item.cons}</p>
+                <p className="text-xs text-green-600 mb-1"><span className="font-bold">◎</span> {item.pros}</p>
+                <p className="text-xs text-red-500"><span className="font-bold">×</span> {item.cons}</p>
               </div>
             ))}
           </div>
@@ -547,7 +547,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">😕</div>
+                  <div className="text-2xl text-gray-400 font-bold">×</div>
                   <h3 className="text-base font-bold text-gray-500">診断前</h3>
                 </div>
                 <ul className="space-y-3 text-sm text-gray-500">
@@ -568,7 +568,7 @@ export default function Home() {
               <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-rose-500 text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl">AI診断後</div>
                 <div className="flex items-center gap-2 mb-4">
-                  <div className="text-2xl">✨</div>
+                  <div className="text-2xl text-yellow-400 font-bold">◆</div>
                   <h3 className="text-base font-bold text-rose-700">診断後</h3>
                 </div>
                 <ul className="space-y-3 text-sm text-rose-700">
@@ -592,9 +592,9 @@ export default function Home() {
           {/* 変化の数値インジケーター */}
           <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
             {[
-              { value: "30秒", label: "診断にかかる時間", icon: "⏱️" },
-              { value: "200種+", label: "解析する成分データ", icon: "🧪" },
-              { value: "¥0", label: "無料で3回試せる", icon: "💰" },
+              { value: "30秒", label: "診断にかかる時間", icon: "◎" },
+              { value: "200種+", label: "解析する成分データ", icon: "◆" },
+              { value: "¥0", label: "無料で3回試せる", icon: "★" },
             ].map((stat) => (
               <div key={stat.label} className="bg-white border border-rose-100 rounded-2xl p-4 text-center shadow-sm">
                 <div className="text-2xl mb-1">{stat.icon}</div>
@@ -623,17 +623,17 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                icon: "😞",
+                icon: "●",
                 title: "何を使えばいいか分からない",
                 desc: "スキンケア商品が多すぎて自分に合うものを選べない。試してはやめての繰り返しに疲れた。",
               },
               {
-                icon: "💸",
+                icon: "●",
                 title: "高い商品を試したのに効果なし",
                 desc: "有名ブランドや皮膚科推薦品を使っても肌に合わず無駄遣い。成分から選ぶ方法を知りたい。",
               },
               {
-                icon: "📱",
+                icon: "●",
                 title: "K-beautyを使いこなしたい",
                 desc: "韓国スキンケアに興味はあるが成分表示が読めない。何がいい成分で何が悪い成分か教えてほしい。",
               },
@@ -654,10 +654,10 @@ export default function Home() {
           <h2 className="text-2xl font-black text-center mb-12">診断でわかること（4つの視点）</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
-              { icon: "🔬", title: "肌タイプ詳細診断", desc: "乾燥・混合・脂性・敏感肌の組み合わせパターンと根本原因を分析。「なぜそうなるか」まで説明します。" },
-              { icon: "📋", title: "朝・夜のパーソナルルーティン", desc: "何を・どの順番で・どのくらい使えばいいか。ステップごとに目的を説明した具体的なルーティンを提案。" },
-              { icon: "🧪", title: "有効成分・NG成分リスト", desc: "あなたの肌悩みに効く成分と避けるべき成分を具体名で明示。商品の裏面成分表を見て選べるようになります。" },
-              { icon: "🛒", title: "コスパ商品レコメンド", desc: "国産・K-beautyの中から成分ベースでコスパの良い商品を提案。価格帯別（プチプラ〜ミドル）で対応。" },
+              { icon: "◆", title: "肌タイプ詳細診断", desc: "乾燥・混合・脂性・敏感肌の組み合わせパターンと根本原因を分析。「なぜそうなるか」まで説明します。" },
+              { icon: "◆", title: "朝・夜のパーソナルルーティン", desc: "何を・どの順番で・どのくらい使えばいいか。ステップごとに目的を説明した具体的なルーティンを提案。" },
+              { icon: "◆", title: "有効成分・NG成分リスト", desc: "あなたの肌悩みに効く成分と避けるべき成分を具体名で明示。商品の裏面成分表を見て選べるようになります。" },
+              { icon: "◆", title: "コスパ商品レコメンド", desc: "国産・K-beautyの中から成分ベースでコスパの良い商品を提案。価格帯別（プチプラ〜ミドル）で対応。" },
             ].map((f) => (
               <div key={f.title} className="bg-white rounded-2xl p-6 shadow-sm border border-rose-100 flex gap-4">
                 <div className="text-3xl shrink-0">{f.icon}</div>
@@ -795,7 +795,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6 mb-10">
             {/* 肌年齢カード */}
             <div className="bg-white border-2 border-rose-200 rounded-2xl p-6 shadow-sm text-center">
-              <div className="text-4xl mb-3">🎂</div>
+              <div className="text-4xl mb-3 text-rose-400 font-bold">◎</div>
               <h3 className="font-bold text-gray-900 mb-2">肌年齢診断</h3>
               <div className="bg-gradient-to-br from-rose-500 to-pink-400 rounded-2xl p-4 text-white mb-3">
                 <div className="text-xs opacity-80 mb-1">実年齢 28歳の場合</div>
@@ -806,7 +806,7 @@ export default function Home() {
             </div>
             {/* 30日プランカード */}
             <div className="bg-white border-2 border-pink-200 rounded-2xl p-6 shadow-sm">
-              <div className="text-4xl mb-3 text-center">📅</div>
+              <div className="text-4xl mb-3 text-center text-pink-400 font-bold">◎</div>
               <h3 className="font-bold text-gray-900 mb-3 text-center">30日スキンケアプラン</h3>
               <div className="space-y-2">
                 {[
@@ -825,7 +825,7 @@ export default function Home() {
             </div>
             {/* 専門家CTA */}
             <div className="bg-white border-2 border-amber-200 rounded-2xl p-6 shadow-sm text-center">
-              <div className="text-4xl mb-3">👩‍⚕️</div>
+              <div className="text-4xl mb-3 text-amber-400 font-bold">◎</div>
               <h3 className="font-bold text-gray-900 mb-2">専門家への相談</h3>
               <p className="text-xs text-gray-500 mb-4 leading-relaxed">AIで改善が難しい肌トラブルは、専門家への相談が最短ルートです。</p>
               <div className="space-y-2">
@@ -868,9 +868,9 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { icon: "📈", title: "スコア推移グラフ", desc: "診断するたびにスコアを自動保存。最大10回分の推移をグラフで表示。" },
-              { icon: "🎂", title: "推定肌年齢診断", desc: "肌スコアから実年齢との差を推定。ケアの効果が「若返り」で実感できる。" },
-              { icon: "🔥", title: "ケアストリーク記録", desc: "毎日のスキンケア日記でストリークを積み上げ。継続モチベーションUP！" },
+              { icon: "▲", title: "スコア推移グラフ", desc: "診断するたびにスコアを自動保存。最大10回分の推移をグラフで表示。" },
+              { icon: "◎", title: "推定肌年齢診断", desc: "肌スコアから実年齢との差を推定。ケアの効果が「若返り」で実感できる。" },
+              { icon: "★", title: "ケアストリーク記録", desc: "毎日のスキンケア日記でストリークを積み上げ。継続モチベーションUP！" },
             ].map((item) => (
               <div key={item.title} className="bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
                 <div className="text-3xl mb-3">{item.icon}</div>
@@ -889,12 +889,12 @@ export default function Home() {
 
       {/* もっと活用する3選 */}
       <section className="py-8 px-4 max-w-lg mx-auto">
-        <h2 className="text-center text-base font-bold text-rose-700 mb-4">✨ AI美肌診断をもっと活用する3選</h2>
+        <h2 className="text-center text-base font-bold text-rose-700 mb-4">AI美肌診断をもっと活用する3選</h2>
         <ol className="space-y-3">
           {[
-            { icon: "📅", title: "季節ごとに再診断する", desc: "春夏秋冬で肌の状態は変わります。季節の変わり目に再診断してスキンケアを最適化しよう。" },
-            { icon: "🛒", title: "おすすめ商品を実際に試す", desc: "AIが提案した成分・商品を実際に購入して肌の変化を記録。自分に合うルーティンを見つけよう。" },
-            { icon: "👥", title: "家族・友人の肌診断もしてあげる", desc: "親や友人の悩みを入力して、AIの肌アドバイスをプレゼントしよう。喜ばれること間違いなし！" },
+            { icon: "◎", title: "季節ごとに再診断する", desc: "春夏秋冬で肌の状態は変わります。季節の変わり目に再診断してスキンケアを最適化しよう。" },
+            { icon: "◎", title: "おすすめ商品を実際に試す", desc: "AIが提案した成分・商品を実際に購入して肌の変化を記録。自分に合うルーティンを見つけよう。" },
+            { icon: "◎", title: "家族・友人の肌診断もしてあげる", desc: "親や友人の悩みを入力して、AIの肌アドバイスをプレゼントしよう。喜ばれること間違いなし！" },
           ].map((item, i) => (
             <li key={i} className="flex items-start gap-3 rounded-xl p-3"
               style={{ background: "rgba(225,29,72,0.05)", border: "1px solid rgba(225,29,72,0.12)" }}>
@@ -981,7 +981,7 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white border border-rose-100 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-bold text-rose-700 mb-3">✅ AIが解析する成分カテゴリ</h3>
+              <h3 className="font-bold text-rose-700 mb-3">AIが解析する成分カテゴリ</h3>
               <div className="space-y-2">
                 {[
                   { cat: "保湿成分", items: "セラミド・ヒアルロン酸・グリセリン・スクワランなど" },
@@ -1001,7 +1001,7 @@ export default function Home() {
               </div>
             </div>
             <div className="bg-white border border-red-100 rounded-2xl p-6 shadow-sm">
-              <h3 className="font-bold text-red-600 mb-3">❌ AIが警告するNG成分</h3>
+              <h3 className="font-bold text-red-600 mb-3">AIが警告するNG成分</h3>
               <div className="space-y-2">
                 {[
                   { cat: "刺激・アレルギー系", items: "合成香料（Parfum）・高濃度アルコール・硫酸系界面活性剤" },
@@ -1038,7 +1038,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-4 mb-6">
             {[
               {
-                icon: "💎",
+                icon: "◆",
                 badge: "美顔器",
                 label: "韓国美顔器 Dr.tengle",
                 desc: "メイクさん・美容師に愛用される韓国スキンケア美顔器。EMS・超音波・光LED複合ケアでプロも認める本格美肌ケア。自宅でエステサロン級のケアが実現。",
@@ -1047,7 +1047,7 @@ export default function Home() {
                 color: "rose",
               },
               {
-                icon: "🌸",
+                icon: "◆",
                 badge: "脱毛サロン",
                 label: "Dione 全身脱毛サロン",
                 desc: "敏感肌専門・全身脱毛サロン。医療レーザーに近い効果で、肌ケアと並行してムダ毛を処理。清潔な肌でスキンケアの浸透率UP。体験コース受付中。",
@@ -1056,7 +1056,7 @@ export default function Home() {
                 color: "pink",
               },
               {
-                icon: "🧬",
+                icon: "◆",
                 badge: "体内から美肌",
                 label: "CLOUD GYM（遺伝子検査×パーソナル）",
                 desc: "遺伝子検査で自分の体質を知り、スキンケアと並行して体内から美肌を目指す。「外側のケア」と「内側の改善」を組み合わせることで美肌効果が最大化。",
@@ -1065,7 +1065,7 @@ export default function Home() {
                 color: "purple",
               },
               {
-                icon: "🧘",
+                icon: "◆",
                 badge: "ストレスケア",
                 label: "SOELU オンラインヨガ",
                 desc: "ストレス・睡眠不足は肌荒れの最大の敵。ヨガで自律神経を整え、ホルモンバランスを改善することで内側から美肌へ。オンラインでトライアル1,000円から始められる。",
@@ -1112,11 +1112,11 @@ export default function Home() {
               <h3 className="font-bold text-rose-800 mb-4 text-sm">AI肌診断で得られる情報</h3>
               <ul className="space-y-2.5">
                 {[
-                  { icon: "🔬", text: "肌タイプ・水分量・皮脂量・敏感度の詳細分析" },
-                  { icon: "📋", text: "朝・夜それぞれ6ステップのパーソナルルーティン" },
-                  { icon: "🧪", text: "積極的に選ぶ成分・避けるべきNG成分リスト" },
-                  { icon: "🛒", text: "肌タイプ別おすすめ商品TOP3（Amazon直リンク）" },
-                  { icon: "📅", text: "2週間・1ヶ月・3ヶ月後の肌改善タイムライン" },
+                  { icon: "◆", text: "肌タイプ・水分量・皮脂量・敏感度の詳細分析" },
+                  { icon: "◆", text: "朝・夜それぞれ6ステップのパーソナルルーティン" },
+                  { icon: "◆", text: "積極的に選ぶ成分・避けるべきNG成分リスト" },
+                  { icon: "◆", text: "肌タイプ別おすすめ商品TOP3（Amazon直リンク）" },
+                  { icon: "◆", text: "2週間・1ヶ月・3ヶ月後の肌改善タイムライン" },
                 ].map((item) => (
                   <li key={item.icon} className="flex items-start gap-2 text-sm text-gray-700">
                     <span className="shrink-0 mt-0.5">{item.icon}</span>
@@ -1136,21 +1136,21 @@ export default function Home() {
             {[
               {
                 step: "Step 1",
-                icon: "📝",
+                icon: "◎",
                 title: "肌の悩みを具体的に入力",
                 desc: "「毛穴が詰まる」「乾燥で小ジワが出る」など、具体的に書くほどAIの診断精度が上がります。現在使っているスキンケア商品を入力するとさらに的確なアドバイスが得られます。",
                 color: "rose",
               },
               {
                 step: "Step 2",
-                icon: "🔬",
+                icon: "◎",
                 title: "診断結果でNGを排除",
                 desc: "「注目成分」タブを開き、あなたの肌に不要なNG成分リストを手元に保存。次のスキンケア購入時に成分表示と照らし合わせて「失敗購入」をゼロにしましょう。",
                 color: "pink",
               },
               {
                 step: "Step 3",
-                icon: "📅",
+                icon: "◎",
                 title: "2週間後に再診断して効果確認",
                 desc: "提案ルーティンを2週間続けたら再診断。肌スコアの変化をグラフで確認できます。季節の変わり目（春・秋）にも再診断してスキンケアを最適化しましょう。",
                 color: "purple",
@@ -1196,7 +1196,7 @@ export default function Home() {
       <section className="py-8 px-6 max-w-3xl mx-auto text-center">
         <div className="inline-flex flex-col sm:flex-row gap-2">
           <a
-            href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent("AI美肌診断 — 肌タイプ・悩みを入力するだけでAIが成分・スキンケアルーティン・商品まで個別提案✨ 無料で試してみて！ → https://hada-ai.vercel.app #AI美肌診断 #スキンケア #美肌")}
+            href={"https://twitter.com/intent/tweet?text=" + encodeURIComponent("AI美肌診断 — 肌タイプ・悩みを入力するだけでAIが成分・スキンケアルーティン・商品まで個別提案！ 無料で試してみて → https://hada-ai.vercel.app #AI美肌診断 #スキンケア #美肌")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors min-h-[44px]"
@@ -1208,7 +1208,7 @@ export default function Home() {
             Xでシェアする
           </a>
           <a
-            href={"https://line.me/R/msg/text/?" + encodeURIComponent("AI美肌診断✨ 肌タイプ・悩みを入力するだけでAIが成分・スキンケアルーティン・商品まで個別提案！無料で試してみて → https://hada-ai.vercel.app")}
+            href={"https://line.me/R/msg/text/?" + encodeURIComponent("AI美肌診断 肌タイプ・悩みを入力するだけでAIが成分・スキンケアルーティン・商品まで個別提案！無料で試してみて → https://hada-ai.vercel.app")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-white font-bold py-3 px-6 rounded-xl text-sm transition-colors min-h-[44px]"
