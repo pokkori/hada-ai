@@ -13,11 +13,11 @@ type ParsedResult = { sections: Section[]; raw: string };
 
 function parseResult(text: string): ParsedResult {
   const sectionDefs = [
-    { key: "肌診断", icon: "🔬" },
-    { key: "スキンケアルーティン", icon: "📋" },
-    { key: "注目成分", icon: "🧪" },
-    { key: "商品レコメンド", icon: "🛒" },
-    { key: "1週間後", icon: "📅" },
+    { key: "肌診断", icon: "[分析]" },
+    { key: "スキンケアルーティン", icon: "[手順]" },
+    { key: "注目成分", icon: "[成分]" },
+    { key: "商品レコメンド", icon: "[商品]" },
+    { key: "1週間後", icon: "[計画]" },
   ];
   const sections: Section[] = [];
   const parts = text.split(/^---$/m);
@@ -30,7 +30,7 @@ function parseResult(text: string): ParsedResult {
       sections.push({ title: matched.key, icon: matched.icon, content });
     }
   }
-  if (sections.length === 0) sections.push({ title: "診断結果", icon: "📄", content: text });
+  if (sections.length === 0) sections.push({ title: "診断結果", icon: "[結果]", content: text });
   return { sections, raw: text };
 }
 
@@ -39,7 +39,7 @@ function Paywall({ onClose }: { onClose: () => void; onOpenPayjp?: () => void })
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="無料枠上限ダイアログを閉じる">×</button>
-        <div className="text-3xl mb-3">⭐</div>
+        <div className="text-3xl mb-3">★</div>
         <h2 className="text-lg font-bold mb-2">無料枠を使い切りました</h2>
         <p className="text-sm text-gray-500 mb-4">プレミアムプランで全機能を使えます</p>
         <KomojuButton
@@ -62,11 +62,11 @@ function CopyButton({ text, label = "コピー" }: { text: string; label?: strin
         className="text-xs px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium transition-colors min-h-[44px]"
         aria-label={copied ? "コピー済み" : `${label}をクリップボードにコピーする`}
       >
-        {copied ? "✓ コピー済み" : label}
+        {copied ? " コピー済み" : label}
       </button>
       {copied && (
         <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-600 text-white text-xs rounded-lg px-2 py-1 whitespace-nowrap shadow-lg animate-bounce">
-          ✅ コピー完了！
+          OK コピー完了！
         </div>
       )}
     </div>
@@ -139,7 +139,7 @@ function Top3Section({ skinType }: { skinType: string }) {
   return (
     <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-lg">🏆</span>
+        <span className="text-lg">TOP3</span>
         <p className="text-sm font-bold text-rose-800">今週試すべきTOP3アイテム（{skinType}向け）</p>
       </div>
       <div className="space-y-2">
@@ -183,7 +183,7 @@ function AffiliateSection({ skinType }: { skinType: string }) {
   const links = getAffiliateLinks(skinType);
   return (
     <div className="mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
-      <p className="text-xs font-bold text-amber-700 mb-3">💛 あなたの肌タイプ（{skinType}）向けおすすめ商品</p>
+      <p className="text-xs font-bold text-amber-700 mb-3"> あなたの肌タイプ（{skinType}）向けおすすめ商品</p>
       <div className="space-y-2">
         {links.map((link, i) => (
           <a
@@ -193,7 +193,7 @@ function AffiliateSection({ skinType }: { skinType: string }) {
             rel="noopener noreferrer"
             className="flex items-center gap-3 bg-white border border-amber-100 rounded-lg p-3 hover:bg-amber-50 transition-colors group"
           >
-            <span className="text-xl shrink-0">🛒</span>
+            <span className="text-xl shrink-0">[商品]</span>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-amber-800 group-hover:text-amber-900">{link.label} →</p>
               <p className="text-xs text-gray-500 mt-0.5">{link.desc}</p>
@@ -217,7 +217,7 @@ function SkinTimeline({ skinScore }: { skinScore: number }) {
 
   return (
     <div className="mt-3 bg-rose-50 border border-rose-100 rounded-xl p-4">
-      <p className="text-xs font-bold text-rose-700 mb-3">📅 肌改善タイムライン（今日から始めた場合）</p>
+      <p className="text-xs font-bold text-rose-700 mb-3">[計画] 肌改善タイムライン（今日から始めた場合）</p>
       <div className="space-y-2">
         {[
           { period: "2週間後", content: week2, color: "bg-green-100 text-green-700" },
@@ -253,8 +253,8 @@ function SkinRoutineCard({ content }: { content: string }) {
 
   const formatStep = (s: string) => s.replace(/^Step\d+[:：\s]*/i, '').replace(/^[・\-\d]+\.\s*/, '').trim();
 
-  const amIcons = ['🧴', '💧', '☀️', '🛡️', '✨'];
-  const pmIcons = ['🧼', '💦', '🌙', '✨', '💊'];
+  const amIcons = ['1.', '2.', '3.', '4.', '5.'];
+  const pmIcons = ['1.', '2.', '3.', '4.', '5.'];
 
   if (amSteps.length === 0 && pmSteps.length === 0) {
     return (
@@ -271,13 +271,13 @@ function SkinRoutineCard({ content }: { content: string }) {
       {amSteps.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">☀️</span>
+            <span className="text-lg">️</span>
             <p className="text-sm font-bold text-amber-700">朝のルーティン（Morning Care）</p>
           </div>
           <div className="space-y-2">
             {amSteps.map((step, i) => (
               <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-2.5 border border-amber-100">
-                <span className="text-lg shrink-0">{amIcons[i] ?? '✅'}</span>
+                <span className="text-lg shrink-0">{amIcons[i] ?? 'OK'}</span>
                 <div className="flex-1">
                   <span className="text-xs font-bold text-amber-600 mr-1">Step{i + 1}</span>
                   <span className="text-xs text-gray-700">{formatStep(step)}</span>
@@ -290,13 +290,13 @@ function SkinRoutineCard({ content }: { content: string }) {
       {pmSteps.length > 0 && (
         <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-lg">🌙</span>
+            <span className="text-lg">PM</span>
             <p className="text-sm font-bold text-indigo-700">夜のルーティン（Night Care）</p>
           </div>
           <div className="space-y-2">
             {pmSteps.map((step, i) => (
               <div key={i} className="flex items-start gap-3 bg-white rounded-lg p-2.5 border border-indigo-100">
-                <span className="text-lg shrink-0">{pmIcons[i] ?? '✅'}</span>
+                <span className="text-lg shrink-0">{pmIcons[i] ?? 'OK'}</span>
                 <div className="flex-1">
                   <span className="text-xs font-bold text-indigo-600 mr-1">Step{i + 1}</span>
                   <span className="text-xs text-gray-700">{formatStep(step)}</span>
@@ -309,7 +309,7 @@ function SkinRoutineCard({ content }: { content: string }) {
       {weeklySteps.length > 0 && (
         <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-lg">💜</span>
+            <span className="text-lg"></span>
             <p className="text-sm font-bold text-purple-700">週1〜2回のスペシャルケア</p>
           </div>
           <div className="space-y-1">
@@ -354,7 +354,7 @@ function BeforeAfterPanel({ currentScore, skinType, concerns }: { currentScore: 
   if (!data.before) {
     return (
       <div className="mt-4 bg-rose-50 border border-rose-200 rounded-xl p-4">
-        <p className="text-xs font-bold text-rose-700 mb-1">📊 Before/After 比較</p>
+        <p className="text-xs font-bold text-rose-700 mb-1"> Before/After 比較</p>
         <p className="text-xs text-gray-500">2回以上別の日に診断すると、前回との変化が表示されます。今日の診断を「Before」として保存しました。</p>
       </div>
     );
@@ -368,7 +368,7 @@ function BeforeAfterPanel({ currentScore, skinType, concerns }: { currentScore: 
 
   return (
     <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
-      <p className="text-sm font-bold text-rose-700 mb-3">📊 Before/After 肌スコア比較</p>
+      <p className="text-sm font-bold text-rose-700 mb-3"> Before/After 肌スコア比較</p>
       <div className="grid grid-cols-2 gap-3 mb-3">
         <div className="bg-white border border-rose-100 rounded-xl p-3 text-center">
           <p className="text-xs text-gray-400 mb-1">Before（{data.before.date}）</p>
@@ -387,7 +387,7 @@ function BeforeAfterPanel({ currentScore, skinType, concerns }: { currentScore: 
       {diff !== 0 && (
         <p className="text-xs text-gray-500 text-center mt-2">
           {improved
-            ? `前回から${Math.abs(diff)}点アップしました！ケアの成果が出ています✨`
+            ? `前回から${Math.abs(diff)}点アップしました！ケアの成果が出ています`
             : `前回から${Math.abs(diff)}点ダウン。ルーティンを見直してみましょう。`}
         </p>
       )}
@@ -430,7 +430,7 @@ function SkinScoreHistory({ currentScore, skinType }: { currentScore: number; sk
   if (history.length < 2) {
     return (
       <div className="mt-4 bg-rose-50 border border-rose-200 rounded-xl p-4">
-        <p className="text-xs font-bold text-rose-700 mb-1">📈 肌スコア推移グラフ</p>
+        <p className="text-xs font-bold text-rose-700 mb-1"> 肌スコア推移グラフ</p>
         <p className="text-xs text-gray-500">2回以上診断すると推移グラフが表示されます。定期的に再診断してスコア変化を記録しましょう！</p>
       </div>
     );
@@ -460,7 +460,7 @@ function SkinScoreHistory({ currentScore, skinType }: { currentScore: number; sk
   return (
     <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs font-bold text-rose-700">📈 肌スコア推移グラフ</p>
+        <p className="text-xs font-bold text-rose-700"> 肌スコア推移グラフ</p>
         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${diff >= 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"}`}>
           {diff >= 0 ? "↑" : "↓"} {Math.abs(diff)}点
         </span>
@@ -551,10 +551,10 @@ function SkincareDiary() {
   return (
     <div className="mt-4 bg-gradient-to-br from-rose-50 to-pink-50 border border-rose-200 rounded-xl p-4">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-bold text-rose-800">📔 今日のスキンケア日記</p>
+        <p className="text-sm font-bold text-rose-800"> 今日のスキンケア日記</p>
         <div className="flex items-center gap-2">
           <span className="text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">
-            🔥 連続ケア {streak}日
+             連続ケア {streak}日
           </span>
           <span className="text-xs text-gray-500">{doneCount}/{allItems.length}</span>
         </div>
@@ -562,14 +562,14 @@ function SkincareDiary() {
 
       {showComplete && (
         <div className="mb-3 bg-gradient-to-r from-rose-500 to-pink-400 text-white rounded-xl px-4 py-2.5 flex items-center gap-2 shadow animate-bounce">
-          <span className="text-lg">✨</span>
-          <p className="text-sm font-bold">今日のスキンケア完了！✨</p>
+          <span className="text-lg"></span>
+          <p className="text-sm font-bold">今日のスキンケア完了！</p>
         </div>
       )}
 
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white rounded-lg p-3 border border-rose-100">
-          <p className="text-xs font-bold text-amber-600 mb-2">☀️ 朝のケア</p>
+          <p className="text-xs font-bold text-amber-600 mb-2">️ 朝のケア</p>
           <div className="space-y-2">
             {morning.map(item => {
               const key = `am_${item}`;
@@ -581,7 +581,7 @@ function SkincareDiary() {
                       checks[key] ? "bg-rose-500 border-rose-500" : "border-gray-300 group-hover:border-rose-300"
                     }`}
                   >
-                    {checks[key] && <span className="text-white text-xs font-bold">✓</span>}
+                    {checks[key] && <span className="text-white text-xs font-bold"></span>}
                   </div>
                   <span className={`text-xs transition-colors ${checks[key] ? "line-through text-gray-400" : "text-gray-700"}`}>
                     {item}
@@ -593,7 +593,7 @@ function SkincareDiary() {
         </div>
 
         <div className="bg-white rounded-lg p-3 border border-rose-100">
-          <p className="text-xs font-bold text-indigo-600 mb-2">🌙 夜のケア</p>
+          <p className="text-xs font-bold text-indigo-600 mb-2">PM 夜のケア</p>
           <div className="space-y-2">
             {night.map(item => {
               const key = `pm_${item}`;
@@ -605,7 +605,7 @@ function SkincareDiary() {
                       checks[key] ? "bg-rose-500 border-rose-500" : "border-gray-300 group-hover:border-rose-300"
                     }`}
                   >
-                    {checks[key] && <span className="text-white text-xs font-bold">✓</span>}
+                    {checks[key] && <span className="text-white text-xs font-bold"></span>}
                   </div>
                   <span className={`text-xs transition-colors ${checks[key] ? "line-through text-gray-400" : "text-gray-700"}`}>
                     {item}
@@ -620,7 +620,7 @@ function SkincareDiary() {
       {allDone && (
         <div className="mt-3 text-center">
           <span className="text-xs bg-rose-100 text-rose-700 font-bold px-3 py-1 rounded-full">
-            本日のケア達成！{streak}日連続継続中 🏆
+            本日のケア達成！{streak}日連続継続中 TOP3
           </span>
         </div>
       )}
@@ -651,10 +651,10 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
 
   const ogUrl = `https://hada-ai.vercel.app/api/og?score=${skinScore}&skinType=${encodeURIComponent(skinType)}`;
   const skinLabel = skinType.includes("乾燥") ? "乾燥肌" : skinType.includes("脂性") || skinType.includes("オイリー") ? "脂性肌" : skinType.includes("混合") ? "混合肌" : skinType.includes("敏感") ? "敏感肌" : skinType;
-  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`私の肌タイプは「${skinLabel}」でした💄\n\nAI美肌診断スコア: ${skinScore}点/100点\n✅ 有効成分リスト\n✅ NG成分リスト\n✅ 朝・夜ルーティン\n全部AIが個別に教えてくれた✨\n無料で診断 → https://hada-ai.vercel.app\n#AI美肌診断 #スキンケア #${skinLabel}`)}`;
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(`私の肌タイプは「${skinLabel}」でした\n\nAI美肌診断スコア: ${skinScore}点/100点\nOK 有効成分リスト\nOK NG成分リスト\nOK 朝・夜ルーティン\n全部AIが個別に教えてくれた\n無料で診断 → https://hada-ai.vercel.app\n#AI美肌診断 #スキンケア #${skinLabel}`)}`;
 
   const scoreColor = skinScore >= 80 ? "from-emerald-400 to-teal-400" : skinScore >= 70 ? "from-yellow-400 to-orange-300" : "from-rose-400 to-pink-400";
-  const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀✨" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
+  const scoreLabel = skinScore >= 80 ? "美肌レベル：優秀" : skinScore >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
 
   const r = 44;
   const circ = 2 * Math.PI * r;
@@ -689,7 +689,7 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
             <p className="text-base font-bold mb-1">{scoreLabel}</p>
             <p className="text-xs opacity-90 leading-relaxed">{firstLine || skinType}</p>
             <div className="mt-2 flex flex-wrap gap-1">
-              {["肌診断 ✓", "ルーティン ✓", "成分解析 ✓"].map(tag => (
+              {["肌診断", "ルーティン", "成分解析"].map(tag => (
                 <span key={tag} className="text-xs bg-white/20 rounded-full px-2 py-0.5">{tag}</span>
               ))}
             </div>
@@ -725,12 +725,12 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
                   </h3>
                 );
               }
-              if (line.startsWith('✓') || line.match(/^[・•]\s/) || line.match(/^[-]\s/) || line.match(/^\d+\.\s/)) {
-                const isCheck = line.startsWith('✓');
+              if (line.startsWith('') || line.match(/^[・•]\s/) || line.match(/^[-]\s/) || line.match(/^\d+\.\s/)) {
+                const isCheck = line.startsWith('');
                 return (
                   <div key={i} className="flex gap-2 items-start text-sm text-gray-700">
-                    <span className="flex-shrink-0 mt-0.5 text-rose-500 font-bold">{isCheck ? '✓' : '●'}</span>
-                    <span>{line.replace(/^[✓・•\-]\s*/, '').replace(/^\d+\.\s*/, '')}</span>
+                    <span className="flex-shrink-0 mt-0.5 text-rose-500 font-bold">{isCheck ? '' : '●'}</span>
+                    <span>{line.replace(/^[・•\-]\s*/, '').replace(/^\d+\.\s*/, '')}</span>
                   </div>
                 );
               }
@@ -774,7 +774,7 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
           Xでシェア
         </a>
         <a
-          href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://hada-ai.vercel.app`)}&text=${encodeURIComponent(`AI美肌診断で肌スコア${skinScore}点でした💄（${skinType}）\n有効成分・NGリスト・ケアルーティンまで全部教えてもらえた✨\n#AI美肌診断 #スキンケア`)}`}
+          href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://hada-ai.vercel.app`)}&text=${encodeURIComponent(`AI美肌診断で肌スコア${skinScore}点でした（${skinType}）\n有効成分・NGリスト・ケアルーティンまで全部教えてもらえた\n#AI美肌診断 #スキンケア`)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 bg-green-500 hover:bg-green-400 text-white font-bold px-4 py-3 rounded-2xl transition-colors flex items-center justify-center gap-2 min-h-[44px]"
@@ -786,15 +786,15 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       </div>
       {/* A8.netアフィリエイト：美容・ダイエット */}
       <div className="mt-4 bg-pink-950 border border-pink-800 rounded-xl p-4">
-        <p className="text-xs font-bold text-pink-200 mb-3">✨ 美肌をさらに磨くために（PR）</p>
+        <p className="text-xs font-bold text-pink-200 mb-3"> 美肌をさらに磨くために（PR）</p>
         <div className="space-y-2">
           {[
-            { icon: "🏃", label: "ハビットパーソナルジム", desc: "失敗したら全額返金！2ヶ月ダイエットコース", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5TKLPU+56HC+5YJRM" },
-            { icon: "💪", label: "ビーコンセプト", desc: "女性向け下半身痩せ専門パーソナルジム", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5X57CI+3UK2+5YRHE" },
-            { icon: "🧬", label: "CLOUD GYM", desc: "遺伝子検査×オンラインパーソナルトレーニング", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM" },
-            { icon: "🌸", label: "Dione 全身脱毛", desc: "敏感肌専門の脱毛サロン。全身脱毛体験受付中", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H" },
-            { icon: "💎", label: "韓国美顔器 Dr.tengle", desc: "メイクさん愛用の韓国スキンケア美顔器", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI" },
-            { icon: "🧘", label: "SOELU オンラインヨガ", desc: "本格ヨガ・フィットネスを自宅で。トライアル1,000円", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9" },
+            { icon: "", label: "ハビットパーソナルジム", desc: "失敗したら全額返金！2ヶ月ダイエットコース", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5TKLPU+56HC+5YJRM" },
+            { icon: "", label: "ビーコンセプト", desc: "女性向け下半身痩せ専門パーソナルジム", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5X57CI+3UK2+5YRHE" },
+            { icon: "", label: "CLOUD GYM", desc: "遺伝子検査×オンラインパーソナルトレーニング", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+5VCWJ6+4RUO+5YJRM" },
+            { icon: "", label: "Dione 全身脱毛", desc: "敏感肌専門の脱毛サロン。全身脱毛体験受付中", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4V1GMQ+3W7I+HVV0H" },
+            { icon: "", label: "韓国美顔器 Dr.tengle", desc: "メイクさん愛用の韓国スキンケア美顔器", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+4W8BUA+4GDM+TS3OI" },
+            { icon: "", label: "SOELU オンラインヨガ", desc: "本格ヨガ・フィットネスを自宅で。トライアル1,000円", url: "https://px.a8.net/svt/ejp?a8mat=4AZIOF+8OKLDE+4EPM+63OY9" },
           ].map((item, i) => (
             <a key={i} href={item.url} target="_blank" rel="noopener noreferrer sponsored"
               className="flex items-center gap-3 bg-pink-900 hover:bg-pink-800 border border-pink-700 rounded-lg p-3 transition-colors group">
@@ -810,12 +810,12 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
 
       {/* 次のアクション3選 */}
       <div className="mt-4 bg-pink-50 border border-pink-200 rounded-xl p-4">
-        <p className="text-sm font-bold text-pink-800 mb-3">💄 次にやるべきこと3選</p>
+        <p className="text-sm font-bold text-pink-800 mb-3"> 次にやるべきこと3選</p>
         <ol className="space-y-2">
           {[
-            { icon: "🛍️", text: "「おすすめ成分・NG成分」タブを見て次に買う化粧品を選ぶ" },
-            { icon: "📋", text: "「スキンケアルーティン」タブをコピーして毎朝のルーティン表を作る" },
-            { icon: "🌿", text: "2週間後に同じ診断をして肌スコアの変化を計測する" },
+            { icon: "️", text: "「おすすめ成分・NG成分」タブを見て次に買う化粧品を選ぶ" },
+            { icon: "[手順]", text: "「スキンケアルーティン」タブをコピーして毎朝のルーティン表を作る" },
+            { icon: "", text: "2週間後に同じ診断をして肌スコアの変化を計測する" },
           ].map((item, i) => (
             <li key={i} className="flex items-start gap-3 text-sm text-gray-700">
               <span className="text-lg leading-none">{item.icon}</span>
@@ -833,7 +833,7 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
 
       {/* 肌年齢診断 */}
       <div className="mt-4 bg-gradient-to-br from-pink-50 to-rose-50 border border-pink-200 rounded-xl p-4">
-        <p className="text-sm font-bold text-pink-800 mb-2">🎂 あなたの推定肌年齢</p>
+        <p className="text-sm font-bold text-pink-800 mb-2"> あなたの推定肌年齢</p>
         <div className="flex items-center gap-4">
           <div className="shrink-0 text-center">
             <div className="text-4xl font-black text-rose-600">
@@ -993,8 +993,8 @@ export default function HadaTool() {
       {showPayjp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl relative">
-            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランダイアログを閉じる">✕</button>
-            <div className="text-3xl mb-3 text-center">✨</div>
+            <button onClick={() => setShowPayjp(false)} className="absolute top-3 right-3 text-gray-400 text-xl min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="プレミアムプランダイアログを閉じる"></button>
+            <div className="text-3xl mb-3 text-center"></div>
             <h2 className="text-lg font-bold mb-2 text-center">プレミアムプラン</h2>
             <p className="text-sm text-gray-500 mb-4 text-center">AI美肌診断 無制限（いつでもキャンセル可）</p>
             <KomojuButton planId="standard" planLabel="AI美肌診断 プレミアム ¥1,980/月" className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 disabled:opacity-50" />
@@ -1034,7 +1034,7 @@ export default function HadaTool() {
               aria-label="カメラ撮影モードに切り替える"
               aria-pressed={inputMode === "camera"}
             >
-              <span>📷</span> カメラ撮影
+              <span></span> カメラ撮影
               <span className="text-xs bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded-full font-semibold">NEW</span>
             </button>
             <button
@@ -1043,7 +1043,7 @@ export default function HadaTool() {
               aria-label="テキスト入力モードに切り替える"
               aria-pressed={inputMode === "text"}
             >
-              <span>✏️</span> テキスト入力
+              <span>️</span> テキスト入力
             </button>
           </div>
 
@@ -1051,7 +1051,7 @@ export default function HadaTool() {
           {inputMode === "camera" && (
             <div className="space-y-4">
               <p className="text-xs text-gray-500 bg-rose-50 border border-rose-100 rounded-lg px-3 py-2">
-                💡 <strong>写真解析</strong>でより精度の高い肌診断が可能です。自然光の下で撮影すると正確な診断になります。
+                 <strong>写真解析</strong>でより精度の高い肌診断が可能です。自然光の下で撮影すると正確な診断になります。
               </p>
 
               {/* カメラ/ギャラリーボタン */}
@@ -1067,7 +1067,7 @@ export default function HadaTool() {
                     aria-label="フロントカメラで自撮り撮影して肌診断"
                   />
                   <div className="bg-pink-500 hover:bg-pink-600 text-white rounded-xl py-4 px-3 text-center transition-colors">
-                    <div className="text-2xl mb-1">📷</div>
+                    <div className="text-2xl mb-1"></div>
                     <div className="text-sm font-bold">自撮りで診断</div>
                     <div className="text-xs opacity-80 mt-0.5">フロントカメラ</div>
                   </div>
@@ -1082,7 +1082,7 @@ export default function HadaTool() {
                     aria-label="ギャラリーから写真を選択して肌診断"
                   />
                   <div className="bg-rose-50 hover:bg-rose-100 text-rose-700 border-2 border-rose-300 rounded-xl py-4 px-3 text-center transition-colors">
-                    <div className="text-2xl mb-1">🖼️</div>
+                    <div className="text-2xl mb-1">️</div>
                     <div className="text-sm font-bold">写真から診断</div>
                     <div className="text-xs text-rose-500 mt-0.5">ギャラリー選択</div>
                   </div>
@@ -1108,7 +1108,7 @@ export default function HadaTool() {
                       </button>
                     </div>
                     <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                      ✅ 写真を取り込みました
+                      OK 写真を取り込みました
                     </div>
                   </div>
                   <button
@@ -1129,13 +1129,13 @@ export default function HadaTool() {
 
               {!capturedImage && (
                 <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 text-center">
-                  <div className="text-4xl mb-2">🤳</div>
+                  <div className="text-4xl mb-2"></div>
                   <p className="text-sm text-gray-500 font-medium">上のボタンで写真を撮影または選択してください</p>
                   <p className="text-xs text-gray-400 mt-1">顔全体が映るように撮影すると精度が上がります</p>
                   <div className="mt-3 text-xs text-gray-400 space-y-0.5">
-                    <p>✓ 自然光（窓際）での撮影を推奨</p>
-                    <p>✓ メイクを落とした素肌が理想</p>
-                    <p>✓ 正面から明るく撮影</p>
+                    <p> 自然光（窓際）での撮影を推奨</p>
+                    <p> メイクを落とした素肌が理想</p>
+                    <p> 正面から明るく撮影</p>
                   </div>
                 </div>
               )}
@@ -1163,11 +1163,11 @@ export default function HadaTool() {
                 </label>
                 <div className="flex flex-wrap gap-1.5 mb-2">
                   {[
-                    { emoji: "🕳️", label: "毛穴・黒ずみ", text: "毛穴が目立つ（特にTゾーン）\n黒ずみ・白ずみが気になる" },
-                    { emoji: "💧", label: "乾燥・かさつき", text: "乾燥によるかさつき・ひきつれ\n化粧水が浸透しにくい" },
-                    { emoji: "🔴", label: "ニキビ・吹き出物", text: "繰り返すニキビ・吹き出物\nニキビ跡が残りやすい" },
-                    { emoji: "✨", label: "くすみ・透明感", text: "くすみが気になる\n透明感・ハリが欲しい" },
-                    { emoji: "☀️", label: "シミ・色素沈着", text: "シミ・そばかす・色素沈着\n紫外線ダメージが蓄積してきた" },
+                    { emoji: "", label: "毛穴・黒ずみ", text: "毛穴が目立つ（特にTゾーン）\n黒ずみ・白ずみが気になる" },
+                    { emoji: "", label: "乾燥・かさつき", text: "乾燥によるかさつき・ひきつれ\n化粧水が浸透しにくい" },
+                    { emoji: "", label: "ニキビ・吹き出物", text: "繰り返すニキビ・吹き出物\nニキビ跡が残りやすい" },
+                    { emoji: "◆", label: "くすみ・透明感", text: "くすみが気になる\n透明感・ハリが欲しい" },
+                    { emoji: "AM", label: "シミ・色素沈着", text: "シミ・そばかす・色素沈着\n紫外線ダメージが蓄積してきた" },
                   ].map((p) => (
                     <button
                       key={p.label}
@@ -1220,7 +1220,7 @@ export default function HadaTool() {
           {/* 達成感バナー */}
           <div className={`transition-all duration-500 overflow-hidden ${completionVisible ? "max-h-24 opacity-100 mb-3" : "max-h-0 opacity-0"}`}>
             <div className="bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
-              <span className="text-2xl">✅</span>
+              <span className="text-2xl">OK</span>
               <div>
                 <p className="font-bold text-sm">肌診断 完了！</p>
                 <p className="text-xs opacity-80">あなたの美肌スコアをチェックしてください</p>
@@ -1236,7 +1236,7 @@ export default function HadaTool() {
                   {inputMode === "camera" ? "写真から肌を解析しています..." : "AIが肌を分析しています..."}
                 </p>
                 <p className="text-xs text-gray-400 mt-2">
-                  {inputMode === "camera" ? "📷 画像解析 → 🔬 肌診断 → 📋 ルーティン提案" : "🔬 肌診断 → 📋 ルーティン → 🧪 成分解析"}
+                  {inputMode === "camera" ? "画像解析 → 肌診断 → ルーティン提案" : "肌診断 → ルーティン → 成分解析"}
                 </p>
               </div>
             </div>
@@ -1245,14 +1245,14 @@ export default function HadaTool() {
           ) : (
             <>
               <div className="flex-1 bg-white border border-gray-200 rounded-xl flex flex-col items-center justify-center min-h-[420px] gap-3">
-                <div className="text-4xl">💄</div>
+                <div className="text-4xl"></div>
                 <p className="text-sm text-center font-medium text-gray-500">肌の情報を入力して<br />「肌を診断する」を押してください</p>
                 <div className="bg-gray-50 rounded-lg p-4 text-xs space-y-2 w-full max-w-[260px]">
                   <p className="font-semibold text-gray-600">診断でわかること：</p>
-                  <p className="text-gray-500">🔬 あなたの肌タイプ詳細分析</p>
-                  <p className="text-gray-500">📋 朝・夜のスキンケアルーティン</p>
-                  <p className="text-gray-500">🧪 注目すべき成分と避ける成分</p>
-                  <p className="text-gray-500">🛒 コスパ重視の商品レコメンド</p>
+                  <p className="text-gray-500">[分析] あなたの肌タイプ詳細分析</p>
+                  <p className="text-gray-500">[手順] 朝・夜のスキンケアルーティン</p>
+                  <p className="text-gray-500">[成分] 注目すべき成分と避ける成分</p>
+                  <p className="text-gray-500">[商品] コスパ重視の商品レコメンド</p>
                 </div>
               </div>
               <SkincareDiary />
