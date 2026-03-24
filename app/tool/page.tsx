@@ -39,7 +39,7 @@ function Paywall({ onClose }: { onClose: () => void; onOpenPayjp?: () => void })
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl text-center relative">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl font-bold min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="無料枠上限ダイアログを閉じる">×</button>
-        <div className="text-3xl mb-3">★</div>
+        <div className="text-3xl mb-3"></div>
         <h2 className="text-lg font-bold mb-2">無料枠を使い切りました</h2>
         <p className="text-sm text-gray-500 mb-4">プレミアムプランで全機能を使えます</p>
         <KomojuButton

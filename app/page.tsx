@@ -226,7 +226,7 @@ function SkinSampleSection() {
             { type: "乾燥敏感肌", score: 86, tag: "K-beautyタイプ", desc: "水分補給を最優先に。セラミド系アイテムがおすすめ", color: "pink" },
             { type: "混合脂性肌", score: 72, tag: "バリア強化タイプ", desc: "Tゾーンの皮脂管理がカギ。ナイアシンアミドが効果的", color: "purple" },
           ].map(card => (
-            <div key={card.type} className={`bg-${card.color}-50 border border-${card.color}-200 rounded-2xl p-5`}>
+            <div key={card.type} style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px' }} className="shadow-lg p-5">
               <div className="flex items-center justify-between mb-2">
                 <span className="font-bold text-lg">{card.type}</span>
                 <span className={`bg-${card.color}-500 text-white text-xs px-2 py-1 rounded-full`}>{card.tag}</span>
@@ -325,7 +325,7 @@ function SkinTypeTabsSection() {
     {
       id: "normal",
       label: "普通",
-      icon: "★",
+      icon: "",
       color: "from-amber-100 to-yellow-50",
       border: "border-amber-300",
       accent: "text-amber-700",
@@ -418,7 +418,7 @@ export default function Home() {
       {/* Hero — ビジュアル刷新 */}
       <section className="bg-gradient-to-br from-pink-400 via-rose-300 to-orange-200 px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
-        <div className="inline-block bg-white/30 backdrop-blur text-rose-800 text-sm font-bold px-4 py-1 rounded-full mb-6 border border-white/40">
+        <div style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: '9999px' }} className="inline-block text-rose-800 text-sm font-bold px-4 py-1 mb-6">
           成分科学 × AI診断
         </div>
         <h1 className="text-4xl md:text-6xl font-black mb-4 leading-tight text-white drop-shadow-md">
@@ -471,7 +471,7 @@ export default function Home() {
         <p className="text-rose-900/60 text-sm">クレジットカード不要で3回無料 • いつでもキャンセル可能</p>
 
         {/* 季節バナー */}
-        <div className="bg-white/30 backdrop-blur border border-white/40 rounded-2xl p-4 text-center mt-8 mb-2">
+        <div style={{ background: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.4)', borderRadius: '16px' }} className="p-4 text-center mt-8 mb-2">
           <p className="text-sm text-rose-900 font-bold">春の肌変化シーズン到来</p>
           <p className="text-xs text-rose-800 mt-1">花粉・紫外線増加で肌荒れが起きやすい時期です。今すぐ肌チェック！</p>
         </div>
@@ -559,7 +559,7 @@ export default function Home() {
                     "韓国コスメを試したいが何を買えばいいか分からない",
                   ].map((text, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-gray-300 mt-0.5 font-bold shrink-0">✗</span>
+                      <span className="text-gray-300 mt-0.5 font-bold shrink-0">NG</span>
                       <span>{text}</span>
                     </li>
                   ))}
@@ -580,7 +580,7 @@ export default function Home() {
                     "K-beautyと国産コスメを横断比較。コスパ最良を選択",
                   ].map((text, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-rose-500 mt-0.5 font-bold shrink-0">✓</span>
+                      <span className="text-rose-500 mt-0.5 font-bold shrink-0">OK</span>
                       <span>{text}</span>
                     </li>
                   ))}
@@ -594,9 +594,9 @@ export default function Home() {
             {[
               { value: "30秒", label: "診断にかかる時間", icon: "◎" },
               { value: "200種+", label: "解析する成分データ", icon: "◆" },
-              { value: "¥0", label: "無料で3回試せる", icon: "★" },
+              { value: "¥0", label: "無料で3回試せる", icon: "" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white border border-rose-100 rounded-2xl p-4 text-center shadow-sm">
+              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px' }} className="shadow-sm p-4 text-center">
                 <div className="text-2xl mb-1">{stat.icon}</div>
                 <div className="text-xl font-black text-rose-600">{stat.value}</div>
                 <p className="text-xs text-gray-500 mt-0.5">{stat.label}</p>
@@ -638,7 +638,7 @@ export default function Home() {
                 desc: "韓国スキンケアに興味はあるが成分表示が読めない。何がいい成分で何が悪い成分か教えてほしい。",
               },
             ].map((f) => (
-              <div key={f.title} className="bg-rose-50 rounded-2xl p-6">
+              <div key={f.title} style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px' }} className="shadow-lg p-6">
                 <div className="text-4xl mb-4">{f.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{f.title}</h3>
                 <p className="text-gray-600 text-sm">{f.desc}</p>
@@ -659,7 +659,7 @@ export default function Home() {
               { icon: "◆", title: "有効成分・NG成分リスト", desc: "あなたの肌悩みに効く成分と避けるべき成分を具体名で明示。商品の裏面成分表を見て選べるようになります。" },
               { icon: "◆", title: "コスパ商品レコメンド", desc: "国産・K-beautyの中から成分ベースでコスパの良い商品を提案。価格帯別（プチプラ〜ミドル）で対応。" },
             ].map((f) => (
-              <div key={f.title} className="bg-white rounded-2xl p-6 shadow-sm border border-rose-100 flex gap-4">
+              <div key={f.title} style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px' }} className="shadow-sm p-6 flex gap-4">
                 <div className="text-3xl shrink-0">{f.icon}</div>
                 <div>
                   <h3 className="font-bold text-lg mb-1">{f.title}</h3>
@@ -677,12 +677,12 @@ export default function Home() {
           <h2 className="text-2xl font-black mb-3">料金プラン</h2>
           <p className="text-gray-500 text-sm mb-10">まずは3回無料でお試しください</p>
           <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+            <div style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '16px' }} className="shadow-sm p-8">
               <h3 className="text-xl font-bold mb-2">無料プラン</h3>
               <div className="text-4xl font-black mb-4">¥0</div>
               <ul className="text-gray-500 space-y-2 mb-6 text-left text-sm">
-                <li className="flex gap-2"><span className="text-green-500">✓</span> 3回まで無料診断</li>
-                <li className="flex gap-2"><span className="text-green-500">✓</span> 肌タイプ・ルーティン・成分・商品 全4タブ</li>
+                <li className="flex gap-2"><span className="text-green-500">OK</span> 3回まで無料診断</li>
+                <li className="flex gap-2"><span className="text-green-500">OK</span> 肌タイプ・ルーティン・成分・商品 全4タブ</li>
                 <li className="flex gap-2 text-gray-300"><span>—</span> 4回目以降は有料</li>
               </ul>
               <Link href="/tool" className="block bg-gray-100 hover:bg-gray-200 font-bold py-3 px-6 rounded-xl transition-all text-sm">
@@ -695,10 +695,10 @@ export default function Home() {
               <div className="text-4xl font-black mb-1">¥1,980<span className="text-lg font-normal">/月</span></div>
               <p className="text-rose-200 text-xs mb-4">皮膚科の診察1回分以下</p>
               <ul className="space-y-2 mb-6 text-left text-sm">
-                <li className="flex gap-2"><span>✓</span> 何度でも無制限に診断</li>
-                <li className="flex gap-2"><span>✓</span> 季節・悩みが変わるたびに再診断</li>
-                <li className="flex gap-2"><span>✓</span> 全4タブ詳細結果</li>
-                <li className="flex gap-2"><span>✓</span> いつでもキャンセル可能</li>
+                <li className="flex gap-2"><span>OK</span> 何度でも無制限に診断</li>
+                <li className="flex gap-2"><span>OK</span> 季節・悩みが変わるたびに再診断</li>
+                <li className="flex gap-2"><span>OK</span> 全4タブ詳細結果</li>
+                <li className="flex gap-2"><span>OK</span> いつでもキャンセル可能</li>
               </ul>
               <button
                 onClick={() => setShowPayjp(true)}
@@ -870,7 +870,7 @@ export default function Home() {
             {[
               { icon: "▲", title: "スコア推移グラフ", desc: "診断するたびにスコアを自動保存。最大10回分の推移をグラフで表示。" },
               { icon: "◎", title: "推定肌年齢診断", desc: "肌スコアから実年齢との差を推定。ケアの効果が「若返り」で実感できる。" },
-              { icon: "★", title: "ケアストリーク記録", desc: "毎日のスキンケア日記でストリークを積み上げ。継続モチベーションUP！" },
+              { icon: "", title: "ケアストリーク記録", desc: "毎日のスキンケア日記でストリークを積み上げ。継続モチベーションUP！" },
             ].map((item) => (
               <div key={item.title} className="bg-white border border-rose-100 rounded-2xl p-5 shadow-sm">
                 <div className="text-3xl mb-3">{item.icon}</div>
@@ -1010,7 +1010,7 @@ export default function Home() {
                   { cat: "敏感肌NG", items: "精油・エタノール・高濃度AHA" },
                 ].map(({ cat, items }) => (
                   <div key={cat} className="flex items-start gap-2 text-sm">
-                    <span className="text-red-400 font-bold shrink-0 mt-0.5">✗</span>
+                    <span className="text-red-400 font-bold shrink-0 mt-0.5">NG</span>
                     <div>
                       <span className="font-bold text-gray-800">{cat}</span>
                       <span className="text-gray-500 text-xs block">{items}</span>

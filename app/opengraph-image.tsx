@@ -20,7 +20,7 @@ export default function Image() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ fontSize: 80, marginBottom: 12, display: "flex" }}>✨</div>
+        <div style={{ fontSize: 80, marginBottom: 12, display: "flex" }}></div>
         <div style={{ fontSize: 52, fontWeight: 700, color: "#9d174d", marginBottom: 12, textAlign: "center", display: "flex" }}>
           AI美肌診断
         </div>

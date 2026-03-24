@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const score = Math.min(100, Math.max(0, parseInt(searchParams.get("score") ?? "75", 10)));
   const skinType = searchParams.get("skinType") ?? "肌タイプ";
 
-  const scoreLabel = score >= 80 ? "美肌レベル：優秀✨" : score >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
+  const scoreLabel = score >= 80 ? "美肌レベル：優秀" : score >= 70 ? "美肌レベル：良好" : "美肌レベル：要ケア";
   const gradientFrom = score >= 80 ? "#10b981" : score >= 70 ? "#f59e0b" : "#f43f5e";
   const gradientTo = score >= 80 ? "#06b6d4" : score >= 70 ? "#ef4444" : "#ec4899";
 
@@ -52,7 +52,7 @@ export async function GET(req: Request) {
             gap: 10,
           }}
         >
-          <span>💄</span>
+          <span></span>
           <span>AI美肌診断スコア</span>
         </div>
 
@@ -142,7 +142,7 @@ export async function GET(req: Request) {
             gap: 8,
           }}
         >
-          <span>💄</span>
+          <span></span>
           <span>無料で肌診断</span>
         </div>
       </div>
