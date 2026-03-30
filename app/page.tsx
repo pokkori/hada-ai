@@ -6,6 +6,7 @@ import { ShareButtons } from "@/components/ShareButtons";
 import { StreakBanner } from "@/components/StreakBanner";
 import { UsageCounter } from "@/components/UsageCounter";
 import { AdBanner } from "@/components/AdBanner";
+import { CrossSell } from "@/components/CrossSell";
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
@@ -278,8 +279,9 @@ function SkinSampleSection() {
         <div className="text-center mt-8">
           <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
           <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100">
-            自分の肌を無料で診断する →
+            私の肌を無料でAI診断 →
           </Link>
+          <p className="text-xs opacity-60 mt-2">※写真1枚・10秒で結果</p>
           <p className="text-xs text-gray-400 mt-2">クレジットカード不要・3回まで無料</p>
         </div>
       </div>
@@ -1235,6 +1237,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
+      <CrossSell currentService="AI美肌診断" />
+
       <footer className="border-t border-gray-200 py-8 text-center text-gray-400 text-sm bg-white">
         <div className="flex justify-center gap-6 mb-4">
           <Link href="/legal" className="hover:text-gray-600">特定商取引法</Link>
