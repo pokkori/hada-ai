@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { GoogleAdScript } from "@/components/GoogleAdScript";
 import "./globals.css";
 
 const SITE_URL = "https://hada-ai.vercel.app";
@@ -113,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         {children}
         <Analytics />
+        <GoogleAdScript />
       </body>
     </html>
   );
