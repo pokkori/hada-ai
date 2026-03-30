@@ -7,6 +7,7 @@ import { StreakBanner } from "@/components/StreakBanner";
 import { UsageCounter } from "@/components/UsageCounter";
 import { AdBanner } from "@/components/AdBanner";
 import { CrossSell } from "@/components/CrossSell";
+import { TrustBadge } from "@/components/TrustBadge";
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
 
@@ -482,6 +483,7 @@ export default function Home() {
             <span className="text-rose-800">国産・韓国コスメ対応</span>
           </div>
         </div>
+        <div className="mb-4"><TrustBadge /></div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
           <Link
             href="/tool?mode=camera"
