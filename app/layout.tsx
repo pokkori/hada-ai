@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAdScript } from "@/components/GoogleAdScript";
 import "./globals.css";
+import { InstallPrompt } from "@/components/InstallPrompt";
 
 const SITE_URL = "https://hada-ai.vercel.app";
 const TITLE = "AI美肌診断 | あなたの肌タイプを分析してパーソナルスキンケアを提案";
@@ -113,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         {children}
+        <InstallPrompt />
         <Analytics />
         <GoogleAdScript />
       </body>

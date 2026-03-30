@@ -3,6 +3,8 @@ import { useState } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
 import { ShareButtons } from "@/components/ShareButtons";
+import { StreakBanner } from "@/components/StreakBanner";
+import { UsageCounter } from "@/components/UsageCounter";
 import { AdBanner } from "@/components/AdBanner";
 
 const PAYJP_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? "";
@@ -274,6 +276,7 @@ function SkinSampleSection() {
         </div>
 
         <div className="text-center mt-8">
+          <div className="max-w-xs mx-auto mb-4"><UsageCounter /></div>
           <Link href="/tool" className="inline-block bg-rose-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-rose-600 shadow-lg shadow-rose-100">
             自分の肌を無料で診断する →
           </Link>
@@ -446,6 +449,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <StreakBanner />
 
       {/* Hero — ビジュアル刷新 */}
       <section className="bg-gradient-to-br from-pink-400 via-rose-300 to-orange-200 px-4 py-20 text-center">
