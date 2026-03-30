@@ -404,6 +404,36 @@ export default function Home() {
   const [showPayjp, setShowPayjp] = useState(false);
 
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              { '@type': 'Question', name: '診断は医学的なものですか？', acceptedAnswer: { '@type': 'Answer', text: '本サービスはAIによるエンターテインメント目的の参考情報です。医療診断ではありません。肌トラブルが続く場合は皮膚科への相談をお勧めします。' } },
+              { '@type': 'Question', name: '無料で使えますか？', acceptedAnswer: { '@type': 'Answer', text: '登録不要で3回分の美肌診断を無料でお試しいただけます。プレミアムプラン（¥1,980/月）で診断回数無制限・詳細スキンケアルーティン・成分解析レポートが利用可能になります。' } },
+              { '@type': 'Question', name: 'どんな肌質に対応していますか？', acceptedAnswer: { '@type': 'Answer', text: '乾燥肌・脂性肌（オイリー）・混合肌・敏感肌・普通肌の5タイプ、さらに複合タイプ（乾燥敏感肌など）にも対応しています。' } },
+              { '@type': 'Question', name: 'スキンケアのルーティンはどのくらい詳しく教えてもらえますか？', acceptedAnswer: { '@type': 'Answer', text: '朝・夜それぞれ6ステップのパーソナルルーティンを提案します。使うべき成分・商品カテゴリ・使用量・順番・注意点まで個別に生成されます。' } },
+              { '@type': 'Question', name: '韓国コスメ（K-beauty）にも対応していますか？', acceptedAnswer: { '@type': 'Answer', text: 'はい、対応しています。COSRX・Dr.Jart+・The Ordinaryなど日本国内で人気の韓国・海外ブランドを含め、200種以上の成分データベースをもとに比較・提案します。' } },
+            ],
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'AI美肌診断',
+            operatingSystem: 'Web',
+            applicationCategory: 'HealthApplication',
+            offers: { '@type': 'Offer', price: 0, priceCurrency: 'JPY' },
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
     <main className="min-h-screen bg-rose-50 text-gray-900">
       {showPayjp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
@@ -1219,8 +1249,13 @@ export default function Home() {
             <a href="https://kokuhaku-line-ai.vercel.app" className="hover:text-gray-500">告白LINE返信AI</a>
           </div>
         </div>
+        <div className="flex items-center justify-center gap-2 text-xs text-gray-300 mt-4">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          SSL暗号化通信 | データは安全に保護されています
+        </div>
       </footer>
       <AdBanner slot="" />
     </main>
+    </>
   );
 }
