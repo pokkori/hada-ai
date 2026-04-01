@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import KomojuButton from "@/components/KomojuButton";
+import { GlowButton } from "@/components/GlowButton";
 import { track } from '@vercel/analytics';
 import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 
@@ -1204,11 +1205,14 @@ export default function HadaTool() {
                 </select>
               </div>
 
-              <button type="submit" disabled={loading || !concerns.trim()}
-                className={`w-full font-bold py-3 rounded-lg text-white transition-colors min-h-[44px] ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-rose-500 hover:bg-rose-600 disabled:bg-rose-300"}`}
-                aria-label="入力した情報をもとに肌診断を実行する">
+              <GlowButton
+                type="submit"
+                disabled={loading || !concerns.trim()}
+                aria-label="入力した情報をもとに肌診断を実行する"
+                variant="primary"
+              >
                 {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
-              </button>
+              </GlowButton>
               {error && <p className="text-sm text-red-500 text-center">{error}</p>}
             </form>
           )}
