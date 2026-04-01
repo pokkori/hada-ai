@@ -6,6 +6,55 @@ import { GlowButton } from "@/components/GlowButton";
 import { track } from '@vercel/analytics';
 import { updateStreak, loadStreak, getStreakMilestoneMessage, type StreakData } from "@/lib/streak";
 
+/* ---- エクスタシー演出ユーティリティ ---- */
+
+function AnimatedScore({ target }: { target: number }) {
+  const [displayed, setDisplayed] = useState(0);
+
+  useEffect(() => {
+    const start = Date.now();
+    const duration = 1500;
+    const animate = () => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayed(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, [target]);
+
+  const color = target >= 80 ? '#22c55e' : target >= 60 ? '#f59e0b' : '#ef4444';
+
+  return (
+    <span style={{
+      fontSize: '1.375rem',
+      fontWeight: 900,
+      color,
+      textShadow: `0 0 20px ${color}80`,
+      transition: 'color 0.5s ease',
+      fontVariantNumeric: 'tabular-nums',
+    }}>
+      {displayed}
+    </span>
+  );
+}
+
+function launchConfetti() {
+  if (typeof document === 'undefined') return;
+  const colors = ['#f43f5e', '#fb7185', '#fbbf24', '#a78bfa', '#34d399', '#60a5fa'];
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-particle';
+    el.style.left = `${Math.random() * 100}vw`;
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = `${1.2 + Math.random() * 1.5}s`;
+    el.style.animationDelay = `${Math.random() * 0.6}s`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3200);
+  }
+}
+
 const FREE_LIMIT = 3;
 const KEY = "hada_count";
 
@@ -661,11 +710,14 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
   const circ = 2 * Math.PI * r;
   const offset = circ - (skinScore / 100) * circ;
 
-  // スコアを履歴・Before/Afterに保存
+  // スコアを履歴・Before/Afterに保存 + コンフェッティ発火
   useEffect(() => {
     saveScoreHistory(skinScore, skinType);
     const summary = parsed.sections[0]?.content.split('\n')[0] ?? skinType;
     saveBeforeAfterSnapshot(skinScore, skinType, concerns, summary);
+    if (skinScore >= 80) {
+      launchConfetti();
+    }
   }, [skinScore, skinType, concerns, parsed.sections]);
 
   return (
@@ -674,7 +726,7 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
       <div className={`bg-gradient-to-br ${scoreColor} rounded-2xl p-5 text-white shadow-lg`}>
         <p className="text-xs opacity-80 mb-3 text-center font-semibold tracking-wide">AI美肌診断スコア</p>
         <div className="flex items-center gap-5">
-          <div className="shrink-0">
+          <div className="shrink-0 relative" style={{ width: 100, height: 100 }}>
             <svg width="100" height="100" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="10" />
               <circle
@@ -682,9 +734,12 @@ function ResultTabs({ parsed, skinType, concerns, lifestyle }: {
                 strokeDasharray={circ} strokeDashoffset={offset}
                 transform="rotate(-90 50 50)" strokeLinecap="round"
               />
-              <text x="50" y="46" textAnchor="middle" fill="white" fontSize="22" fontWeight="bold">{skinScore}</text>
               <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="9">/100点</text>
             </svg>
+            {/* カウントアップスコア（SVG外・重ね表示） */}
+            <div className="absolute inset-0 flex items-center justify-center" style={{ paddingBottom: 14 }}>
+              <AnimatedScore target={skinScore} />
+            </div>
           </div>
           <div className="flex-1">
             <p className="text-base font-bold mb-1">{scoreLabel}</p>
@@ -1094,6 +1149,8 @@ export default function HadaTool() {
               {capturedImage && (
                 <div className="space-y-3">
                   <div className="relative rounded-xl overflow-hidden border-2 border-rose-300 bg-gray-50">
+                    {/* スキャンライン演出（診断中のみ表示） */}
+                    {loading && <div className="scan-line" aria-hidden="true" />}
                     <img
                       src={`data:${capturedMime};base64,${capturedImage}`}
                       alt="診断する肌写真"
@@ -1115,7 +1172,7 @@ export default function HadaTool() {
                   <button
                     onClick={handleCameraSubmit}
                     disabled={loading}
-                    className={`w-full font-bold py-3.5 rounded-xl text-white transition-colors text-base min-h-[44px] ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50"}`}
+                    className={`w-full font-bold py-3.5 rounded-xl text-white transition-colors text-base min-h-[44px] ${isLimit ? "bg-orange-500 hover:bg-orange-600" : "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:opacity-50"} ${!loading && !isLimit ? "cta-pulse" : ""}`}
                     aria-label="撮影した写真で肌診断を実行する"
                   >
                     {loading ? (
@@ -1205,14 +1262,16 @@ export default function HadaTool() {
                 </select>
               </div>
 
-              <GlowButton
-                type="submit"
-                disabled={loading || !concerns.trim()}
-                aria-label="入力した情報をもとに肌診断を実行する"
-                variant="primary"
-              >
-                {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
-              </GlowButton>
+              <div className={!loading && concerns.trim() && !isLimit ? "cta-pulse rounded-[14px]" : ""}>
+                <GlowButton
+                  type="submit"
+                  disabled={loading || !concerns.trim()}
+                  aria-label="入力した情報をもとに肌診断を実行する"
+                  variant="primary"
+                >
+                  {loading ? "診断中..." : isLimit ? "プレミアムで無制限に診断" : "肌を診断する（無料）"}
+                </GlowButton>
+              </div>
               {error && <p className="text-sm text-red-500 text-center">{error}</p>}
             </form>
           )}
