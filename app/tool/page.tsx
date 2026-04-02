@@ -1013,7 +1013,7 @@ export default function HadaTool() {
       setStreak(s);
       const msg = getStreakMilestoneMessage(s.count);
       if (msg) setStreakMsg(msg);
-    } catch { setError("通信エラーが発生しました。"); }
+    } catch { setError("少し時間をおいてもう一度お試しください。"); }
     finally { setLoading(false); }
   };
 
@@ -1040,7 +1040,7 @@ export default function HadaTool() {
       setStreak(s);
       const msg = getStreakMilestoneMessage(s.count);
       if (msg) setStreakMsg(msg);
-    } catch { setError("通信エラーが発生しました。"); }
+    } catch { setError("少し時間をおいてもう一度お試しください。"); }
     finally { setLoading(false); }
   };
 
